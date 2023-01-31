@@ -9,6 +9,23 @@ import java.util.UUID;
 public class TranslationEntry {
 
     public String entryKey;
+
+    public String getEntryKey() {
+        return entryKey;
+    }
+
+    public void setEntryKey(String entryKey) {
+        this.entryKey = entryKey;
+    }
+
+    public String getEntryValue() {
+        return entryValue;
+    }
+
+    public void setEntryValue(String entryValue) {
+        this.entryValue = entryValue;
+    }
+
     public String entryValue;
 
     @JsonCreator
