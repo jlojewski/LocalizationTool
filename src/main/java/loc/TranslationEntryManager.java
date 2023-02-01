@@ -72,5 +72,12 @@ public class TranslationEntryManager {
         return mergedMap;
     }
 
+//    public LinkedHashMap<String, String> addLanguage(LinkedHashMap<String, String> mapToAppend) {
+//        String newLanguageField = GUIManager.getInstance().openLanguageDialogInput();
+//
+//        }
+//    }
+
+
 
 }

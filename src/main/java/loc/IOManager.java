@@ -3,6 +3,8 @@ package loc;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,21 +16,24 @@ import java.util.LinkedHashMap;
 
 public class IOManager {
 
-    LinkedHashMap<String, String> loadedFiles;
+    private LinkedHashMap<String, String> loadedFiles;
+    private PropertyChangeSupport support;
 
     public LinkedHashMap<String, String> getLoadedFiles() {
         return loadedFiles;
     }
 
     public void setLoadedFiles(LinkedHashMap<String, String> loadedFiles) {
+        var oldVal=this.loadedFiles;
         this.loadedFiles = loadedFiles;
+        support.firePropertyChange("loadedFiles", oldVal, loadedFiles);
     }
 
     private static IOManager IOManagerInstance;
 
     private IOManager() {
-
-
+        support = new PropertyChangeSupport(this);
+        addPropertyChangeListener(GUIManager.getInstance());
     }
 
     public static IOManager getInstance() {
@@ -37,6 +42,14 @@ public class IOManager {
         }
 
         return IOManagerInstance;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
     }
 
 
@@ -59,7 +72,7 @@ public class IOManager {
         LinkedHashMap<String, String> finalMergedMap = TranslationEntryManager.getInstance().mergeLoadedEntryFiles(listOfLoadedFiles);
 
         return finalMergedMap;
-        }
+    }
 
 
     public void saveConsolidatedTranslationFile(LinkedHashMap consolidatedMap) {
@@ -78,12 +91,14 @@ public class IOManager {
 
     public void mapConsolidatedTranslationFile(LinkedHashMap consolidatedMapToMap, File targetFile) {
         ObjectMapper fileSaveMapper = new ObjectMapper();
-            try {
-                fileSaveMapper.writeValue(targetFile, consolidatedMapToMap.entrySet());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        };
+        try {
+            fileSaveMapper.writeValue(targetFile, consolidatedMapToMap.entrySet());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    ;
 
 //        consolidatedMapToMap.entrySet().forEach(entry -> {
 //            try {
@@ -93,7 +108,9 @@ public class IOManager {
 //            }
 //        });
 
-    }
+
+
+}
 
 
 

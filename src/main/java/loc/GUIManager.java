@@ -7,20 +7,25 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.LinkedHashMap;
+
 import org.apache.commons.io.FilenameUtils;
 
-public class GUIManager implements ActionListener {
+public class GUIManager implements ActionListener, PropertyChangeListener {
     JFrame mainFrame;
     JPanel buttonPanel;
     JTextArea log;
     JFileChooser fileChooser;
     JButton openButton;
     JButton saveButton;
+    JButton addLanguageButton;
     JScrollPane logScrollPane;
     BorderLayout layout;
 
-    private static GUIManager GUIManagerInstance;
+        private static GUIManager GUIManagerInstance;
 
     private GUIManager() {
         fileChooser = new JFileChooser();
@@ -53,8 +58,13 @@ public class GUIManager implements ActionListener {
         saveButton = new JButton("Save");
         saveButton.addActionListener(this);
 
+        addLanguageButton = new JButton("Add language");
+        addLanguageButton.addActionListener(this);
+
         buttonPanel = new JPanel();
         buttonPanel.add(openButton);
+        buttonPanel.add(addLanguageButton);
+        addLanguageButton.setEnabled(false);
         buttonPanel.add(saveButton);
 
         layout.addLayoutComponent(buttonPanel, BorderLayout.PAGE_START);
@@ -107,22 +117,49 @@ public class GUIManager implements ActionListener {
         }
     }
 
+    public String openLanguageDialogInput() {
+        String userInput = (String) JOptionPane.showInputDialog(
+                null,
+                "Insert your desired name/shorthand for the new language:",
+                "Add language",
+                JOptionPane.PLAIN_MESSAGE
+                );
+
+        return userInput;
+
+    }
+
+    public void enableLanguageButton(boolean trueOrFalse) {
+        if (trueOrFalse == true) {
+            addLanguageButton.setEnabled(true);
+        } else {
+            addLanguageButton.setEnabled(false);
+        }
+    }
+
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        //Handle open button action.
         if (e.getSource() == openButton) {
             IOManager.getInstance().setLoadedFiles(IOManager.getInstance().loadTranslationFiles());
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 
-            //Handle save button action.
         } else if (e.getSource() == saveButton) {
-                IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getLoadedFiles());
+            IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getLoadedFiles());
 //            log.setCaretPosition(log.getDocument().getLength());
+
+        } else if (e.getSource() == addLanguageButton) {
+            openLanguageDialogInput();
         }
     }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
+       //enableLanguageButton(IOManager.getInstance().checkIfTranslationFilesHaveBeenLoaded());
+       enableLanguageButton(evt.getNewValue()!=null);
+    }
 }
