@@ -4,34 +4,19 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.UUID;
+import java.util.LinkedHashMap;
 
 public class TranslationEntry {
 
-    public String entryKey;
+    String entryKey;
+    LinkedHashMap<String, String> entryValue;
 
-    public String getEntryKey() {
-        return entryKey;
-    }
-
-    public void setEntryKey(String entryKey) {
-        this.entryKey = entryKey;
-    }
-
-    public String getEntryValue() {
-        return entryValue;
-    }
-
-    public void setEntryValue(String entryValue) {
-        this.entryValue = entryValue;
-    }
-
-    public String entryValue;
 
     @JsonCreator
-    public TranslationEntry(@JsonProperty("key") String entryKey, @JsonProperty("value") String entryValue) {
+    public TranslationEntry(@JsonProperty("entryKey") String entryKey, @JsonProperty("entryValue") LinkedHashMap<String, String> entryValue) {
         this.entryKey = entryKey;
         this.entryValue = entryValue;
     }
+
 
 }

@@ -15,9 +15,12 @@ import java.util.stream.Stream;
 
 public class TranslationEntryManager {
 
+    LinkedHashMap<String, String> languageMapTemplate;
+
     private static TranslationEntryManager TranslationEntryManagerInstance;
 
     private TranslationEntryManager() {
+        languageMapTemplate = new LinkedHashMap<>();
 
     }
 
@@ -44,24 +47,6 @@ public class TranslationEntryManager {
 
     }
 
-//    public ArrayList<TranslationEntry> convertJson(File file, ObjectMapper mapper) {
-//        ArrayList<> result = new ArrayList<TranslationEntry>();
-//        try {
-//            TranslationEntry trentry = mapper.readValue(file, TranslationEntry.class);
-//            result.put(trentry.getEntryKey(), trentry.getEntryValue());
-//        } catch (IOException e) {
-//            GUIManager.getInstance().setupFileChooser();
-//        }
-//        return result;
-
-//
-//    }
-
-//    public LinkedHashMap<String, String> mergeLoadedEntryFiles(ArrayList<LinkedHashMap> listOfEntryFiles) {
-//        LinkedHashMap<String,String> mergedMap = new LinkedHashMap<String,String>();
-//         listOfEntryFiles.forEach((entryFile)->Stream.concat(mergedMap.entrySet().stream(),entryFile.entrySet().stream()));
-//         return mergedMap;
-//    }
 
     public LinkedHashMap<String, String> mergeLoadedEntryFiles(ArrayList<LinkedHashMap<String,String>> listOfEntryFiles) {
         LinkedHashMap<String,String> mergedMap = new LinkedHashMap<String,String>();
@@ -72,11 +57,36 @@ public class TranslationEntryManager {
         return mergedMap;
     }
 
-//    public LinkedHashMap<String, String> addLanguage(LinkedHashMap<String, String> mapToAppend) {
-//        String newLanguageField = GUIManager.getInstance().openLanguageDialogInput();
-//
-//        }
-//    }
+    public void declareNewLanguage() {
+        String newLanguage = GUIManager.getInstance().openLanguageDialogInput();
+        languageMapTemplate.put(newLanguage, null);
+
+        }
+
+
+     public LinkedHashMap<String, LinkedHashMap<String, String>> convertToNewMapFormat(LinkedHashMap<String, String> startingMap, LinkedHashMap<String, String> languageMap) {
+         String tempKey = null;
+         String tempVal = null;
+         String tempKeyForLanguage = null;
+         LinkedHashMap<String, String> valueMap = languageMap;
+         LinkedHashMap<String, LinkedHashMap<String, String>> convertedMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+         for (Map.Entry<String, String> entry : startingMap.entrySet()) {
+             tempKey = entry.getKey();
+             tempVal = entry.getValue();
+
+             convertedMap.put(tempKey, replaceAllMappingsWithInitialInputValue(tempVal, valueMap));
+
+         }
+         return convertedMap;
+     }
+
+
+
+
+    public LinkedHashMap<String, String> replaceAllMappingsWithInitialInputValue(String valueToUse, LinkedHashMap<String, String> currentMap) {
+        currentMap.replaceAll((k, v) -> v = valueToUse);
+        return currentMap;
+    }
 
 
 
