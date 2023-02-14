@@ -1,33 +1,39 @@
 package loc;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.io.*;
+import java.util.*;
 
 public class IOManager {
 
-    private LinkedHashMap<String, String> loadedFiles;
+    private LinkedHashMap<String, String> mapOfLoadedFiles;
+    private List<TranslationEntry> listOfLoadedFilesAsTranslationEntries;
     private PropertyChangeSupport support;
 
-    public LinkedHashMap<String, String> getLoadedFiles() {
-        return loadedFiles;
+
+    public LinkedHashMap<String, String> getMapOfLoadedFiles() {
+        return mapOfLoadedFiles;
     }
 
-    public void setLoadedFiles(LinkedHashMap<String, String> loadedFiles) {
-        var oldVal= this.loadedFiles;
-        this.loadedFiles = loadedFiles;
-        support.firePropertyChange("loadedFiles", oldVal, loadedFiles);
+    public void setMapOfLoadedFiles(LinkedHashMap<String, String> mapOfLoadedFiles) {
+        var oldVal= this.mapOfLoadedFiles;
+        this.mapOfLoadedFiles = mapOfLoadedFiles;
+        support.firePropertyChange("mapOfLoadedFiles", oldVal, mapOfLoadedFiles);
     }
+
+    public List<TranslationEntry> getListOfLoadedFilesAsTranslationEntries() {
+        return listOfLoadedFilesAsTranslationEntries;
+    }
+
+    public void setListOfLoadedFilesAsTranslationEntries(List<TranslationEntry> listOfLoadedFilesAsTranslationEntries) {
+        this.listOfLoadedFilesAsTranslationEntries = listOfLoadedFilesAsTranslationEntries;
+    }
+
 
     private static IOManager IOManagerInstance;
 
@@ -110,18 +116,6 @@ public class IOManager {
 //    }
 
 
-    public void saveConsolidatedTranslationFile(LinkedHashMap consolidatedMap) {
-        String programPath = (System.getProperty("user.dir"));
-        try {
-            File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
-            mapConsolidatedTranslationFile(consolidatedMap, savedConsolidatedFile);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
 //    public void saveConsolidatedTranslationFile(LinkedHashMap consolidatedMap) {
 //        String programPath = (System.getProperty("user.dir"));
 //        try {
@@ -134,17 +128,18 @@ public class IOManager {
 //
 //    }
 
-
-
-
-    public void mapConsolidatedTranslationFile(LinkedHashMap consolidatedMapToMap, File targetFile) {
-        ObjectMapper fileSaveMapper = new ObjectMapper();
+    public void saveConsolidatedTranslationFile(List<TranslationEntry> consolidatedArray) {
+        String programPath = (System.getProperty("user.dir"));
         try {
-            fileSaveMapper.writeValue(targetFile, consolidatedMapToMap.entrySet());
+            File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
+            mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
+
 
 //    public void mapConsolidatedTranslationFile(LinkedHashMap consolidatedMapToMap, File targetFile) {
 //        ObjectMapper fileSaveMapper = new ObjectMapper();
@@ -155,6 +150,15 @@ public class IOManager {
 //        }
 //    }
 
+    public void mapConsolidatedTranslationFile(List<TranslationEntry> consolidatedArrayToMap, File targetFile) {
+        ObjectMapper jsonObjectMapper = new ObjectMapper();
+        try {
+//            jsonObjectMapper.writeValue(targetFile, consolidatedMapToMap.entrySet());
+            jsonObjectMapper.writeValue(targetFile, consolidatedArrayToMap);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
 
 
 //        consolidatedMapToMap.entrySet().forEach(entry -> {

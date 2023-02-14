@@ -25,7 +25,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     JScrollPane logScrollPane;
     BorderLayout layout;
 
-        private static GUIManager GUIManagerInstance;
+    private static GUIManager GUIManagerInstance;
 
     private GUIManager() {
         fileChooser = new JFileChooser();
@@ -45,8 +45,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     public void prepareMainGUI() {
         layout = new BorderLayout();
 
-        log = new JTextArea(5,20);
-        log.setMargin(new Insets(5,5,5,  5));
+        log = new JTextArea(5, 20);
+        log.setMargin(new Insets(5, 5, 5, 5));
         log.setEditable(false);
         logScrollPane = new JScrollPane(log);
 
@@ -86,7 +86,6 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     }
 
 
-
     public File[] setupFileChooser() {
 
         String programPath = System.getProperty("user.dir");
@@ -123,7 +122,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
                 "Insert your desired name/shorthand for the new language:",
                 "Add language",
                 JOptionPane.PLAIN_MESSAGE
-                );
+        );
 
         return userInput;
 
@@ -138,17 +137,17 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     }
 
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == openButton) {
-            IOManager.getInstance().setLoadedFiles(IOManager.getInstance().loadTranslationFiles());
+            IOManager.getInstance().setMapOfLoadedFiles(IOManager.getInstance().loadTranslationFiles());
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(TranslationEntryManager.getInstance().createTranslationEntries(IOManager.getInstance().getMapOfLoadedFiles()));
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 
         } else if (e.getSource() == saveButton) {
-            IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getLoadedFiles());
+            IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
 //            log.setCaretPosition(log.getDocument().getLength());
 
         } else if (e.getSource() == addLanguageButton) {
@@ -159,7 +158,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
-       //enableLanguageButton(IOManager.getInstance().checkIfTranslationFilesHaveBeenLoaded());
-       enableLanguageButton(evt.getNewValue()!=null);
+        //enableLanguageButton(IOManager.getInstance().checkIfTranslationFilesHaveBeenLoaded());
+        enableLanguageButton(evt.getNewValue() != null);
     }
 }

@@ -8,8 +8,8 @@ import java.util.LinkedHashMap;
 
 public class TranslationEntry {
 
-    String entryKey;
-    String entryValue;
+    public String entryKey;
+    public String entryValue;
 //    LinkedHashMap<String, String> entryValue;
 
 

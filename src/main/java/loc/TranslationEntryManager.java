@@ -63,7 +63,8 @@ public class TranslationEntryManager {
 
         }
 
-
+    //currently unused implementation which mapped one type of map to another;
+    // do not revisit unless dire circumstances occur
      public LinkedHashMap<String, LinkedHashMap<String, String>> convertToNewMapFormat(LinkedHashMap<String, String> startingMap, LinkedHashMap<String, String> languageMap) {
          String tempKey = null;
          String tempVal = null;
@@ -88,15 +89,15 @@ public class TranslationEntryManager {
         return currentMap;
     }
 
-
+//currently used/worked on/developed method to convert the initially loaded maps into array(s) with objects
     public List<TranslationEntry> createTranslationEntries(LinkedHashMap<String, String> inputMap) {
-        List<TranslationEntry> arrayListOfEntriesWithValuesMovedFromMap = inputMap.entrySet().stream().map(entry -> {
+        List<TranslationEntry> arrayListOfEntriesWithValuesTakenFromMap = inputMap.entrySet().stream().map(entry -> {
             TranslationEntry t = new TranslationEntry(null, null);
             t.setEntryKey(entry.getKey());
             t.setEntryValue(entry.getValue());
             return t;
         }).collect(Collectors.toList());
-        return arrayListOfEntriesWithValuesMovedFromMap;
+        return arrayListOfEntriesWithValuesTakenFromMap;
     }
 
 
