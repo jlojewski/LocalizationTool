@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,7 +37,10 @@ public class TranslationEntryManager {
         try {
             result = mapper.readValue(file, typeRef);
         } catch (IOException e) {
-            GUIManager.getInstance().setupFileChooser();
+            e.printStackTrace();
+            //come back later and check if the above needs to be replaced with
+            //another call GUIManager.getInstance().setupFileChooser();
+            //as it seems to be buggy at the moment
         }
         return result;
 
@@ -86,6 +86,17 @@ public class TranslationEntryManager {
     public LinkedHashMap<String, String> replaceAllMappingsWithInitialInputValue(String valueToUse, LinkedHashMap<String, String> currentMap) {
         currentMap.replaceAll((k, v) -> v = valueToUse);
         return currentMap;
+    }
+
+
+    public List<TranslationEntry> createTranslationEntries(LinkedHashMap<String, String> inputMap) {
+        List<TranslationEntry> arrayListOfEntriesWithValuesMovedFromMap = inputMap.entrySet().stream().map(entry -> {
+            TranslationEntry t = new TranslationEntry(null, null);
+            t.setEntryKey(entry.getKey());
+            t.setEntryValue(entry.getValue());
+            return t;
+        }).collect(Collectors.toList());
+        return arrayListOfEntriesWithValuesMovedFromMap;
     }
 
 
