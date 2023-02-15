@@ -9,8 +9,10 @@ import java.util.LinkedHashMap;
 public class TranslationEntry {
 
     public String entryKey;
+    @JsonIgnore
     public String entryValue;
-//    LinkedHashMap<String, String> entryValue;
+    public String filename;
+    public LinkedHashMap<String, String> languages;
 
 
     public String getEntryKey() {
@@ -21,14 +23,7 @@ public class TranslationEntry {
         this.entryKey = entryKey;
     }
 
-//    public LinkedHashMap<String, String> getEntryValue() {
-//        return entryValue;
-//    }
-
-//    public void setEntryValue(LinkedHashMap<String, String> entryValue) {
-//        this.entryValue = entryValue;
-//    }
-
+    @JsonIgnore
     public String getEntryValue() {
         return entryValue;
     }
@@ -37,16 +32,20 @@ public class TranslationEntry {
         this.entryValue = entryValue;
     }
 
-//    @JsonCreator
-//    public TranslationEntry(@JsonProperty("entryKey") String entryKey, @JsonProperty("entryValue") LinkedHashMap<String, String> entryValue) {
-//        this.entryKey = entryKey;
-//        this.entryValue = entryValue;
-//    }
+    public LinkedHashMap<String, String> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(LinkedHashMap<String, String> languages) {
+        this.languages = languages;
+    }
 
     @JsonCreator
-    public TranslationEntry(@JsonProperty("entryKey") String entryKey, @JsonProperty("entryValue") String entryValue) {
+    public TranslationEntry(@JsonProperty("entryKey") String entryKey, @JsonProperty("entryValue") String entryValue, @JsonProperty("filename") String filename, @JsonProperty("languages") LinkedHashMap<String, String> languages) {
         this.entryKey = entryKey;
         this.entryValue = entryValue;
+        this.filename = filename;
+        this.languages = languages;
     }
 
 

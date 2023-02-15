@@ -6,18 +6,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TranslationEntryManager {
 
-    LinkedHashMap<String, String> languageMapTemplate;
-
     private static TranslationEntryManager TranslationEntryManagerInstance;
 
     private TranslationEntryManager() {
-        languageMapTemplate = new LinkedHashMap<>();
 
     }
 
@@ -57,32 +55,6 @@ public class TranslationEntryManager {
         return mergedMap;
     }
 
-    public void declareNewLanguage() {
-        String newLanguage = GUIManager.getInstance().openLanguageDialogInput();
-        languageMapTemplate.put(newLanguage, null);
-
-        }
-
-    //currently unused implementation which mapped one type of map to another;
-    // do not revisit unless dire circumstances occur
-     public LinkedHashMap<String, LinkedHashMap<String, String>> convertToNewMapFormat(LinkedHashMap<String, String> startingMap, LinkedHashMap<String, String> languageMap) {
-         String tempKey = null;
-         String tempVal = null;
-         String tempKeyForLanguage = null;
-         LinkedHashMap<String, String> valueMap = languageMap;
-         LinkedHashMap<String, LinkedHashMap<String, String>> convertedMap = new LinkedHashMap<String, LinkedHashMap<String, String>>();
-         for (Map.Entry<String, String> entry : startingMap.entrySet()) {
-             tempKey = entry.getKey();
-             tempVal = entry.getValue();
-
-             convertedMap.put(tempKey, replaceAllMappingsWithInitialInputValue(tempVal, valueMap));
-
-         }
-         return convertedMap;
-     }
-
-
-
 
     public LinkedHashMap<String, String> replaceAllMappingsWithInitialInputValue(String valueToUse, LinkedHashMap<String, String> currentMap) {
         currentMap.replaceAll((k, v) -> v = valueToUse);
@@ -92,7 +64,11 @@ public class TranslationEntryManager {
 //currently used/worked on/developed method to convert the initially loaded maps into array(s) with objects
     public List<TranslationEntry> createTranslationEntries(LinkedHashMap<String, String> inputMap) {
         List<TranslationEntry> arrayListOfEntriesWithValuesTakenFromMap = inputMap.entrySet().stream().map(entry -> {
-            TranslationEntry t = new TranslationEntry(null, null);
+            TranslationEntry t = new TranslationEntry(null, null, null, null);
+            t.languages = new LinkedHashMap<>();
+            t.languages.put("DEFAULT", entry.getValue());
+            Path  = get
+            t.filename =
             t.setEntryKey(entry.getKey());
             t.setEntryValue(entry.getValue());
             return t;

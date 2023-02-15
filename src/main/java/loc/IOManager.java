@@ -153,7 +153,6 @@ public class IOManager {
     public void mapConsolidatedTranslationFile(List<TranslationEntry> consolidatedArrayToMap, File targetFile) {
         ObjectMapper jsonObjectMapper = new ObjectMapper();
         try {
-//            jsonObjectMapper.writeValue(targetFile, consolidatedMapToMap.entrySet());
             jsonObjectMapper.writeValue(targetFile, consolidatedArrayToMap);
             }catch(Exception e){
                 e.printStackTrace();
