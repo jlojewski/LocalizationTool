@@ -137,12 +137,12 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     }
 
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == openButton) {
-            IOManager.getInstance().setMapOfLoadedFiles(IOManager.getInstance().loadTranslationFiles());
-            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(TranslationEntryManager.getInstance().createTranslationEntries(IOManager.getInstance().getMapOfLoadedFiles()));
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadTranslationFiles());
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 

@@ -51,8 +51,17 @@ public class TranslationEntryManager {
         for (var map:listOfEntryFiles) {
           map.forEach((k,v)->mergedMap.put(k,v));
 
-        };
+        }
         return mergedMap;
+    }
+
+    public ArrayList<TranslationEntry> mergeLoadedEntryFilesInArrays(ArrayList<List<TranslationEntry>> listOfEntryFiles) {
+        ArrayList<TranslationEntry> mergedList = new ArrayList<>();
+        for (var list:listOfEntryFiles) {
+            mergedList.addAll(list);
+
+        }
+        return mergedList;
     }
 
 
@@ -62,13 +71,13 @@ public class TranslationEntryManager {
     }
 
 //currently used/worked on/developed method to convert the initially loaded maps into array(s) with objects
-    public List<TranslationEntry> createTranslationEntries(LinkedHashMap<String, String> inputMap) {
+    public List<TranslationEntry> createTranslationEntriesFromMap(LinkedHashMap<String, String> inputMap, Path filename) {
         List<TranslationEntry> arrayListOfEntriesWithValuesTakenFromMap = inputMap.entrySet().stream().map(entry -> {
-            TranslationEntry t = new TranslationEntry(null, null, null, null);
+            TranslationEntry t = new TranslationEntry(null, null, null, null, null);
+            t.setEntryID(UUID.randomUUID());
             t.languages = new LinkedHashMap<>();
             t.languages.put("DEFAULT", entry.getValue());
-            Path  = get
-            t.filename =
+            t.setFilename(filename.toString());
             t.setEntryKey(entry.getKey());
             t.setEntryValue(entry.getValue());
             return t;

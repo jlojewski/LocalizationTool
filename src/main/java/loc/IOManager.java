@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class IOManager {
@@ -59,25 +61,24 @@ public class IOManager {
     }
 
 
-    public LinkedHashMap<String, String> loadTranslationFiles() {
+    public ArrayList<TranslationEntry> loadTranslationFiles() {
         ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupFileChooser()));
 //        LinkedHashMap loadedFilesMap = new LinkedHashMap<String, String>();
         ObjectMapper fileImportMapper = new ObjectMapper();
-        ArrayList<LinkedHashMap<String, String>> listOfLoadedFiles = new ArrayList<LinkedHashMap<String, String>>();
+//        ArrayList<LinkedHashMap<String, String>> listOfLoadedFiles = new ArrayList<LinkedHashMap<String, String>>();
+        ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
         for (File f : filesToConvert) {
-//            try {
-//                TranslationEntry tren = fileImportMapper.readValue(f, TranslationEntry.class);
-//                loadedFilesMap.put(tren.entryKey, tren.entryValue);
-//            } catch (IOException e) {
-//                GUIManager.getInstance().setupFileChooser();
-//            }
-//        }
-//        return loadedFilesMap;
-            listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToMap(f, fileImportMapper));
-        }
-        LinkedHashMap<String, String> finalMergedMap = TranslationEntryManager.getInstance().mergeLoadedEntryFiles(listOfLoadedFiles);
 
-        return finalMergedMap;
+            Path importedFilePath = Paths.get(f.getAbsolutePath());
+            Path importedFileName = importedFilePath.getFileName();
+//            listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToMap(f, fileImportMapper));
+            LinkedHashMap<String, String> tempMap = TranslationEntryManager.getInstance().convertJsonToMap(f, fileImportMapper);
+            listOfLoadedFiles.add(TranslationEntryManager.getInstance().createTranslationEntriesFromMap(tempMap, importedFileName));
+
+        }
+        ArrayList<TranslationEntry> finalMergedList = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(listOfLoadedFiles);
+
+        return finalMergedList;
     }
 
 //    public LinkedHashMap<String, String> loadTranslationFiles() {
