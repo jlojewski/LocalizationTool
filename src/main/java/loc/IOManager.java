@@ -33,7 +33,9 @@ public class IOManager {
     }
 
     public void setListOfLoadedFilesAsTranslationEntries(List<TranslationEntry> listOfLoadedFilesAsTranslationEntries) {
+        var oldVal= this.listOfLoadedFilesAsTranslationEntries;
         this.listOfLoadedFilesAsTranslationEntries = listOfLoadedFilesAsTranslationEntries;
+        support.firePropertyChange("listOfLoadedFilesAsTranslationEntries", oldVal, listOfLoadedFilesAsTranslationEntries);
     }
 
 

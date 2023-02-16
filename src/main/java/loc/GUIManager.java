@@ -14,6 +14,9 @@ import java.util.LinkedHashMap;
 
 import org.apache.commons.io.FilenameUtils;
 
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
+
 public class GUIManager implements ActionListener, PropertyChangeListener {
     JFrame mainFrame;
     JPanel buttonPanel;
@@ -75,7 +78,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 
     public void showMainGUI() {
         JFrame mainFrame = new JFrame("Localization Tool");
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         mainFrame.add(buttonPanel);
         mainFrame.add(logScrollPane);
@@ -136,6 +139,14 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         }
     }
 
+    public void openLanguageTable() {
+        LanguageCheckboxTable languageBox = new LanguageCheckboxTable();
+        languageBox.setDefaultCloseOperation(HIDE_ON_CLOSE);
+        languageBox.pack();
+        languageBox.setLocation(150, 150);
+        languageBox.setVisible(true);
+    }
+
 
 
     @Override
@@ -151,7 +162,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 //            log.setCaretPosition(log.getDocument().getLength());
 
         } else if (e.getSource() == addLanguageButton) {
-            openLanguageDialogInput();
+//            openLanguageDialogInput();
+            openLanguageTable();
         }
     }
 
