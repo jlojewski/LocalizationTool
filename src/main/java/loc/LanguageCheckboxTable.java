@@ -6,9 +6,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class LanguageCheckboxTable extends JFrame {
+public class LanguageCheckboxTable extends JTable {
 
-    private JTable table;
 
     public LanguageCheckboxTable() {
         String[] tableColumnNames = {"Language",
@@ -26,21 +25,24 @@ public class LanguageCheckboxTable extends JFrame {
         };
 
         DefaultTableModel tableModel = new DefaultTableModel(tableData, tableColumnNames);
-        table = new JTable(tableModel) {
-            @Override
-            public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return String.class;
-                    default:
-                        return Boolean.class;
-                }
-            }
-        };
-        table.setPreferredScrollableViewportSize(table.getPreferredSize());
-        JScrollPane scrollPane = new JScrollPane(table);
-        getContentPane().add(scrollPane);
+        setModel(tableModel);
+        {
 
+        }
+        ;
+        setPreferredScrollableViewportSize(getPreferredSize());
+        setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+    }
+
+    @Override
+    public Class getColumnClass(int column) {
+        switch (column) {
+            case 0:
+                return String.class;
+            default:
+                return Boolean.class;
+        }
     }
 
 

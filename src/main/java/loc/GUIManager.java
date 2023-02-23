@@ -140,13 +140,27 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     }
 
     public void openLanguageTable() {
-        LanguageCheckboxTable languageBox = new LanguageCheckboxTable();
-        languageBox.setDefaultCloseOperation(HIDE_ON_CLOSE);
-        languageBox.pack();
-        languageBox.setLocation(150, 150);
-        languageBox.setVisible(true);
+        LanguageMenu languageMenu = new LanguageMenu();
+
+        // og language table code - uncomment when your current solution inevitably doesn't work
+//        LanguageCheckboxTable languageBox = new LanguageCheckboxTable();
+//        languageBox.setDefaultCloseOperation(HIDE_ON_CLOSE);
+//        languageBox.pack();
+//        languageBox.setLocation(150, 150);
+//        languageBox.setVisible(true);
     }
 
+    public void pickLanguagesFromTable(JTable table) {
+        for (int i = 0; i < table.getRowCount(); i++) {
+            Boolean isChecked = Boolean.valueOf(table.getValueAt(i, 2).toString());
+
+            if (isChecked) {
+
+            } else {
+
+            }
+        }
+    }
 
 
     @Override
