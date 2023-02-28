@@ -11,9 +11,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.LinkedHashMap;
-
 import org.apache.commons.io.FilenameUtils;
-
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
 
@@ -24,9 +22,11 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     JFileChooser fileChooser;
     JButton openButton;
     JButton saveButton;
-    JButton addLanguageButton;
+    JButton importSettingsButton;
+    JButton languageSettingsButton;
     JScrollPane logScrollPane;
     BorderLayout layout;
+    LanguageMenu languageMenu;
 
     private static GUIManager GUIManagerInstance;
 
@@ -61,17 +61,22 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         saveButton = new JButton("Save");
         saveButton.addActionListener(this);
 
-        addLanguageButton = new JButton("Add language");
-        addLanguageButton.addActionListener(this);
+        importSettingsButton = new JButton("Import language settings");
+        importSettingsButton.addActionListener(this);
+
+        languageSettingsButton = new JButton("Create language settings");
+        languageSettingsButton.addActionListener(this);
 
         buttonPanel = new JPanel();
         buttonPanel.add(openButton);
-        buttonPanel.add(addLanguageButton);
-        addLanguageButton.setEnabled(false);
+        buttonPanel.add(importSettingsButton);
+        buttonPanel.add(languageSettingsButton);
+        languageSettingsButton.setEnabled(false);
         buttonPanel.add(saveButton);
 
         layout.addLayoutComponent(buttonPanel, BorderLayout.PAGE_START);
         layout.addLayoutComponent(logScrollPane, BorderLayout.CENTER);
+        languageMenu = new LanguageMenu();
 
 
     }
@@ -133,14 +138,14 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 
     public void enableLanguageButton(boolean trueOrFalse) {
         if (trueOrFalse == true) {
-            addLanguageButton.setEnabled(true);
+            languageSettingsButton.setEnabled(true);
         } else {
-            addLanguageButton.setEnabled(false);
+            languageSettingsButton.setEnabled(false);
         }
     }
 
     public void openLanguageTable() {
-        LanguageMenu languageMenu = new LanguageMenu();
+        languageMenu.setVisible(true);
 
         // og language table code - uncomment when your current solution inevitably doesn't work
 //        LanguageCheckboxTable languageBox = new LanguageCheckboxTable();
@@ -175,7 +180,10 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
             IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
 //            log.setCaretPosition(log.getDocument().getLength());
 
-        } else if (e.getSource() == addLanguageButton) {
+        } else if (e.getSource() == importSettingsButton) {
+
+
+        } else if (e.getSource() == languageSettingsButton) {
 //            openLanguageDialogInput();
             openLanguageTable();
         }

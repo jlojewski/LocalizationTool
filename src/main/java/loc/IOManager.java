@@ -16,6 +16,7 @@ public class IOManager {
     private LinkedHashMap<String, String> mapOfLoadedFiles;
     private List<TranslationEntry> listOfLoadedFilesAsTranslationEntries;
     private PropertyChangeSupport support;
+    private LinkedHashSet<String> setOfUniqueLanguages = new LinkedHashSet<>();
 
 
     public LinkedHashMap<String, String> getMapOfLoadedFiles() {
@@ -37,6 +38,15 @@ public class IOManager {
         this.listOfLoadedFilesAsTranslationEntries = listOfLoadedFilesAsTranslationEntries;
         support.firePropertyChange("listOfLoadedFilesAsTranslationEntries", oldVal, listOfLoadedFilesAsTranslationEntries);
     }
+
+    public LinkedHashSet<String> getSetOfUniqueLanguages() {
+        return setOfUniqueLanguages;
+    }
+
+    public void setSetOfUniqueLanguages(LinkedHashSet<String> setOfUniqueLanguages) {
+        this.setOfUniqueLanguages = setOfUniqueLanguages;
+    }
+
 
 
     private static IOManager IOManagerInstance;
@@ -161,6 +171,19 @@ public class IOManager {
                 e.printStackTrace();
             }
         }
+
+
+    public void saveTranslationSettings(TranslationSettings settingsToUse) {
+        ObjectMapper translationSettingsMapper = new ObjectMapper();
+        String programPath = (System.getProperty("user.dir"));
+        try {
+            File savedTranslationSettingsFile = new File(programPath, "translation_settings.json");
+            translationSettingsMapper.writeValue(savedTranslationSettingsFile, settingsToUse);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 //        consolidatedMapToMap.entrySet().forEach(entry -> {
