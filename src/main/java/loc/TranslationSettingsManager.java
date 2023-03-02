@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.LinkedHashSet;
 
 public class TranslationSettingsManager {
+    private TranslationSettings currentTranslationSettings;
 
     private static TranslationSettingsManager TranslationSettingsManagerInstance;
 
@@ -21,6 +22,14 @@ public class TranslationSettingsManager {
 
         return TranslationSettingsManagerInstance;
 
+    }
+
+    public TranslationSettings getCurrentTranslationSettings() {
+        return currentTranslationSettings;
+    }
+
+    public void setCurrentTranslationSettings(TranslationSettings currentTranslationSettings) {
+        this.currentTranslationSettings = currentTranslationSettings;
     }
 
 

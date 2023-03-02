@@ -185,6 +185,17 @@ public class IOManager {
         }
     }
 
+    public TranslationSettings loadTranslationSettings(File settingsToImport) {
+            TranslationSettings settings = null;
+            try {
+                ObjectMapper settingsImportMapper = new ObjectMapper();
+                settings = settingsImportMapper.readValue(settingsToImport , TranslationSettings.class);
+            } catch (IOException e) {
+                GUIManager.getInstance().setupSettingsChooser();
+            }
+            return settings;
+    }
+
 
 //        consolidatedMapToMap.entrySet().forEach(entry -> {
 //            try {

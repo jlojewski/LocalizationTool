@@ -20,6 +20,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     JPanel buttonPanel;
     JTextArea log;
     JFileChooser fileChooser;
+    JFileChooser settingsChooser;
     JButton openButton;
     JButton saveButton;
     JButton importSettingsButton;
@@ -54,6 +55,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         logScrollPane = new JScrollPane(log);
 
         fileChooser = new JFileChooser();
+        settingsChooser = new JFileChooser();
 
         openButton = new JButton("Open .json");
         openButton.addActionListener(this);
@@ -124,6 +126,33 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         }
     }
 
+    public File setupSettingsChooser() {
+
+        String programPath = System.getProperty("user.dir");
+        settingsChooser.setMultiSelectionEnabled(false);
+        settingsChooser.setCurrentDirectory(new File(programPath));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON files", "json");
+        settingsChooser.setFileFilter(filter);
+        settingsChooser.setDialogTitle("Choose a .json file containing language settings");
+
+        int returnVal = settingsChooser.showOpenDialog(null);
+        if (returnVal == settingsChooser.APPROVE_OPTION) {
+            File chosenSettings = settingsChooser.getSelectedFile();
+            String fileExt = FilenameUtils.getExtension(chosenSettings.toString());
+
+                if (!fileExt.equals("json")) {
+                    return setupSettingsChooser();
+
+                } else {
+                    return chosenSettings;
+                }
+
+        } else {
+            System.exit(0);
+            return null;
+        }
+    }
+
     public String openLanguageDialogInput() {
         String userInput = (String) JOptionPane.showInputDialog(
                 null,
@@ -181,6 +210,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 //            log.setCaretPosition(log.getDocument().getLength());
 
         } else if (e.getSource() == importSettingsButton) {
+            TranslationSettingsManager.getInstance().setCurrentTranslationSettings(IOManager.getInstance().loadTranslationSettings(setupSettingsChooser()));
 
 
         } else if (e.getSource() == languageSettingsButton) {

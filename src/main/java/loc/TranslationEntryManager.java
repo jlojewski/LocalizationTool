@@ -86,5 +86,33 @@ public class TranslationEntryManager {
     }
 
 
+// UNFINISHED; additionally, the current version of this method presumes modifying an existing list; uncomment and rewrite this if it turns out that the list
+// should remain unmodified and the end result of adding languages should be added to a copied list instead
+//    public List<TranslationEntry> addLanguagesToLoadedEntries(List<TranslationEntry> originalList) {
+//        List<TranslationEntry> modifiedList = new List<TranslationEntry>;
+//        TranslationEntry tempEntry = null;
+//        String tempValue = null;
+//        for(int i = 0; i < originalList.size(); i++) {
+//            tempEntry = originalList.get(i);
+//            tempValue = tempEntry.getLanguages().get("DEFAULT");
+//            for(String lang : TranslationSettingsManager.getInstance().getCurrentTranslationSettings().getUserDefinedLanguages()) {
+//                tempEntry.languages.put(lang, tempValue);
+//            }
+//        } return modifiedList;
+//    }
+
+    public void addLanguagesToLoadedEntries(List<TranslationEntry> originalList, TranslationSettings languageSettings) {
+        TranslationEntry tempEntry = null;
+        String tempValue = null;
+        for(int i = 0; i < originalList.size(); i++) {
+            tempEntry = originalList.get(i);
+            tempValue = tempEntry.getLanguages().get("DEFAULT");
+            for(String lang : TranslationSettingsManager.getInstance().getCurrentTranslationSettings().getUserDefinedLanguages()) {
+                originalList.get(i).languages.put(lang, tempValue);
+            }
+        }
+    }
+
+
 
 }

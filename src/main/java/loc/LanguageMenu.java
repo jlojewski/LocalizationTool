@@ -15,7 +15,7 @@ public class LanguageMenu extends JFrame implements ActionListener {
 
     public LanguageMenu() {
 
-        confirmButton = new JButton("Confirm");
+        confirmButton = new JButton("Save in settings");
         cancelButton = new JButton("Cancel");
         confirmButton.addActionListener(this);
         cancelButton.addActionListener(this);
