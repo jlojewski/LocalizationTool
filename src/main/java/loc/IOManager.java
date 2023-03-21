@@ -2,7 +2,9 @@ package loc;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -75,17 +77,21 @@ public class IOManager {
 
     public ArrayList<TranslationEntry> loadTranslationFiles() {
         ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupFileChooser()));
-//        LinkedHashMap loadedFilesMap = new LinkedHashMap<String, String>();
+//        LinkedHashMap loadedFilesMa8p = new LinkedHashMap<String, String>();
+
         ObjectMapper fileImportMapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(TranslationEntry.class, new EntryDeserializer());
+        fileImportMapper.registerModule(module);
+
 //        ArrayList<LinkedHashMap<String, String>> listOfLoadedFiles = new ArrayList<LinkedHashMap<String, String>>();
         ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
         for (File f : filesToConvert) {
 
-            Path importedFilePath = Paths.get(f.getAbsolutePath());
-            Path importedFileName = importedFilePath.getFileName();
-//            listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToMap(f, fileImportMapper));
-            LinkedHashMap<String, String> tempMap = TranslationEntryManager.getInstance().convertJsonToMap(f, fileImportMapper);
-            listOfLoadedFiles.add(TranslationEntryManager.getInstance().createTranslationEntriesFromMap(tempMap, importedFileName));
+
+//            LinkedHashMap<String, String> tempMap = TranslationEntryManager.getInstance().convertJsonToMap(f, fileImportMapper);
+//            listOfLoadedFiles.add(TranslationEntryManager.getInstance().createTranslationEntriesFromMap(tempMap, importedFileName));
+            listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToList(f, fileImportMapper));
 
         }
         ArrayList<TranslationEntry> finalMergedList = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(listOfLoadedFiles);
@@ -141,9 +147,22 @@ public class IOManager {
 //
 //    }
 
+//    public void saveConsolidatedTranslationFile(List<TranslationEntry> consolidatedArray) {
+//        String programPath = (System.getProperty("user.dir"));
+//        try {
+//            File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
+//            mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+
     public void saveConsolidatedTranslationFile(List<TranslationEntry> consolidatedArray) {
         String programPath = (System.getProperty("user.dir"));
         try {
+            TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
             File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
             mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
 

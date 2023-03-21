@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,10 +29,9 @@ public class TranslationEntryManager {
 
     }
 
-
-    public LinkedHashMap<String, String> convertJsonToMap(File file, ObjectMapper mapper) {
-        LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
-        TypeReference<LinkedHashMap<String, String>> typeRef = new TypeReference<LinkedHashMap<String, String>>(){};
+    public ArrayList<TranslationEntry> convertJsonToList(File file, ObjectMapper mapper) {
+        ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
+        TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>(){};
         try {
             result = mapper.readValue(file, typeRef);
         } catch (IOException e) {
@@ -40,20 +40,62 @@ public class TranslationEntryManager {
             //another call GUIManager.getInstance().setupFileChooser();
             //as it seems to be buggy at the moment
         }
+        Path importedFilePath = Paths.get(file.getAbsolutePath());
+        Path importedFileName = importedFilePath.getFileName();
+        String filename = importedFileName.toString();
+        for (TranslationEntry t : result)
+            {
+
+                t.setFilename(filename);
+
+
+        }
         return result;
 
 
     }
 
+//    public LinkedHashMap<String, String> convertJsonToMap(File file, ObjectMapper mapper) {
+//        LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
+//        TypeReference<LinkedHashMap<String, String>> typeRef = new TypeReference<LinkedHashMap<String, String>>(){};
+//        try {
+//            result = mapper.readValue(file, typeRef);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            //come back later and check if the above needs to be replaced with
+//            //another call GUIManager.getInstance().setupFileChooser();
+//            //as it seems to be buggy at the moment
+//        }
+//        return result;
+//
+//
+//    }
 
-    public LinkedHashMap<String, String> mergeLoadedEntryFiles(ArrayList<LinkedHashMap<String,String>> listOfEntryFiles) {
-        LinkedHashMap<String,String> mergedMap = new LinkedHashMap<String,String>();
-        for (var map:listOfEntryFiles) {
-          map.forEach((k,v)->mergedMap.put(k,v));
+//    public ArrayList<String> convertJsonToList(File file, ObjectMapper mapper) {
+//        ArrayList<String> result = new LinkedHashMa<String, String>();
+//        TypeReference<LinkedHashMap<String, String>> typeRef = new TypeReference<LinkedHashMap<String, String>>(){};
+//        try {
+//            result = mapper.readValue(file, typeRef);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            //come back later and check if the above needs to be replaced with
+//            //another call GUIManager.getInstance().setupFileChooser();
+//            //as it seems to be buggy at the moment
+//        }
+//        return result;
+//
+//
+//    }
 
-        }
-        return mergedMap;
-    }
+
+//    public LinkedHashMap<String, String> mergeLoadedEntryFiles(ArrayList<LinkedHashMap<String,String>> listOfEntryFiles) {
+//        LinkedHashMap<String,String> mergedMap = new LinkedHashMap<String,String>();
+//        for (var map:listOfEntryFiles) {
+//          map.forEach((k,v)->mergedMap.put(k,v));
+//
+//        }
+//        return mergedMap;
+//    }
 
     public ArrayList<TranslationEntry> mergeLoadedEntryFilesInArrays(ArrayList<List<TranslationEntry>> listOfEntryFiles) {
         ArrayList<TranslationEntry> mergedList = new ArrayList<>();
@@ -70,7 +112,7 @@ public class TranslationEntryManager {
         return currentMap;
     }
 
-//currently used/worked on/developed method to convert the initially loaded maps into array(s) with objects
+//this is the currently used/worked on/developed method to convert the initially loaded maps into array(s) with objects
     public List<TranslationEntry> createTranslationEntriesFromMap(LinkedHashMap<String, String> inputMap, Path filename) {
         List<TranslationEntry> arrayListOfEntriesWithValuesTakenFromMap = inputMap.entrySet().stream().map(entry -> {
             TranslationEntry t = new TranslationEntry(null, null, null, null, null);
@@ -112,6 +154,20 @@ public class TranslationEntryManager {
             }
         }
     }
+
+//    public void checkIfEntryKeysAreUnique(List<TranslationEntry> listToCheck) {
+//        for (int i = 0; i < listToCheck.size(); i++) {
+//            for (int j = i + 1; j < listToCheck.size(); j++) {
+//                if (listToCheck.get(i).getEntryKey() == listToCheck.get(j).getEntryKey()) {
+////                    String tempNameString = listToCheck.get(i).getEntryKey();
+//                    while (listToCheck.)
+//
+//
+//
+//                }
+//            }
+//        }
+//    }
 
 
 
