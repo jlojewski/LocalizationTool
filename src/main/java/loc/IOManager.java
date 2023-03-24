@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -75,29 +76,53 @@ public class IOManager {
     }
 
 
+
     public ArrayList<TranslationEntry> loadTranslationFiles() {
         ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupFileChooser()));
-//        LinkedHashMap loadedFilesMa8p = new LinkedHashMap<String, String>();
 
         ObjectMapper fileImportMapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(TranslationEntry.class, new EntryDeserializer());
-        fileImportMapper.registerModule(module);
+        fileImportMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
 
-//        ArrayList<LinkedHashMap<String, String>> listOfLoadedFiles = new ArrayList<LinkedHashMap<String, String>>();
         ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
         for (File f : filesToConvert) {
 
 
-//            LinkedHashMap<String, String> tempMap = TranslationEntryManager.getInstance().convertJsonToMap(f, fileImportMapper);
-//            listOfLoadedFiles.add(TranslationEntryManager.getInstance().createTranslationEntriesFromMap(tempMap, importedFileName));
-            listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToList(f, fileImportMapper));
+            try {
+                Path importedFilePath = Paths.get(f.getAbsolutePath());
+                Path importedFileName = importedFilePath.getFileName();
+                String convertedPath = importedFilePath.toString();
+                String targetJson = readFileAsString(convertedPath);
+                listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToList(f, targetJson, fileImportMapper));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
         ArrayList<TranslationEntry> finalMergedList = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(listOfLoadedFiles);
 
         return finalMergedList;
     }
+
+
+//latest commented version of the method
+//    public ArrayList<TranslationEntry> loadTranslationFiles() {
+//        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupFileChooser()));
+//
+//        ObjectMapper fileImportMapper = new ObjectMapper();
+//
+//        ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
+//        for (File f : filesToConvert) {
+//
+//
+//            listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToList(f, fileImportMapper));
+//
+//        }
+//        ArrayList<TranslationEntry> finalMergedList = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(listOfLoadedFiles);
+//
+//        return finalMergedList;
+//    }
+
+
 
 //    public LinkedHashMap<String, String> loadTranslationFiles() {
 //        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupFileChooser()));
@@ -223,6 +248,12 @@ public class IOManager {
 //                e.printStackTrace();
 //            }
 //        });
+
+
+    public String readFileAsString(String file) throws Exception
+    {
+        return new String(Files.readAllBytes(Paths.get(file)));
+    }
 
 
 

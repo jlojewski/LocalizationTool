@@ -1,11 +1,18 @@
 package loc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -29,30 +36,70 @@ public class TranslationEntryManager {
 
     }
 
-    public ArrayList<TranslationEntry> convertJsonToList(File file, ObjectMapper mapper) {
+// original list conversion method back when attempting to first write a custom deserializer; uncomment
+// if the current implementation doesn't work
+//    public ArrayList<TranslationEntry> convertJsonToList(File file, ObjectMapper mapper) {
+//        ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
+//        TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>(){};
+//        try {
+//            result = mapper.readValue(file, typeRef);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            //come back later and check if the above needs to be replaced with
+//            //another call GUIManager.getInstance().setupFileChooser();
+//            //as it seems to be buggy at the moment
+//        }
+//        Path importedFilePath = Paths.get(file.getAbsolutePath());
+//        Path importedFileName = importedFilePath.getFileName();
+//        String filename = importedFileName.toString();
+//        for (TranslationEntry t : result)
+//            {
+//
+//                t.setFilename(filename);
+//
+//
+//        }
+//        return result;
+//    }
+
+
+        public ArrayList<TranslationEntry> convertJsonToList(File file, String json, ObjectMapper mapper) {
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>(){};
+
+        Path importedFilePath = Paths.get(file.getAbsolutePath());
+        Path importedFileName = importedFilePath.getFileName();
+        String filename = importedFileName.toString();
+        TranslationEntry tempTranslationEntry;
+
+        JsonNode node;
+
         try {
-            result = mapper.readValue(file, typeRef);
-        } catch (IOException e) {
+            node = mapper.readValue(json, JsonNode.class);
+            Iterator<Map.Entry<String, JsonNode>> userEntries = node.fields();
+            while(userEntries.hasNext()) {
+                Map.Entry<String, JsonNode> userEntry = userEntries.next();
+                tempTranslationEntry = new TranslationEntry(null, null, null, null, null);
+                tempTranslationEntry.entryID = UUID.randomUUID();
+                tempTranslationEntry.entryKey = userEntry.getKey();
+                //.asText is currently experimental - need to check after rewrite if it works and all and whether
+                //it throws nullpointerexceptions
+                tempTranslationEntry.entryValue = userEntry.getValue().asText();
+                tempTranslationEntry.filename = filename;
+                tempTranslationEntry.languages = new LinkedHashMap<>();
+                tempTranslationEntry.languages.put("DEFAULT", tempTranslationEntry.getEntryValue());
+                result.add(tempTranslationEntry);
+
+            }
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
             //come back later and check if the above needs to be replaced with
             //another call GUIManager.getInstance().setupFileChooser();
             //as it seems to be buggy at the moment
         }
-        Path importedFilePath = Paths.get(file.getAbsolutePath());
-        Path importedFileName = importedFilePath.getFileName();
-        String filename = importedFileName.toString();
-        for (TranslationEntry t : result)
-            {
-
-                t.setFilename(filename);
 
 
-        }
         return result;
-
-
     }
 
 //    public LinkedHashMap<String, String> convertJsonToMap(File file, ObjectMapper mapper) {
