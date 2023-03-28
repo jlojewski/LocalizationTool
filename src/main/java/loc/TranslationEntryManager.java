@@ -63,7 +63,7 @@ public class TranslationEntryManager {
 //    }
 
 
-        public ArrayList<TranslationEntry> convertJsonToList(File file, String json, ObjectMapper mapper) {
+        public ArrayList<TranslationEntry> convertGameJsonToList(File file, String json, ObjectMapper mapper) {
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>(){};
 
@@ -101,6 +101,25 @@ public class TranslationEntryManager {
 
         return result;
     }
+
+//    public ArrayList<TranslationEntry> convertConsolidatedJsonToList(File file, ObjectMapper mapper) {
+//        ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
+//        TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>(){};
+//
+//        try {
+//            result = mapper.readValue(file, typeRef);
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            //come back later and check if the above needs to be replaced with
+//            //another call GUIManager.getInstance().setupFileChooser();
+//            //as it seems to be buggy at the moment
+//        }
+//
+//
+//        return result;
+//    }
 
 //    public LinkedHashMap<String, String> convertJsonToMap(File file, ObjectMapper mapper) {
 //        LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();

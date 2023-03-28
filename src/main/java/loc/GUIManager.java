@@ -2,6 +2,7 @@ package loc;
 
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -17,17 +18,22 @@ import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
 
 public class GUIManager implements ActionListener, PropertyChangeListener {
     JFrame mainFrame;
-    JPanel buttonPanel;
+    JPanel buttonPanel1;
+    JPanel buttonPanel2;
     JTextArea log;
     JFileChooser fileChooser;
     JFileChooser settingsChooser;
-    JButton openButton;
+    JFileChooser fileToGameChooser;
+    JButton openButton1;
     JButton saveButton;
     JButton importSettingsButton;
     JButton languageSettingsButton;
     JScrollPane logScrollPane;
     BorderLayout layout;
     LanguageMenu languageMenu;
+    TitledBorder border1;
+    TitledBorder border2;
+    JButton openButton2;
 
     private static GUIManager GUIManagerInstance;
 
@@ -49,19 +55,22 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     public void prepareMainGUI() {
         layout = new BorderLayout();
 
-        log = new JTextArea(5, 20);
+        log = new JTextArea(8, 20);
         log.setMargin(new Insets(5, 5, 5, 5));
         log.setEditable(false);
         logScrollPane = new JScrollPane(log);
 
         fileChooser = new JFileChooser();
         settingsChooser = new JFileChooser();
+        fileToGameChooser = new JFileChooser();
 
-        openButton = new JButton("Open .json");
-        openButton.addActionListener(this);
+        openButton1 = new JButton("Open .json");
+        openButton1.addActionListener(this);
 
         saveButton = new JButton("Save");
         saveButton.addActionListener(this);
+
+        openButton2 = new JButton("Open .json");
 
         importSettingsButton = new JButton("Import language settings");
         importSettingsButton.addActionListener(this);
@@ -69,16 +78,32 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         languageSettingsButton = new JButton("Create language settings");
         languageSettingsButton.addActionListener(this);
 
-        buttonPanel = new JPanel();
-        buttonPanel.add(openButton);
-        buttonPanel.add(importSettingsButton);
-        buttonPanel.add(languageSettingsButton);
-        languageSettingsButton.setEnabled(false);
-        buttonPanel.add(saveButton);
+        border1 = new TitledBorder("Game files -> Translation files");
+        border1.setTitleJustification(TitledBorder.CENTER);
+        border1.setTitlePosition(TitledBorder.TOP);
 
-        layout.addLayoutComponent(buttonPanel, BorderLayout.PAGE_START);
-        layout.addLayoutComponent(logScrollPane, BorderLayout.CENTER);
+        border2 = new TitledBorder("Translation files -> Game files");
+        border2.setTitleJustification(TitledBorder.CENTER);
+        border2.setTitlePosition(TitledBorder.TOP);
+
+        buttonPanel1 = new JPanel();
+        buttonPanel1.add(openButton1);
+        buttonPanel1.add(importSettingsButton);
+        buttonPanel1.add(languageSettingsButton);
+        languageSettingsButton.setEnabled(false);
+        buttonPanel1.add(saveButton);
+        buttonPanel1.setBorder(border1);
+
+        layout.addLayoutComponent(buttonPanel1, BorderLayout.PAGE_START);
         languageMenu = new LanguageMenu();
+
+        buttonPanel2 = new JPanel();
+        buttonPanel2.add(openButton2);
+
+        buttonPanel2.setBorder(border2);
+        layout.addLayoutComponent(buttonPanel2, BorderLayout.CENTER);
+        layout.addLayoutComponent(logScrollPane, BorderLayout.PAGE_END);
+
 
 
     }
@@ -87,7 +112,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         JFrame mainFrame = new JFrame("Localization Tool");
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        mainFrame.add(buttonPanel);
+        mainFrame.add(buttonPanel1);
+        mainFrame.add(buttonPanel2);
         mainFrame.add(logScrollPane);
         mainFrame.setLayout(layout);
 
@@ -96,7 +122,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     }
 
 
-    public File[] setupFileChooser() {
+    public File[] setupGameToTranslationFileChooser() {
 
         String programPath = System.getProperty("user.dir");
         fileChooser.setMultiSelectionEnabled(true);
@@ -105,7 +131,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         fileChooser.setFileFilter(filter);
         fileChooser.setDialogTitle("Choose all .json files containing translation files");
 
-        int returnVal = fileChooser.showOpenDialog(null);
+        int returnVal = fileToGameChooser.showOpenDialog(null);
         if (returnVal == fileChooser.APPROVE_OPTION) {
             File[] chosenFiles = fileChooser.getSelectedFiles();
 
@@ -113,7 +139,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
                 String fileExt = FilenameUtils.getExtension(f.toString());
 
                 if (!fileExt.equals("json")) {
-                    return setupFileChooser();
+                    return setupGameToTranslationFileChooser();
 
                 } else {
                     break;
@@ -146,6 +172,33 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
                 } else {
                     return chosenSettings;
                 }
+
+        } else {
+            System.exit(0);
+            return null;
+        }
+    }
+
+    public File setupTranslationToGameFileChooser() {
+
+        String programPath = System.getProperty("user.dir");
+        fileToGameChooser.setMultiSelectionEnabled(false);
+        fileToGameChooser.setCurrentDirectory(new File(programPath));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON files", "json");
+        fileToGameChooser.setFileFilter(filter);
+        fileToGameChooser.setDialogTitle("Choose a previously generated .json translation file");
+
+        int returnVal = fileToGameChooser.showOpenDialog(null);
+        if (returnVal == fileToGameChooser.APPROVE_OPTION) {
+            File chosenFile = fileToGameChooser.getSelectedFile();
+            String fileExt = FilenameUtils.getExtension(chosenFile.toString());
+
+            if (!fileExt.equals("json")) {
+                return setupTranslationToGameFileChooser();
+
+            } else {
+                return chosenFile;
+            }
 
         } else {
             System.exit(0);
@@ -200,8 +253,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == openButton) {
-            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadTranslationFiles());
+        if (e.getSource() == openButton1) {
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles());
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 
@@ -216,8 +269,12 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         } else if (e.getSource() == languageSettingsButton) {
 //            openLanguageDialogInput();
             openLanguageTable();
+
+        } else if (e.getSource() == openButton2) {
+            IOManager.getInstance().setLoadedTranslationFileForExport(IOManager.getInstance().loadConsolidatedTranslationFile(setupTranslationToGameFileChooser()));
         }
     }
+
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

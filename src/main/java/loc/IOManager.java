@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.apache.commons.io.FilenameUtils;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -20,6 +21,8 @@ public class IOManager {
     private List<TranslationEntry> listOfLoadedFilesAsTranslationEntries;
     private PropertyChangeSupport support;
     private LinkedHashSet<String> setOfUniqueLanguages = new LinkedHashSet<>();
+    //    private File loadedTranslationFileForExport;
+    private List<TranslationEntry> loadedTranslationFileForExport;
 
 
     public LinkedHashMap<String, String> getMapOfLoadedFiles() {
@@ -50,6 +53,14 @@ public class IOManager {
         this.setOfUniqueLanguages = setOfUniqueLanguages;
     }
 
+    public List<TranslationEntry> getLoadedTranslationFileForExport() {
+        return loadedTranslationFileForExport;
+    }
+
+    public void setLoadedTranslationFileForExport(List<TranslationEntry> loadedTranslationFileForExport) {
+        this.loadedTranslationFileForExport = loadedTranslationFileForExport;
+    }
+
 
 
     private static IOManager IOManagerInstance;
@@ -77,8 +88,8 @@ public class IOManager {
 
 
 
-    public ArrayList<TranslationEntry> loadTranslationFiles() {
-        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupFileChooser()));
+    public ArrayList<TranslationEntry> loadUnconsolidatedTranslationFiles() {
+        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupGameToTranslationFileChooser()));
 
         ObjectMapper fileImportMapper = new ObjectMapper();
         fileImportMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
@@ -92,7 +103,7 @@ public class IOManager {
                 Path importedFileName = importedFilePath.getFileName();
                 String convertedPath = importedFilePath.toString();
                 String targetJson = readFileAsString(convertedPath);
-                listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToList(f, targetJson, fileImportMapper));
+                listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertGameJsonToList(f, targetJson, fileImportMapper));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -102,6 +113,29 @@ public class IOManager {
 
         return finalMergedList;
     }
+
+
+    public ArrayList<TranslationEntry> loadConsolidatedTranslationFile(File consolidatedJson) {
+        ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
+        ObjectMapper fileImportMapper = new ObjectMapper();
+        TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>(){};
+
+        try {
+            result = fileImportMapper.readValue(consolidatedJson, typeRef);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            //come back later and check if the above needs to be replaced with
+            //another call GUIManager.getInstance().setupFileChooser();
+            //as it seems to be buggy at the moment
+        }
+
+
+        return result;
+    }
+
+
 
 
 //latest commented version of the method
@@ -217,6 +251,56 @@ public class IOManager {
         }
 
 
+//  work in progress - messy, unfinished; to be cleaned up and split into separate methods
+    public void exportUnconsolidatedTranslationFiles(List<TranslationEntry> listOfEntries) {
+        LinkedHashMap<String, String> convertedExportMap;
+        ObjectMapper exportMapper = new ObjectMapper();
+
+        try {
+            Files.createDirectories(Paths.get("localization"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String programPath = (System.getProperty("user.dir"));
+        String basePath = FilenameUtils.concat(programPath, "localization");
+        String varPath;
+        String outputKey;
+        String outputValue;
+
+
+
+
+        for (TranslationEntry t : listOfEntries) {
+            try {
+                LinkedHashMap<String, String> languages = t.getLanguages();
+                for (Map.Entry<String, String> entry : languages.entrySet()) {
+                    varPath = FilenameUtils.concat(basePath, entry.getKey());
+                    Files.createDirectories(Paths.get(varPath));
+                    LinkedHashMap<String, String> tempMap = new LinkedHashMap<>();
+                    tempMap.put(t.getEntryKey(), entry.getValue());
+                    saveUnconsolidatedFileVariant(tempMap, exportMapper, varPath, t.getFilename());
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+
+    public void saveUnconsolidatedFileVariant(LinkedHashMap<String, String> mapVariantToSave, ObjectMapper mapper, String path, String filename) {
+        try {
+            File savedFileVariant = new File(path, filename);
+            mapper.writeValue(savedFileVariant, mapVariantToSave);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     public void saveTranslationSettings(TranslationSettings settingsToUse) {
         ObjectMapper translationSettingsMapper = new ObjectMapper();
         String programPath = (System.getProperty("user.dir"));
@@ -254,6 +338,14 @@ public class IOManager {
     {
         return new String(Files.readAllBytes(Paths.get(file)));
     }
+
+
+
+//    public void setListOfLoadedFilesAs(List<TranslationEntry> listOfLoadedFilesAsTranslationEntries) {
+//        var oldVal= this.listOfLoadedFilesAsTranslationEntries;
+//        this.listOfLoadedFilesAsTranslationEntries = listOfLoadedFilesAsTranslationEntries;
+//    }
+
 
 
 
