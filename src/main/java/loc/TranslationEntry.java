@@ -72,5 +72,5 @@ public class TranslationEntry {
         this.languages = languages;
     }
 
-
+/// UWAGA OD GRZEGORZA: ZAMIAST PISAC CUSTOMOWEGO DESERIALIZERA, CO JEST BARDZO TRUDNE I NIE NA TERAZ, ŻEBY OBSLUZYC DUPLIKATY PRZERÓB TRANSLATION ENTRY (?) ZGODNIE Z https://stackoverflow.com/questions/62353185/convert-json-with-duplicated-keys-with-jackson
 }

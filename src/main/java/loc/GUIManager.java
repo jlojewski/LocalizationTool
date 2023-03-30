@@ -25,7 +25,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     JFileChooser settingsChooser;
     JFileChooser fileToGameChooser;
     JButton openButton1;
-    JButton saveButton;
+    JButton saveButton1;
     JButton importSettingsButton;
     JButton languageSettingsButton;
     JScrollPane logScrollPane;
@@ -34,6 +34,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     TitledBorder border1;
     TitledBorder border2;
     JButton openButton2;
+    JButton saveButton2;
 
     private static GUIManager GUIManagerInstance;
 
@@ -67,10 +68,14 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         openButton1 = new JButton("Open .json");
         openButton1.addActionListener(this);
 
-        saveButton = new JButton("Save");
-        saveButton.addActionListener(this);
+        saveButton1 = new JButton("Save");
+        saveButton1.addActionListener(this);
 
         openButton2 = new JButton("Open .json");
+        openButton2.addActionListener(this);
+
+        saveButton2 = new JButton("Export to game");
+        saveButton2.addActionListener(this);
 
         importSettingsButton = new JButton("Import language settings");
         importSettingsButton.addActionListener(this);
@@ -91,7 +96,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         buttonPanel1.add(importSettingsButton);
         buttonPanel1.add(languageSettingsButton);
         languageSettingsButton.setEnabled(false);
-        buttonPanel1.add(saveButton);
+        buttonPanel1.add(saveButton1);
         buttonPanel1.setBorder(border1);
 
         layout.addLayoutComponent(buttonPanel1, BorderLayout.PAGE_START);
@@ -99,6 +104,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 
         buttonPanel2 = new JPanel();
         buttonPanel2.add(openButton2);
+        buttonPanel2.add(saveButton2);
 
         buttonPanel2.setBorder(border2);
         layout.addLayoutComponent(buttonPanel2, BorderLayout.CENTER);
@@ -258,7 +264,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 
-        } else if (e.getSource() == saveButton) {
+        } else if (e.getSource() == saveButton1) {
             IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
 //            log.setCaretPosition(log.getDocument().getLength());
 
@@ -272,6 +278,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 
         } else if (e.getSource() == openButton2) {
             IOManager.getInstance().setLoadedTranslationFileForExport(IOManager.getInstance().loadConsolidatedTranslationFile(setupTranslationToGameFileChooser()));
+        } else if (e.getSource() == saveButton2) {
+            IOManager.getInstance().exportUnconsolidatedTranslationFiles(IOManager.getInstance().getLoadedTranslationFileForExport());
         }
     }
 

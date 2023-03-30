@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class IOManager {
 
@@ -22,7 +23,7 @@ public class IOManager {
     private PropertyChangeSupport support;
     private LinkedHashSet<String> setOfUniqueLanguages = new LinkedHashSet<>();
     //    private File loadedTranslationFileForExport;
-    private List<TranslationEntry> loadedTranslationFileForExport;
+    private ArrayList<TranslationEntry> loadedTranslationFileForExport;
 
 
     public LinkedHashMap<String, String> getMapOfLoadedFiles() {
@@ -30,7 +31,7 @@ public class IOManager {
     }
 
     public void setMapOfLoadedFiles(LinkedHashMap<String, String> mapOfLoadedFiles) {
-        var oldVal= this.mapOfLoadedFiles;
+        var oldVal = this.mapOfLoadedFiles;
         this.mapOfLoadedFiles = mapOfLoadedFiles;
         support.firePropertyChange("mapOfLoadedFiles", oldVal, mapOfLoadedFiles);
     }
@@ -40,7 +41,7 @@ public class IOManager {
     }
 
     public void setListOfLoadedFilesAsTranslationEntries(List<TranslationEntry> listOfLoadedFilesAsTranslationEntries) {
-        var oldVal= this.listOfLoadedFilesAsTranslationEntries;
+        var oldVal = this.listOfLoadedFilesAsTranslationEntries;
         this.listOfLoadedFilesAsTranslationEntries = listOfLoadedFilesAsTranslationEntries;
         support.firePropertyChange("listOfLoadedFilesAsTranslationEntries", oldVal, listOfLoadedFilesAsTranslationEntries);
     }
@@ -53,14 +54,13 @@ public class IOManager {
         this.setOfUniqueLanguages = setOfUniqueLanguages;
     }
 
-    public List<TranslationEntry> getLoadedTranslationFileForExport() {
+    public ArrayList<TranslationEntry> getLoadedTranslationFileForExport() {
         return loadedTranslationFileForExport;
     }
 
-    public void setLoadedTranslationFileForExport(List<TranslationEntry> loadedTranslationFileForExport) {
+    public void setLoadedTranslationFileForExport(ArrayList<TranslationEntry> loadedTranslationFileForExport) {
         this.loadedTranslationFileForExport = loadedTranslationFileForExport;
     }
-
 
 
     private static IOManager IOManagerInstance;
@@ -85,7 +85,6 @@ public class IOManager {
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
         support.removePropertyChangeListener(pcl);
     }
-
 
 
     public ArrayList<TranslationEntry> loadUnconsolidatedTranslationFiles() {
@@ -118,7 +117,8 @@ public class IOManager {
     public ArrayList<TranslationEntry> loadConsolidatedTranslationFile(File consolidatedJson) {
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         ObjectMapper fileImportMapper = new ObjectMapper();
-        TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>(){};
+        TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>() {
+        };
 
         try {
             result = fileImportMapper.readValue(consolidatedJson, typeRef);
@@ -134,8 +134,6 @@ public class IOManager {
 
         return result;
     }
-
-
 
 
 //latest commented version of the method
@@ -155,7 +153,6 @@ public class IOManager {
 //
 //        return finalMergedList;
 //    }
-
 
 
 //    public LinkedHashMap<String, String> loadTranslationFiles() {
@@ -245,14 +242,14 @@ public class IOManager {
         ObjectMapper jsonObjectMapper = new ObjectMapper();
         try {
             jsonObjectMapper.writeValue(targetFile, consolidatedArrayToMap);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
 
-//  work in progress - messy, unfinished; to be cleaned up and split into separate methods
-    public void exportUnconsolidatedTranslationFiles(List<TranslationEntry> listOfEntries) {
+    //  work in progress - messy, unfinished; to be cleaned up and split into separate methods
+    public void exportUnconsolidatedTranslationFiles(ArrayList<TranslationEntry> listOfEntries) {
         LinkedHashMap<String, String> convertedExportMap;
         ObjectMapper exportMapper = new ObjectMapper();
 
@@ -265,29 +262,40 @@ public class IOManager {
         String programPath = (System.getProperty("user.dir"));
         String basePath = FilenameUtils.concat(programPath, "localization");
         String varPath;
+        String filenameToUse;
+        String langPath;
         String outputKey;
         String outputValue;
+        LinkedHashMap<String, String> mapOfLanguagesToBeUsed = listOfEntries.get(0).getLanguages();
+        List<String> languageList = new ArrayList<>(mapOfLanguagesToBeUsed.keySet());
 
 
 
-
-        for (TranslationEntry t : listOfEntries) {
-            try {
-                LinkedHashMap<String, String> languages = t.getLanguages();
-                for (Map.Entry<String, String> entry : languages.entrySet()) {
-                    varPath = FilenameUtils.concat(basePath, entry.getKey());
+        try {
+            Map<String, List<TranslationEntry>> translationEntriesPerFilename =
+                    listOfEntries.stream().collect(Collectors.groupingBy(TranslationEntry::getFilename));
+            for (Map.Entry<String, List<TranslationEntry>> z : translationEntriesPerFilename.entrySet()) {
+                filenameToUse = z.getKey();
+                for (String s : languageList) {
+                    varPath = FilenameUtils.concat(basePath, s);
                     Files.createDirectories(Paths.get(varPath));
-                    LinkedHashMap<String, String> tempMap = new LinkedHashMap<>();
-                    tempMap.put(t.getEntryKey(), entry.getValue());
-                    saveUnconsolidatedFileVariant(tempMap, exportMapper, varPath, t.getFilename());
+                    LinkedHashMap<String, String> tempMap = new LinkedHashMap<String, String>();
+                    for (TranslationEntry t : z.getValue()) {
+                        tempMap.put(t.getEntryKey(), t.getLanguages().get(s));
+
+
+                    }
+                    saveUnconsolidatedFileVariant(tempMap, exportMapper, varPath, filenameToUse);
 
                 }
+            }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-    }
+
 
 
     public void saveUnconsolidatedFileVariant(LinkedHashMap<String, String> mapVariantToSave, ObjectMapper mapper, String path, String filename) {
@@ -298,7 +306,6 @@ public class IOManager {
             e.printStackTrace();
         }
     }
-
 
 
     public void saveTranslationSettings(TranslationSettings settingsToUse) {
@@ -314,14 +321,14 @@ public class IOManager {
     }
 
     public TranslationSettings loadTranslationSettings(File settingsToImport) {
-            TranslationSettings settings = null;
-            try {
-                ObjectMapper settingsImportMapper = new ObjectMapper();
-                settings = settingsImportMapper.readValue(settingsToImport , TranslationSettings.class);
-            } catch (IOException e) {
-                GUIManager.getInstance().setupSettingsChooser();
-            }
-            return settings;
+        TranslationSettings settings = null;
+        try {
+            ObjectMapper settingsImportMapper = new ObjectMapper();
+            settings = settingsImportMapper.readValue(settingsToImport, TranslationSettings.class);
+        } catch (IOException e) {
+            GUIManager.getInstance().setupSettingsChooser();
+        }
+        return settings;
     }
 
 
@@ -334,19 +341,15 @@ public class IOManager {
 //        });
 
 
-    public String readFileAsString(String file) throws Exception
-    {
+    public String readFileAsString(String file) throws Exception {
         return new String(Files.readAllBytes(Paths.get(file)));
     }
-
 
 
 //    public void setListOfLoadedFilesAs(List<TranslationEntry> listOfLoadedFilesAsTranslationEntries) {
 //        var oldVal= this.listOfLoadedFilesAsTranslationEntries;
 //        this.listOfLoadedFilesAsTranslationEntries = listOfLoadedFilesAsTranslationEntries;
 //    }
-
-
 
 
 }
