@@ -15,6 +15,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
 
 public class IOManager {
 
@@ -22,8 +24,8 @@ public class IOManager {
     private List<TranslationEntry> listOfLoadedFilesAsTranslationEntries;
     private PropertyChangeSupport support;
     private LinkedHashSet<String> setOfUniqueLanguages = new LinkedHashSet<>();
-    //    private File loadedTranslationFileForExport;
     private ArrayList<TranslationEntry> loadedTranslationFileForExport;
+    private long translationKeyChecksum;
 
 
     public LinkedHashMap<String, String> getMapOfLoadedFiles() {
@@ -60,6 +62,14 @@ public class IOManager {
 
     public void setLoadedTranslationFileForExport(ArrayList<TranslationEntry> loadedTranslationFileForExport) {
         this.loadedTranslationFileForExport = loadedTranslationFileForExport;
+    }
+
+    public long getTranslationKeyChecksum() {
+        return translationKeyChecksum;
+    }
+
+    public void setTranslationKeyChecksum(long translationKeyChecksum) {
+        this.translationKeyChecksum = translationKeyChecksum;
     }
 
 
@@ -109,6 +119,7 @@ public class IOManager {
 
         }
         ArrayList<TranslationEntry> finalMergedList = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(listOfLoadedFiles);
+        setTranslationKeyChecksum(getChecksumFromKeysInTranslationFile(finalMergedList));
 
         return finalMergedList;
     }
@@ -332,24 +343,45 @@ public class IOManager {
     }
 
 
-//        consolidatedMapToMap.entrySet().forEach(entry -> {
-//            try {
-//                fileSaveMapper.writeValue(targetFile, entry);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        });
-
-
     public String readFileAsString(String file) throws Exception {
         return new String(Files.readAllBytes(Paths.get(file)));
     }
 
 
-//    public void setListOfLoadedFilesAs(List<TranslationEntry> listOfLoadedFilesAsTranslationEntries) {
-//        var oldVal= this.listOfLoadedFilesAsTranslationEntries;
-//        this.listOfLoadedFilesAsTranslationEntries = listOfLoadedFilesAsTranslationEntries;
-//    }
+    public long getChecksumFromKeysInTranslationFile(List<TranslationEntry> list) {
+        ArrayList<String> keys = new ArrayList<String>();
+        ArrayList<TranslationEntry> listCopy = new ArrayList<TranslationEntry>(list);
+        Collections.sort(listCopy);
+
+        String extractedKey = null;
+        for (TranslationEntry t : list ) {
+            extractedKey = t.getEntryKey();
+            keys.add(extractedKey);
+        }
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ObjectOutputStream obj;
+        try {
+            obj = new ObjectOutputStream(output);
+            obj.writeObject(keys);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] bytes = output.toByteArray();
+        var keysChecksum = getCRC32Checksum(bytes);
+
+        return keysChecksum;
+    }
+
+    /// worek wszystkich checksum + sprawdzanie najnowszej + z jakiego projektu pochodziły - dyskusja z gruchą -
+    /// w razie czego zapytaj ponownie
+
+    public static long getCRC32Checksum(byte[] bytes) {
+        Checksum crc32 = new CRC32();
+        crc32.update(bytes, 0, bytes.length);
+        return crc32.getValue();
+    }
+
+
 
 
 }

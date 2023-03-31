@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import java.util.LinkedHashMap;
 
-public class TranslationEntry {
+public class TranslationEntry implements Comparable<TranslationEntry> {
 
 
     public UUID entryID;
@@ -70,6 +70,12 @@ public class TranslationEntry {
         this.entryValue = entryValue;
         this.filename = filename;
         this.languages = languages;
+    }
+
+    @Override
+    public int compareTo(TranslationEntry o) {
+
+        return this.entryID.compareTo(o.getEntryID());
     }
 
 /// UWAGA OD GRZEGORZA: ZAMIAST PISAC CUSTOMOWEGO DESERIALIZERA, CO JEST BARDZO TRUDNE I NIE NA TERAZ, ŻEBY OBSLUZYC DUPLIKATY PRZERÓB TRANSLATION ENTRY (?) ZGODNIE Z https://stackoverflow.com/questions/62353185/convert-json-with-duplicated-keys-with-jackson

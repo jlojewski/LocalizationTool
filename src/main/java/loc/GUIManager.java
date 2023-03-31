@@ -137,7 +137,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         fileChooser.setFileFilter(filter);
         fileChooser.setDialogTitle("Choose all .json files containing translation files");
 
-        int returnVal = fileToGameChooser.showOpenDialog(null);
+        int returnVal = fileChooser.showOpenDialog(null);
         if (returnVal == fileChooser.APPROVE_OPTION) {
             File[] chosenFiles = fileChooser.getSelectedFiles();
 
