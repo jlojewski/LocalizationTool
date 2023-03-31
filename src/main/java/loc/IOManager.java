@@ -251,8 +251,12 @@ public class IOManager {
 
     public void mapConsolidatedTranslationFile(List<TranslationEntry> consolidatedArrayToMap, File targetFile) {
         ObjectMapper jsonObjectMapper = new ObjectMapper();
+        List<Object> listWithChecksum = new ArrayList<Object>();
+        Long checksum = getTranslationKeyChecksum();
+        listWithChecksum.add(checksum);
+        listWithChecksum.addAll(consolidatedArrayToMap);
         try {
-            jsonObjectMapper.writeValue(targetFile, consolidatedArrayToMap);
+            jsonObjectMapper.writeValue(targetFile, listWithChecksum);
         } catch (Exception e) {
             e.printStackTrace();
         }

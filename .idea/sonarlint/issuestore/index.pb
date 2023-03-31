@@ -42,9 +42,3 @@ r
 Blocalization/DEFAULT/Calendar — do testowania duplikatów 2.json,c\7\c7694339ac3b10c39529f81d805941efa1890947
 I
 translation_settings.json,e\f\ef00398200d91b529c40df08335e2db468c8d006
-a
-1src/main/java/loc/TranslationSettingsManager.java,3\6\362013afa1087dd21ce86db6d6088281e9bb7c4a
-U
-%src/main/java/loc/TranslationMap.java,1\d\1d3d8df0483488df2d7e17e2203a11797c9ecfd2
-Z
-*src/main/java/loc/TranslationSettings.java,0\0\002893f2dd15f5fd2614a905297cf0cc26bc3b24
