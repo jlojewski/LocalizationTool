@@ -3,8 +3,11 @@ package loc;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.FilenameUtils;
 
 import java.beans.PropertyChangeListener;
@@ -126,13 +129,20 @@ public class IOManager {
 
 
     public ArrayList<TranslationEntry> loadConsolidatedTranslationFile(File consolidatedJson) {
+//        ArrayNode checksumNode;
+        JsonNode checksumNode;
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         ObjectMapper fileImportMapper = new ObjectMapper();
-        TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>() {
-        };
+        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>(){};
 
         try {
-            result = fileImportMapper.readValue(consolidatedJson, typeRef);
+            checksumNode = fileImportMapper.readTree(consolidatedJson);
+            var content = checksumNode.path("keyChecksum");
+            System.out.println(content);
+
+
+            result = fileImportMapper.readValue(consolidatedJson, typeRefFinal);
+
 
 
         } catch (IOException e) {
@@ -252,7 +262,7 @@ public class IOManager {
     public void mapConsolidatedTranslationFile(List<TranslationEntry> consolidatedArrayToMap, File targetFile) {
         ObjectMapper jsonObjectMapper = new ObjectMapper();
         List<Object> listWithChecksum = new ArrayList<Object>();
-        Long checksum = getTranslationKeyChecksum();
+        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
         listWithChecksum.add(checksum);
         listWithChecksum.addAll(consolidatedArrayToMap);
         try {
@@ -281,6 +291,9 @@ public class IOManager {
         String langPath;
         String outputKey;
         String outputValue;
+
+        /// ponieważ get(0) niżej pobiera pierwszy element z listy - a elementem 0 jest checksum bez listy
+        /// języków - to całość się wyjebuje; popraw najlepiej tak, żeby checksum był rozkminiany/usuwany już tutaj
         LinkedHashMap<String, String> mapOfLanguagesToBeUsed = listOfEntries.get(0).getLanguages();
         List<String> languageList = new ArrayList<>(mapOfLanguagesToBeUsed.keySet());
 

@@ -18,6 +18,8 @@ public class TranslationEntry implements Comparable<TranslationEntry> {
     public String entryValue;
     public String filename;
     public LinkedHashMap<String, String> languages;
+    @JsonIgnore
+    private Long keyChecksum;
 
 
 
@@ -61,6 +63,15 @@ public class TranslationEntry implements Comparable<TranslationEntry> {
 
     public void setLanguages(LinkedHashMap<String, String> languages) {
         this.languages = languages;
+    }
+
+    @JsonIgnore
+    public Long getKeyChecksum() {
+        return keyChecksum;
+    }
+
+    public void setKeyChecksum(Long keyChecksum) {
+        this.keyChecksum = keyChecksum;
     }
 
     @JsonCreator
