@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.beans.PropertyChangeListener;
@@ -28,7 +29,7 @@ public class IOManager {
     private PropertyChangeSupport support;
     private LinkedHashSet<String> setOfUniqueLanguages = new LinkedHashSet<>();
     private ArrayList<TranslationEntry> loadedTranslationFileForExport;
-    private long translationKeyChecksum;
+    private String translationKeyChecksum;
 
 
     public LinkedHashMap<String, String> getMapOfLoadedFiles() {
@@ -67,11 +68,11 @@ public class IOManager {
         this.loadedTranslationFileForExport = loadedTranslationFileForExport;
     }
 
-    public long getTranslationKeyChecksum() {
+    public String getTranslationKeyChecksum() {
         return translationKeyChecksum;
     }
 
-    public void setTranslationKeyChecksum(long translationKeyChecksum) {
+    public void setTranslationKeyChecksum(String translationKeyChecksum) {
         this.translationKeyChecksum = translationKeyChecksum;
     }
 
@@ -129,16 +130,20 @@ public class IOManager {
 
 
     public ArrayList<TranslationEntry> loadConsolidatedTranslationFile(File consolidatedJson) {
-//        ArrayNode checksumNode;
+//        ArrayNode outerNode;
+//        JsonNode checksumNode;
+        JsonNode rootNode;
+        String checksum;
         JsonNode checksumNode;
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         ObjectMapper fileImportMapper = new ObjectMapper();
         TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>(){};
 
         try {
-            checksumNode = fileImportMapper.readTree(consolidatedJson);
-            var content = checksumNode.path("keyChecksum");
-            System.out.println(content);
+            rootNode = fileImportMapper.readTree(consolidatedJson);
+            checksumNode = rootNode.findValue("keyChecksum");
+            checksum = checksumNode.asText();
+            System.out.println(checksum);
 
 
             result = fileImportMapper.readValue(consolidatedJson, typeRefFinal);
@@ -365,7 +370,7 @@ public class IOManager {
     }
 
 
-    public long getChecksumFromKeysInTranslationFile(List<TranslationEntry> list) {
+    public String getChecksumFromKeysInTranslationFile(List<TranslationEntry> list) {
         ArrayList<String> keys = new ArrayList<String>();
         ArrayList<TranslationEntry> listCopy = new ArrayList<TranslationEntry>(list);
         Collections.sort(listCopy);
@@ -375,6 +380,7 @@ public class IOManager {
             extractedKey = t.getEntryKey();
             keys.add(extractedKey);
         }
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ObjectOutputStream obj;
         try {
@@ -384,7 +390,9 @@ public class IOManager {
             e.printStackTrace();
         }
         byte[] bytes = output.toByteArray();
-        var keysChecksum = getCRC32Checksum(bytes);
+
+
+        String keysChecksum = DigestUtils.md5Hex(bytes);
 
         return keysChecksum;
     }

@@ -8,18 +8,18 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class TranslationChecksum {
 
-    private Long keyChecksum;
+    private String keyChecksum;
 
-    public Long getKeyChecksum() {
+    public String getKeyChecksum() {
         return keyChecksum;
     }
 
-    public void setKeyChecksum(Long keyChecksum) {
+    public void setKeyChecksum(String keyChecksum) {
         this.keyChecksum = keyChecksum;
     }
 
     @JsonCreator
-    public TranslationChecksum(@JsonProperty("keyChecksum") Long keyChecksum) {
+    public TranslationChecksum(@JsonProperty("keyChecksum") String keyChecksum) {
         this.keyChecksum = keyChecksum;
 
     }
