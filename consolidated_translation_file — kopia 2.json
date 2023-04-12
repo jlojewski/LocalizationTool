@@ -1,0 +1,231 @@
+[
+  {
+    "keyChecksum": "f839ce5e1ac19013b9265853260a0f1d"
+
+  },
+
+  {
+    "entryID": "721b395c-fa38-4009-9222-13dd8c8a93b8",
+    "entryKey": "Calendar.Canvas.GameOverUI.Text",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "G A M E  O V E R",
+      "English": "G A M E  O V E R",
+      "Polish": "G A M E  O V E R",
+      "German": "G A M E  O V E R",
+      "French": "G A M E  O V E R",
+      "Spanish": "G A M E  O V E R",
+      "Chinese": "G A M E  O V E R"
+    }
+  },
+  {
+    "entryID": "17caad97-adc1-4afc-b871-9cb9847af73b",
+    "entryKey": "Calendar.RegionAttritionCalendarSubscriber.Subscribers.AttritionHeader",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "Districts suffer Attrition.",
+      "English": "Districts suffer Attrition.",
+      "Polish": "Districts suffer Attrition.",
+      "German": "Districts suffer Attrition.",
+      "French": "Districts suffer Attrition.",
+      "Spanish": "Districts suffer Attrition.",
+      "Chinese": "Districts suffer Attrition."
+    }
+  },
+  {
+    "entryID": "4fad7a50-09e2-4815-80aa-3a17db68886d",
+    "entryKey": "Calendar.RegionEventCalendarSubscriber.Subscribers.EventHeader",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "A new event has occurred.",
+      "English": "A new event has occurred.",
+      "Polish": "A new event has occurred.",
+      "German": "A new event has occurred.",
+      "French": "A new event has occurred.",
+      "Spanish": "A new event has occurred.",
+      "Chinese": "A new event has occurred."
+    }
+  },
+  {
+    "entryID": "28fa29c1-49eb-464a-9f10-4cb8fa4119af",
+    "entryKey": "Calendar.RegionMomentumCalendarSubscriber.Subscribers.MomentumHeader",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "The Uprising's Momentum is reduced.",
+      "English": "The Uprising's Momentum is reduced.",
+      "Polish": "The Uprising's Momentum is reduced.",
+      "German": "The Uprising's Momentum is reduced.",
+      "French": "The Uprising's Momentum is reduced.",
+      "Spanish": "The Uprising's Momentum is reduced.",
+      "Chinese": "The Uprising's Momentum is reduced."
+    }
+  },
+  {
+    "entryID": "9fd8ccb0-3a98-4c19-b348-d60249b23d81",
+    "entryKey": "Calendar.RegionMoraleCalendarSubscriber.Subscribers.LoseMoraleHeader",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "Districts lose Morale.",
+      "English": "Districts lose Morale.",
+      "Polish": "Districts lose Morale.",
+      "German": "Districts lose Morale.",
+      "French": "Districts lose Morale.",
+      "Spanish": "Districts lose Morale.",
+      "Chinese": "Districts lose Morale."
+    }
+  },
+  {
+    "entryID": "60ad7426-4d43-400e-b802-e1deb996f4f4",
+    "entryKey": "Calendar.RegionNewDayCalendarSubscriber.Subscribers.DayHeader",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "Day",
+      "English": "Day",
+      "Polish": "Day",
+      "German": "Day",
+      "French": "Day",
+      "Spanish": "Day",
+      "Chinese": "Day"
+    }
+  },
+  {
+    "entryID": "38bc8128-5030-4f67-9836-5d942bcc3ea4",
+    "entryKey": "Calendar.RegionNewDayCalendarSubscriber.Subscribers.NewDayHeader",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "A new day begins.",
+      "English": "A new day begins.",
+      "Polish": "A new day begins.",
+      "German": "A new day begins.",
+      "French": "A new day begins.",
+      "Spanish": "A new day begins.",
+      "Chinese": "A new day begins."
+    }
+  },
+  {
+    "entryID": "c49c6889-c845-4193-a531-3283c08f3305",
+    "entryKey": "Calendar.RegionSurrenderCalendarSubscriber.Subscribers.HeaderResisted",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "Districts refuse to surrender!",
+      "English": "Districts refuse to surrender!",
+      "Polish": "Districts refuse to surrender!",
+      "German": "Districts refuse to surrender!",
+      "French": "Districts refuse to surrender!",
+      "Spanish": "Districts refuse to surrender!",
+      "Chinese": "Districts refuse to surrender!"
+    }
+  },
+  {
+    "entryID": "23506264-af95-4a70-8238-3ac36488c7ad",
+    "entryKey": "Calendar.RegionSurrenderCalendarSubscriber.Subscribers.HeaderSurrendered",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "DISTRICTS SURRENDERED!",
+      "English": "DISTRICTS SURRENDERED!",
+      "Polish": "DISTRICTS SURRENDERED!",
+      "German": "DISTRICTS SURRENDERED!",
+      "French": "DISTRICTS SURRENDERED!",
+      "Spanish": "DISTRICTS SURRENDERED!",
+      "Chinese": "DISTRICTS SURRENDERED!"
+    }
+  },
+  {
+    "entryID": "1f18ae3a-62e4-4dd6-b9cf-458ffea5cd4d",
+    "entryKey": "CalendarTimeUI.TimeUI.DayTextPart",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "Day",
+      "English": "Day",
+      "Polish": "Day",
+      "German": "Day",
+      "French": "Day",
+      "Spanish": "Day",
+      "Chinese": "Day"
+    }
+  },
+  {
+    "entryID": "d7b95941-c4e9-4163-8df6-5d6390446fcf",
+    "entryKey": "CharacterOverTimeHealingCalendarSubscriber.PAXSubscribers.HealingHeader",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "Your team rests.",
+      "English": "Your team rests.",
+      "Polish": "Your team rests.",
+      "German": "Your team rests.",
+      "French": "Your team rests.",
+      "Spanish": "Your team rests.",
+      "Chinese": "Your team rests."
+    }
+  },
+  {
+    "entryID": "de164b33-7c5e-4dbc-8a42-5dd3ed2e421d",
+    "entryKey": "CharacterOverTimeHealingCalendarSubscriber.PAXSubscribers.MessageText",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "teammate(s) recover some health.",
+      "English": "teammate(s) recover some health.",
+      "Polish": "teammate(s) recover some health.",
+      "German": "teammate(s) recover some health.",
+      "French": "teammate(s) recover some health.",
+      "Spanish": "teammate(s) recover some health.",
+      "Chinese": "teammate(s) recover some health."
+    }
+  },
+  {
+    "entryID": "84794b5e-4bae-43e5-b42f-5ac7b5221d24",
+    "entryKey": "CharacterOverTimeHealingCalendarSubscriber.Subscribers.HealingHeader",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "Your team rests.",
+      "English": "Your team rests.",
+      "Polish": "Your team rests.",
+      "German": "Your team rests.",
+      "French": "Your team rests.",
+      "Spanish": "Your team rests.",
+      "Chinese": "Your team rests."
+    }
+  },
+  {
+    "entryID": "cdf0c96e-2106-4821-a160-384611f84941",
+    "entryKey": "CharacterOverTimeHealingCalendarSubscriber.Subscribers.MessageText",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "teammate(s) recover some health.",
+      "English": "teammate(s) recover some health.",
+      "Polish": "teammate(s) recover some health.",
+      "German": "teammate(s) recover some health.",
+      "French": "teammate(s) recover some health.",
+      "Spanish": "teammate(s) recover some health.",
+      "Chinese": "teammate(s) recover some health."
+    }
+  },
+  {
+    "entryID": "4c711e35-da61-4b56-b033-51c97a80d010",
+    "entryKey": "CodexFilterButton.Filter.LabelText",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "Filter:",
+      "English": "Filter:",
+      "Polish": "Filter:",
+      "German": "Filter:",
+      "French": "Filter:",
+      "Spanish": "Filter:",
+      "Chinese": "Filter:"
+    }
+  },
+  {
+    "entryID": "4822c59b-4898-4f02-bb36-8ef7d7dafae9",
+    "entryKey": "CodexSortButton.Sort.LabelText",
+    "filename": "Calendar — duplikattest.json",
+    "languages": {
+      "DEFAULT": "Sort:",
+      "English": "Sort:",
+      "Polish": "Sort:",
+      "German": "Sort:",
+      "French": "Sort:",
+      "Spanish": "Sort:",
+      "Chinese": "Sort:"
+    }
+  }
+]

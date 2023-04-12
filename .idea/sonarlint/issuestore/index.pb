@@ -3,13 +3,6 @@ A
 testtesttest.json,e\f\ef8b3710d373d96c3ab96050012b94b930d6009d
 G
 translation_sample.json,9\7\97daf629183059dff36eb9ab162bf9fd55aae8b5
-:
-
-.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
-]
--Calendar — do testowania duplikatów 2.json,6\a\6ad11c842100b9dcebd055d8bdb06135896a3bf1
-N
-Calendar — duplikattest.json,b\c\bc908b122f002de935bd9fa23aea07f55dcab1d7
 Q
 !localization/German/Calendar.json,f\0\f01cd1e9be64c8966b6d9c0f7a9ccd676a68844b
 q
@@ -40,7 +33,18 @@ r
 Blocalization/DEFAULT/Calendar — do testowania duplikatów 2.json,c\7\c7694339ac3b10c39529f81d805941efa1890947
 I
 translation_settings.json,e\f\ef00398200d91b529c40df08335e2db468c8d006
-=
-Calendar.json,3\b\3b879e7cc118b6ecede4f64c4460f55c31e77b19
 a
 1src/main/java/loc/TranslationSettingsManager.java,3\6\362013afa1087dd21ce86db6d6088281e9bb7c4a
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+K
+src/main/java/loc/Main.java,b\3\b36cec49e4652c22c1180b798977fc0f6b002a29
+Z
+*src/main/java/loc/TranslationSettings.java,0\0\002893f2dd15f5fd2614a905297cf0cc26bc3b24
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
+N
+Calendar — duplikattest.json,b\c\bc908b122f002de935bd9fa23aea07f55dcab1d7
+]
+-Calendar — do testowania duplikatów 2.json,6\a\6ad11c842100b9dcebd055d8bdb06135896a3bf1

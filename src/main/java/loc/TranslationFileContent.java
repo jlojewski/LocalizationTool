@@ -9,15 +9,15 @@ import java.util.List;
 
 public class TranslationFileContent {
 
-    private String checksumKey;
+    private TranslationChecksum checksum;
     private List<TranslationEntry> contentList;
 
-    public String getChecksumKey() {
-        return checksumKey;
+    public TranslationChecksum getChecksum() {
+        return checksum;
     }
 
-    public void setChecksumKey(String checksumKey) {
-        this.checksumKey = checksumKey;
+    public void setChecksum(TranslationChecksum checksum) {
+        this.checksum = checksum;
     }
 
     public List<TranslationEntry> getContentList() {
@@ -29,8 +29,8 @@ public class TranslationFileContent {
     }
 
     @JsonCreator
-    public TranslationFileContent(@JsonProperty("checksumKey") String checksumKey, @JsonProperty("contentList") List<TranslationEntry> contentList) {
-        this.checksumKey = checksumKey;
+    public TranslationFileContent(@JsonProperty("checksum") TranslationChecksum checksum, @JsonProperty("contentList") List<TranslationEntry> contentList) {
+        this.checksum = checksum;
         this.contentList = contentList;
     }
 

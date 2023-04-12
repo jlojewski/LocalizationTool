@@ -137,6 +137,7 @@ public class IOManager {
         JsonNode checksumNode;
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         ObjectMapper fileImportMapper = new ObjectMapper();
+//        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>(){};
         TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>(){};
 
         try {
@@ -266,12 +267,15 @@ public class IOManager {
 
     public void mapConsolidatedTranslationFile(List<TranslationEntry> consolidatedArrayToMap, File targetFile) {
         ObjectMapper jsonObjectMapper = new ObjectMapper();
-        List<Object> listWithChecksum = new ArrayList<Object>();
         TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
-        listWithChecksum.add(checksum);
-        listWithChecksum.addAll(consolidatedArrayToMap);
+        TranslationFileContent content = new TranslationFileContent(checksum, consolidatedArrayToMap);
+//        List<Object> listWithChecksum = new ArrayList<Object>();
+//        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
+//        listWithChecksum.add(checksum);
+//        listWithChecksum.addAll(consolidatedArrayToMap);
         try {
-            jsonObjectMapper.writeValue(targetFile, listWithChecksum);
+//            jsonObjectMapper.writeValue(targetFile, listWithChecksum);
+            jsonObjectMapper.writeValue(targetFile, content);
         } catch (Exception e) {
             e.printStackTrace();
         }
