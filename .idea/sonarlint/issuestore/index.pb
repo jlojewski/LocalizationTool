@@ -37,8 +37,6 @@ a
 1src/main/java/loc/TranslationSettingsManager.java,3\6\362013afa1087dd21ce86db6d6088281e9bb7c4a
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-K
-src/main/java/loc/Main.java,b\3\b36cec49e4652c22c1180b798977fc0f6b002a29
 Z
 *src/main/java/loc/TranslationSettings.java,0\0\002893f2dd15f5fd2614a905297cf0cc26bc3b24
 :
