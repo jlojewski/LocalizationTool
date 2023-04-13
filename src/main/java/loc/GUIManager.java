@@ -153,7 +153,6 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
             }
             return chosenFiles;
         } else {
-            System.exit(0);
             return null;
         }
     }
@@ -180,7 +179,6 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
                 }
 
         } else {
-            System.exit(0);
             return null;
         }
     }
@@ -208,7 +206,6 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 
             ///TU SIĘ CZAI CANCELUJACE ZLO - WYMYSL JAK TO OBSLUZYC
         } else {
-            System.exit(0);
             return null;
         }
     }
@@ -261,7 +258,11 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == openButton1) {
-            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles());
+            var chosenFiles = setupGameToTranslationFileChooser();
+            if (chosenFiles == null) {
+                return;
+            }
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 
@@ -270,7 +271,11 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 //            log.setCaretPosition(log.getDocument().getLength());
 
         } else if (e.getSource() == importSettingsButton) {
-            TranslationSettingsManager.getInstance().setCurrentTranslationSettings(IOManager.getInstance().loadTranslationSettings(setupSettingsChooser()));
+            var chosenFile = setupSettingsChooser();
+            if (chosenFile == null) {
+                return;
+            }
+            TranslationSettingsManager.getInstance().setCurrentTranslationSettings(IOManager.getInstance().loadTranslationSettings(chosenFile));
 
 
         } else if (e.getSource() == languageSettingsButton) {
@@ -278,7 +283,12 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
             openLanguageTable();
 
         } else if (e.getSource() == openButton2) {
-            IOManager.getInstance().setLoadedTranslationFileForExport(IOManager.getInstance().loadConsolidatedTranslationFile(setupTranslationToGameFileChooser()));
+            var chosenFile = setupTranslationToGameFileChooser();
+            if (chosenFile == null) {
+                return;
+            }
+            IOManager.getInstance().setLoadedTranslationFileForExport(IOManager.getInstance().loadConsolidatedTranslationFile(chosenFile));
+
         } else if (e.getSource() == saveButton2) {
             IOManager.getInstance().exportUnconsolidatedTranslationFiles(IOManager.getInstance().getLoadedTranslationFileForExport());
         }

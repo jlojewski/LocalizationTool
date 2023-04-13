@@ -107,8 +107,8 @@ public class IOManager {
     }
 
 
-    public ArrayList<TranslationEntry> loadUnconsolidatedTranslationFiles() {
-        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupGameToTranslationFileChooser()));
+    public ArrayList<TranslationEntry> loadUnconsolidatedTranslationFiles(File[] filesToUse) {
+        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(filesToUse));
 
         ObjectMapper fileImportMapper = new ObjectMapper();
         fileImportMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
