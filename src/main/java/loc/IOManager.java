@@ -136,23 +136,30 @@ public class IOManager {
     public ArrayList<TranslationEntry> loadConsolidatedTranslationFile(File consolidatedJson) {
 //        ArrayNode outerNode;
 //        JsonNode checksumNode;
-        JsonNode rootNode;
-        String checksum;
-        JsonNode checksumNode;
+//        JsonNode rootNode;
+        String generatedChecksum = null;
+//        JsonNode checksumNode;
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         ObjectMapper fileImportMapper = new ObjectMapper();
 //        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>(){};
         TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>() {
         };
+        String programPath = (System.getProperty("user.dir"));
+        String checksumTrackerName = "checksum_tracker.txt";
+        String combinedPath = FilenameUtils.concat(programPath, checksumTrackerName);
+        Path externalChecksumsFilePath = Paths.get(combinedPath);
+        Path externalChecksumsFileName = externalChecksumsFilePath.getFileName();
 
         try {
-            rootNode = fileImportMapper.readTree(consolidatedJson);
-            checksumNode = rootNode.findValue("keyChecksum");
-            checksum = checksumNode.asText();
-            System.out.println(checksum);
-
+//            rootNode = fileImportMapper.readTree(consolidatedJson);
+//            checksumNode = rootNode.findValue("keyChecksum");
+//            checksum = checksumNode.asText();
 
             result = fileImportMapper.readValue(consolidatedJson, typeRefFinal);
+            generatedChecksum = getChecksumFromKeysInTranslationFile(result);
+            setTranslationKeyChecksum(generatedChecksum);
+            System.out.println(generatedChecksum);
+            compareLoadedChecksumWithExternalFile(generatedChecksum, externalChecksumsFileName);
 
 
         } catch (IOException e) {
@@ -276,8 +283,7 @@ public class IOManager {
 
         try (FileWriter fw = new FileWriter(fileToUse, true);
              BufferedWriter bw = new BufferedWriter(fw);
-             PrintWriter winnerWriter = new PrintWriter(bw))
-        {
+             PrintWriter winnerWriter = new PrintWriter(bw)) {
 
             String checksum = getTranslationKeyChecksum();
             winnerWriter.println(checksum);
@@ -446,6 +452,39 @@ public class IOManager {
         String keysChecksum = DigestUtils.md5Hex(bytes);
 
         return keysChecksum;
+    }
+
+    public void compareLoadedChecksumWithExternalFile(String checksumToCompare, Path filenameToUse) {
+        String programPath = (System.getProperty("user.dir"));
+//        Path filePath = Paths.get(fileToBeComparedTo.getAbsolutePath());
+//        Path filename = filePath.getFileName();
+        ArrayList<String> externalChecksumList = loadChecksumsFromTrackerFile(filenameToUse);
+
+        for (String c : externalChecksumList) {
+            if (c.equals(checksumToCompare)) {
+                System.out.println("TEN SAM CHECKSUM REEE " + c);
+            }
+        }
+
+
+
+    }
+
+    public ArrayList<String> loadChecksumsFromTrackerFile(Path filenameToUse) {
+        ArrayList<String> listOfChecksums = new ArrayList<String>();
+        try {
+            BufferedReader importReader = new BufferedReader(new FileReader(filenameToUse.toString()));
+            listOfChecksums = new ArrayList<>();
+            String checksumLine = importReader.readLine();
+            while (checksumLine != null) {
+                listOfChecksums.add(checksumLine);
+                checksumLine = importReader.readLine();
+            }
+            importReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return listOfChecksums;
     }
 
     /// worek wszystkich checksum + sprawdzanie najnowszej + z jakiego projektu pochodziły - dyskusja z gruchą -
