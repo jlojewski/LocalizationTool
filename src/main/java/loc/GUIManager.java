@@ -206,6 +206,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
                 return chosenFile;
             }
 
+            ///TU SIĘ CZAI CANCELUJACE ZLO - WYMYSL JAK TO OBSLUZYC
         } else {
             System.exit(0);
             return null;

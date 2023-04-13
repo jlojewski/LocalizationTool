@@ -40,5 +40,3 @@ a
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 ^
 .consolidated_translation_file — kopia 2.json,e\7\e74ed35ffbb6c5eb83a715bf4a91aeeebb830b2a
-\
-,consolidated_translation_file — kopia.json,0\3\03b129a736f49c414fb6ab5331117700ef1bb958

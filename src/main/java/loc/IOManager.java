@@ -10,8 +10,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.ls.LSOutput;
 
+import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.*;
@@ -144,8 +146,17 @@ public class IOManager {
 //        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>(){};
         TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>() {
         };
+
         String programPath = (System.getProperty("user.dir"));
         String checksumTrackerName = "checksum_tracker.txt";
+
+        try {
+            FileUtils.touch(new File(checksumTrackerName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         String combinedPath = FilenameUtils.concat(programPath, checksumTrackerName);
         Path externalChecksumsFilePath = Paths.get(combinedPath);
         Path externalChecksumsFileName = externalChecksumsFilePath.getFileName();
@@ -460,14 +471,21 @@ public class IOManager {
 //        Path filename = filePath.getFileName();
         ArrayList<String> externalChecksumList = loadChecksumsFromTrackerFile(filenameToUse);
 
-        for (String c : externalChecksumList) {
-            if (c.equals(checksumToCompare)) {
-                System.out.println("TEN SAM CHECKSUM REEE " + c);
+
+        if (!externalChecksumList.isEmpty()) {
+            for (String c : externalChecksumList) {
+                if (c.equals(checksumToCompare)) {
+                    System.out.println("ZNALEZIONO TEN SAM CHECKSUM " + c);
+
+                } else {
+                    System.out.println("NIE ZNALEZIONO CHECKSUMY" + c);
+                    JOptionPane.showMessageDialog(null, "No matching checksums detected! Please make sure that translation keys are not modified between the operations.", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
             }
+        } else {
+            System.out.println("NIE ZNALEZIONO CHECKSUMY");
+            JOptionPane.showMessageDialog(null, "No matching checksums detected! Please make sure that translation keys are not modified between the operations.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
-
-
-
     }
 
     public ArrayList<String> loadChecksumsFromTrackerFile(Path filenameToUse) {
