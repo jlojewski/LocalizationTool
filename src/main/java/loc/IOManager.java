@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.w3c.dom.ls.LSOutput;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -21,6 +22,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
+
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
 
 public class IOManager {
 
@@ -138,7 +142,8 @@ public class IOManager {
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         ObjectMapper fileImportMapper = new ObjectMapper();
 //        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>(){};
-        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>(){};
+        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>() {
+        };
 
         try {
             rootNode = fileImportMapper.readTree(consolidatedJson);
@@ -148,7 +153,6 @@ public class IOManager {
 
 
             result = fileImportMapper.readValue(consolidatedJson, typeRefFinal);
-
 
 
         } catch (IOException e) {
@@ -247,9 +251,38 @@ public class IOManager {
         try {
             TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
             File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
+            File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
             mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
+            storeChecksumInFile(storedChecksumFile);
 
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    ///zmień na zapisywanie w pliku .txt
+    public void storeChecksumInFile(File fileToUse) {
+//        ObjectMapper checksumObjectMapper = new ObjectMapper();
+//        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
+//        try {
+//            checksumObjectMapper.writeValue(fileToUse, checksum);
+////        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
+//        } catch (IOException e) {
+//           e.printStackTrace();
+//        winnerWriter.println(");
+//                winnerWriter.close();
+//        }
+
+        try (FileWriter fw = new FileWriter(fileToUse, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter winnerWriter = new PrintWriter(bw))
+        {
+
+            String checksum = getTranslationKeyChecksum();
+            winnerWriter.println(checksum);
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -265,17 +298,34 @@ public class IOManager {
 //        }
 //    }
 
+    //newest version if you need to uncomment and go back
+//    public void mapConsolidatedTranslationFile(List<TranslationEntry> consolidatedArrayToMap, File targetFile) {
+//        ObjectMapper jsonObjectMapper = new ObjectMapper();
+//        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
+//        TranslationFileContent content = new TranslationFileContent(checksum, consolidatedArrayToMap);
+////        List<Object> listWithChecksum = new ArrayList<Object>();
+////        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
+////        listWithChecksum.add(checksum);
+////        listWithChecksum.addAll(consolidatedArrayToMap);
+//        try {
+////            jsonObjectMapper.writeValue(targetFile, listWithChecksum);
+//            jsonObjectMapper.writeValue(targetFile, content);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     public void mapConsolidatedTranslationFile(List<TranslationEntry> consolidatedArrayToMap, File targetFile) {
         ObjectMapper jsonObjectMapper = new ObjectMapper();
-        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
-        TranslationFileContent content = new TranslationFileContent(checksum, consolidatedArrayToMap);
+//        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
+//        TranslationFileContent content = new TranslationFileContent(checksum, consolidatedArrayToMap);
 //        List<Object> listWithChecksum = new ArrayList<Object>();
 //        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
 //        listWithChecksum.add(checksum);
 //        listWithChecksum.addAll(consolidatedArrayToMap);
         try {
 //            jsonObjectMapper.writeValue(targetFile, listWithChecksum);
-            jsonObjectMapper.writeValue(targetFile, content);
+            jsonObjectMapper.writeValue(targetFile, consolidatedArrayToMap);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -307,7 +357,6 @@ public class IOManager {
         List<String> languageList = new ArrayList<>(mapOfLanguagesToBeUsed.keySet());
 
 
-
         try {
             Map<String, List<TranslationEntry>> translationEntriesPerFilename =
                     listOfEntries.stream().collect(Collectors.groupingBy(TranslationEntry::getFilename));
@@ -327,12 +376,10 @@ public class IOManager {
                 }
             }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-
+    }
 
 
     public void saveUnconsolidatedFileVariant(LinkedHashMap<String, String> mapVariantToSave, ObjectMapper mapper, String path, String filename) {
@@ -380,7 +427,7 @@ public class IOManager {
         Collections.sort(listCopy);
 
         String extractedKey = null;
-        for (TranslationEntry t : list ) {
+        for (TranslationEntry t : list) {
             extractedKey = t.getEntryKey();
             keys.add(extractedKey);
         }
@@ -409,8 +456,6 @@ public class IOManager {
         crc32.update(bytes, 0, bytes.length);
         return crc32.getValue();
     }
-
-
 
 
 }

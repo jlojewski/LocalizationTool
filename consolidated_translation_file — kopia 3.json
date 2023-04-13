@@ -1,0 +1,245 @@
+{
+  "checksum": {
+    "keyChecksum": "f839ce5e1ac19013b9265853260a0f1d"
+  },
+  "contentList": [
+    {
+      "entryID": "cc6f4b36-9eba-45da-a951-a0b337a3a68b",
+      "entryKey": "Calendar.Canvas.GameOverUI.Text",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "The Uprising has fallen",
+        "English": "The Uprising has fallen",
+        "Polish": "The Uprising has fallen",
+        "German": "The Uprising has fallen",
+        "French": "The Uprising has fallen",
+        "Spanish": "The Uprising has fallen",
+        "Chinese": "The Uprising has fallen"
+      }
+    },
+    {
+      "entryID": "312a047c-99bb-497b-8e53-705a368fa473",
+      "entryKey": "Calendar.Canvas.GameOverUI.Text (1)",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "G A M E  O V E R",
+        "English": "G A M E  O V E R",
+        "Polish": "G A M E  O V E R",
+        "German": "G A M E  O V E R",
+        "French": "G A M E  O V E R",
+        "Spanish": "G A M E  O V E R",
+        "Chinese": "G A M E  O V E R"
+      }
+    },
+    {
+      "entryID": "82165559-ba20-400a-9c0b-6f74ba9c022a",
+      "entryKey": "Calendar.RegionAttritionCalendarSubscriber.Subscribers.AttritionHeader",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "Districts suffer Attrition.",
+        "English": "Districts suffer Attrition.",
+        "Polish": "Districts suffer Attrition.",
+        "German": "Districts suffer Attrition.",
+        "French": "Districts suffer Attrition.",
+        "Spanish": "Districts suffer Attrition.",
+        "Chinese": "Districts suffer Attrition."
+      }
+    },
+    {
+      "entryID": "365d46ca-31bc-4aea-bebb-779043545856",
+      "entryKey": "Calendar.RegionEventCalendarSubscriber.Subscribers.EventHeader",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "A new event has occurred.",
+        "English": "A new event has occurred.",
+        "Polish": "A new event has occurred.",
+        "German": "A new event has occurred.",
+        "French": "A new event has occurred.",
+        "Spanish": "A new event has occurred.",
+        "Chinese": "A new event has occurred."
+      }
+    },
+    {
+      "entryID": "7dca969f-9e65-4a1d-969c-e1ecddd37058",
+      "entryKey": "Calendar.RegionMomentumCalendarSubscriber.Subscribers.MomentumHeader",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "The Uprising's Momentum is reduced.",
+        "English": "The Uprising's Momentum is reduced.",
+        "Polish": "The Uprising's Momentum is reduced.",
+        "German": "The Uprising's Momentum is reduced.",
+        "French": "The Uprising's Momentum is reduced.",
+        "Spanish": "The Uprising's Momentum is reduced.",
+        "Chinese": "The Uprising's Momentum is reduced."
+      }
+    },
+    {
+      "entryID": "0157f693-9af3-4299-8748-675e1478fbd4",
+      "entryKey": "Calendar.RegionMoraleCalendarSubscriber.Subscribers.LoseMoraleHeader",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "Districts lose Morale.",
+        "English": "Districts lose Morale.",
+        "Polish": "Districts lose Morale.",
+        "German": "Districts lose Morale.",
+        "French": "Districts lose Morale.",
+        "Spanish": "Districts lose Morale.",
+        "Chinese": "Districts lose Morale."
+      }
+    },
+    {
+      "entryID": "01d00e15-0921-4b8b-a6af-8b6084b9d0dd",
+      "entryKey": "Calendar.RegionNewDayCalendarSubscriber.Subscribers.DayHeader",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "Day",
+        "English": "Day",
+        "Polish": "Day",
+        "German": "Day",
+        "French": "Day",
+        "Spanish": "Day",
+        "Chinese": "Day"
+      }
+    },
+    {
+      "entryID": "d4e8ec01-e772-495d-a235-361c34a0904f",
+      "entryKey": "Calendar.RegionNewDayCalendarSubscriber.Subscribers.NewDayHeader",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "A new day begins.",
+        "English": "A new day begins.",
+        "Polish": "A new day begins.",
+        "German": "A new day begins.",
+        "French": "A new day begins.",
+        "Spanish": "A new day begins.",
+        "Chinese": "A new day begins."
+      }
+    },
+    {
+      "entryID": "03c50935-b181-4c6f-9879-ddae7317db0c",
+      "entryKey": "Calendar.RegionSurrenderCalendarSubscriber.Subscribers.HeaderResisted",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "Districts refuse to surrender!",
+        "English": "Districts refuse to surrender!",
+        "Polish": "Districts refuse to surrender!",
+        "German": "Districts refuse to surrender!",
+        "French": "Districts refuse to surrender!",
+        "Spanish": "Districts refuse to surrender!",
+        "Chinese": "Districts refuse to surrender!"
+      }
+    },
+    {
+      "entryID": "37301bc7-20e0-4c81-960e-62ff2137e412",
+      "entryKey": "Calendar.RegionSurrenderCalendarSubscriber.Subscribers.HeaderSurrendered",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "DISTRICTS SURRENDERED!",
+        "English": "DISTRICTS SURRENDERED!",
+        "Polish": "DISTRICTS SURRENDERED!",
+        "German": "DISTRICTS SURRENDERED!",
+        "French": "DISTRICTS SURRENDERED!",
+        "Spanish": "DISTRICTS SURRENDERED!",
+        "Chinese": "DISTRICTS SURRENDERED!"
+      }
+    },
+    {
+      "entryID": "05b84919-34b7-4e39-a112-bf914a9d11dd",
+      "entryKey": "CalendarTimeUI.TimeUI.DayTextPart",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "Day",
+        "English": "Day",
+        "Polish": "Day",
+        "German": "Day",
+        "French": "Day",
+        "Spanish": "Day",
+        "Chinese": "Day"
+      }
+    },
+    {
+      "entryID": "96e09d1b-3543-4b48-ae7e-0734fa26c3b4",
+      "entryKey": "CharacterOverTimeHealingCalendarSubscriber.PAXSubscribers.HealingHeader",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "Your team rests.",
+        "English": "Your team rests.",
+        "Polish": "Your team rests.",
+        "German": "Your team rests.",
+        "French": "Your team rests.",
+        "Spanish": "Your team rests.",
+        "Chinese": "Your team rests."
+      }
+    },
+    {
+      "entryID": "a3a1319f-72b2-4735-8a16-91c3a4c84ca7",
+      "entryKey": "CharacterOverTimeHealingCalendarSubscriber.PAXSubscribers.MessageText",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "teammate(s) recover some health.",
+        "English": "teammate(s) recover some health.",
+        "Polish": "teammate(s) recover some health.",
+        "German": "teammate(s) recover some health.",
+        "French": "teammate(s) recover some health.",
+        "Spanish": "teammate(s) recover some health.",
+        "Chinese": "teammate(s) recover some health."
+      }
+    },
+    {
+      "entryID": "4961f0fb-54ac-453a-92a9-79dec843ebe6",
+      "entryKey": "CharacterOverTimeHealingCalendarSubscriber.Subscribers.HealingHeader",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "Your team rests.",
+        "English": "Your team rests.",
+        "Polish": "Your team rests.",
+        "German": "Your team rests.",
+        "French": "Your team rests.",
+        "Spanish": "Your team rests.",
+        "Chinese": "Your team rests."
+      }
+    },
+    {
+      "entryID": "1d57e260-4f24-4a95-baf8-f78ad10b8abc",
+      "entryKey": "CharacterOverTimeHealingCalendarSubscriber.Subscribers.MessageText",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "teammate(s) recover some health.",
+        "English": "teammate(s) recover some health.",
+        "Polish": "teammate(s) recover some health.",
+        "German": "teammate(s) recover some health.",
+        "French": "teammate(s) recover some health.",
+        "Spanish": "teammate(s) recover some health.",
+        "Chinese": "teammate(s) recover some health."
+      }
+    },
+    {
+      "entryID": "8d5c50a0-7f70-4c12-949c-e8bd99adca60",
+      "entryKey": "CodexFilterButton.Filter.LabelText",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "Filter:",
+        "English": "Filter:",
+        "Polish": "Filter:",
+        "German": "Filter:",
+        "French": "Filter:",
+        "Spanish": "Filter:",
+        "Chinese": "Filter:"
+      }
+    },
+    {
+      "entryID": "a91b8964-8e51-457e-b7db-7e8e150b0b25",
+      "entryKey": "CodexSortButton.Sort.LabelText",
+      "filename": "Calendar.json",
+      "languages": {
+        "DEFAULT": "Sort:",
+        "English": "Sort:",
+        "Polish": "Sort:",
+        "German": "Sort:",
+        "French": "Sort:",
+        "Spanish": "Sort:",
+        "Chinese": "Sort:"
+      }
+    }
+  ]
+}

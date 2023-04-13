@@ -18,10 +18,5 @@ public class TranslationChecksum {
         this.keyChecksum = keyChecksum;
     }
 
-    @JsonCreator
-    public TranslationChecksum(@JsonProperty("keyChecksum") String keyChecksum) {
-        this.keyChecksum = keyChecksum;
-
-    }
 
 }
