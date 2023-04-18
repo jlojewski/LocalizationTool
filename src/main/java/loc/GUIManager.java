@@ -295,6 +295,9 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     }
 
 
+    //ustal czemu i kiedy w konsoli bialym tekstem pojawia "Exception while removing references" na zamknieciu programu
+
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 

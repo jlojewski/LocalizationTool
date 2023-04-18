@@ -9,8 +9,10 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.input.BOMInputStream;
 import org.w3c.dom.ls.LSOutput;
 
 import javax.swing.*;
@@ -114,15 +116,27 @@ public class IOManager {
         fileImportMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
 
         ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
+        InputStream inputStream;
         for (File f : filesToConvert) {
 
 
             try {
+                String defaultEncoding = "UTF-8";
+                inputStream = new FileInputStream(f);
+                try {
+                    BOMInputStream bOMInputStream = new BOMInputStream(inputStream);
+                    ByteOrderMark bom = bOMInputStream.getBOM();
+                    String charsetName = bom == null ? defaultEncoding : bom.getCharsetName();
+                    InputStreamReader reader = new InputStreamReader(new BufferedInputStream(bOMInputStream), charsetName);
+
                 Path importedFilePath = Paths.get(f.getAbsolutePath());
                 Path importedFileName = importedFilePath.getFileName();
                 String convertedPath = importedFilePath.toString();
                 String targetJson = readFileAsString(convertedPath);
-                listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertGameJsonToList(f, targetJson, fileImportMapper));
+                listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertGameJsonToList(f, targetJson, fileImportMapper, reader));
+                } finally {
+                    inputStream.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -513,6 +527,7 @@ public class IOManager {
         crc32.update(bytes, 0, bytes.length);
         return crc32.getValue();
     }
+
 
 
 }

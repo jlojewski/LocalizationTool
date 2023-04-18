@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -63,7 +64,7 @@ public class TranslationEntryManager {
 //    }
 
 
-        public ArrayList<TranslationEntry> convertGameJsonToList(File file, String json, ObjectMapper mapper) {
+        public ArrayList<TranslationEntry> convertGameJsonToList(File file, String json, ObjectMapper mapper, InputStreamReader reader) {
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>(){};
 
@@ -75,7 +76,7 @@ public class TranslationEntryManager {
         JsonNode node;
 
         try {
-            node = mapper.readValue(json, JsonNode.class);
+            node = mapper.readValue(reader, JsonNode.class);
             Iterator<Map.Entry<String, JsonNode>> userEntries = node.fields();
             while(userEntries.hasNext()) {
                 Map.Entry<String, JsonNode> userEntry = userEntries.next();
@@ -96,7 +97,9 @@ public class TranslationEntryManager {
             //come back later and check if the above needs to be replaced with
             //another call GUIManager.getInstance().setupFileChooser();
             //as it seems to be buggy at the moment
-        }
+        } catch (IOException e) {
+            e.printStackTrace();
+            }
 
 
         return result;
