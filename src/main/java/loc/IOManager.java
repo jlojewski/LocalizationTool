@@ -381,7 +381,7 @@ public class IOManager {
         String langPath;
         String outputKey;
         String outputValue;
-        
+
         LinkedHashMap<String, String> mapOfLanguagesToBeUsed = listOfEntries.get(0).getLanguages();
         List<String> languageList = new ArrayList<>(mapOfLanguagesToBeUsed.keySet());
 
