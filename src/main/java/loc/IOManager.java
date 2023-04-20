@@ -467,6 +467,7 @@ public class IOManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        byte[] bytes = output.toByteArray();
 
 
         String keysChecksum = DigestUtils.md5Hex(bytes);
