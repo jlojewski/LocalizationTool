@@ -456,15 +456,13 @@ public class IOManager {
         Collections.sort(listCopy);
 
         String extractedKey = null;
-        for (TranslationEntry t : list) {
+        for (TranslationEntry t : listCopy) {
             extractedKey = t.getEntryKey();
             keys.add(extractedKey);
         }
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        ObjectOutputStream obj;
-        try {
-            obj = new ObjectOutputStream(output);
+        try (ObjectOutputStream obj = new ObjectOutputStream(output)){
             obj.writeObject(keys);
         } catch (IOException e) {
             e.printStackTrace();
