@@ -381,9 +381,7 @@ public class IOManager {
         String langPath;
         String outputKey;
         String outputValue;
-
-        /// ponieważ get(0) niżej pobiera pierwszy element z listy - a elementem 0 jest checksum bez listy
-        /// języków - to całość się wyjebuje; popraw najlepiej tak, żeby checksum był rozkminiany/usuwany już tutaj
+        
         LinkedHashMap<String, String> mapOfLanguagesToBeUsed = listOfEntries.get(0).getLanguages();
         List<String> languageList = new ArrayList<>(mapOfLanguagesToBeUsed.keySet());
 
