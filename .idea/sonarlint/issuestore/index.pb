@@ -26,21 +26,11 @@ a
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 ^
 .consolidated_translation_file — kopia 2.json,e\7\e74ed35ffbb6c5eb83a715bf4a91aeeebb830b2a
-S
-#src/main/java/loc/LanguageMenu.java,3\c\3c4e248469c890ad26dccc4d72213e6f11db34b0
-=
-Calendar.json,3\b\3b879e7cc118b6ecede4f64c4460f55c31e77b19
 A
 testtesttest.json,e\f\ef8b3710d373d96c3ab96050012b94b930d6009d
-N
-Calendar — duplikattest.json,b\c\bc908b122f002de935bd9fa23aea07f55dcab1d7
-K
-src/main/java/loc/Main.java,b\3\b36cec49e4652c22c1180b798977fc0f6b002a29
 ^
 .consolidated_translation_file — kopia 3.json,1\7\17cd1b7d9ca4d204c0a1e2c539d4d2d72c1e1a51
-Z
-*src/main/java/loc/TranslationSettings.java,0\0\002893f2dd15f5fd2614a905297cf0cc26bc3b24
 ]
--src/main/java/loc/TranslationFileContent.java,0\b\0bf7a9e405b163eab99838dd098226510bbf040b
-W
-'src/main/java/loc/TranslationEntry.java,1\6\1697e160f22bc9e4c3a311fd4d85e9f4ef3313f2
+-Calendar — do testowania duplikatów 2.json,6\a\6ad11c842100b9dcebd055d8bdb06135896a3bf1
+=
+Calendar.json,3\b\3b879e7cc118b6ecede4f64c4460f55c31e77b19

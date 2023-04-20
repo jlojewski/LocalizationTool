@@ -487,15 +487,13 @@ public class IOManager {
 
 
         if (!externalChecksumList.isEmpty()) {
-            for (String c : externalChecksumList) {
-                if (c.equals(checksumToCompare)) {
-                    System.out.println("ZNALEZIONO TEN SAM CHECKSUM " + c);
+                if (externalChecksumList.contains(checksumToCompare)) {
+                    System.out.println("ZNALEZIONO TEN SAM CHECKSUM " + checksumToCompare);
 
                 } else {
-                    System.out.println("NIE ZNALEZIONO CHECKSUMY" + c);
+                    System.out.println("NIE ZNALEZIONO CHECKSUMY" + checksumToCompare);
                     JOptionPane.showMessageDialog(null, "No matching checksums detected! Please make sure that translation keys are not modified between the operations.", "Warning", JOptionPane.WARNING_MESSAGE);
                 }
-            }
         } else {
             System.out.println("NIE ZNALEZIONO CHECKSUMY");
             JOptionPane.showMessageDialog(null, "No matching checksums detected! Please make sure that translation keys are not modified between the operations.", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -522,11 +520,6 @@ public class IOManager {
     /// worek wszystkich checksum + sprawdzanie najnowszej + z jakiego projektu pochodziły - dyskusja z gruchą -
     /// w razie czego zapytaj ponownie
 
-    public static long getCRC32Checksum(byte[] bytes) {
-        Checksum crc32 = new CRC32();
-        crc32.update(bytes, 0, bytes.length);
-        return crc32.getValue();
-    }
 
 
 

@@ -94,8 +94,9 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         buttonPanel1 = new JPanel();
         buttonPanel1.add(openButton1);
         buttonPanel1.add(importSettingsButton);
+        importSettingsButton.setEnabled(false);
         buttonPanel1.add(languageSettingsButton);
-        languageSettingsButton.setEnabled(false);
+//        languageSettingsButton.setEnabled(false);
         buttonPanel1.add(saveButton1);
         buttonPanel1.setBorder(border1);
 
@@ -224,9 +225,9 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 
     public void enableLanguageButton(boolean trueOrFalse) {
         if (trueOrFalse == true) {
-            languageSettingsButton.setEnabled(true);
+            importSettingsButton.setEnabled(true);
         } else {
-            languageSettingsButton.setEnabled(false);
+            importSettingsButton.setEnabled(false);
         }
     }
 
@@ -265,6 +266,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
+
 
         } else if (e.getSource() == saveButton1) {
             IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
