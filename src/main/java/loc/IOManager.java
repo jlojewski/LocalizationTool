@@ -489,7 +489,7 @@ public class IOManager {
                     System.out.println("ZNALEZIONO TEN SAM CHECKSUM " + checksumToCompare);
 
                 } else {
-                    System.out.println("NIE ZNALEZIONO CHECKSUMY" + checksumToCompare);
+                    System.out.println("NIE ZNALEZIONO CHECKSUMY");
                     JOptionPane.showMessageDialog(null, "No matching checksums detected! Please make sure that translation keys are not modified between the operations.", "Warning", JOptionPane.WARNING_MESSAGE);
                 }
         } else {
