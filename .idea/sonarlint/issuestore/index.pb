@@ -17,8 +17,6 @@ R
 "localization/Chinese/Calendar.json,8\f\8f8ce05071a913f6c9accea67a3c495fe9ff6455
 I
 translation_settings.json,e\f\ef00398200d91b529c40df08335e2db468c8d006
-a
-1src/main/java/loc/TranslationSettingsManager.java,3\6\362013afa1087dd21ce86db6d6088281e9bb7c4a
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 :
@@ -32,5 +30,3 @@ A
 .consolidated_translation_file — kopia 3.json,1\7\17cd1b7d9ca4d204c0a1e2c539d4d2d72c1e1a51
 ]
 -Calendar — do testowania duplikatów 2.json,6\a\6ad11c842100b9dcebd055d8bdb06135896a3bf1
-=
-Calendar.json,3\b\3b879e7cc118b6ecede4f64c4460f55c31e77b19

@@ -113,7 +113,7 @@ public class IOManager {
         ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(filesToUse));
 
         ObjectMapper fileImportMapper = new ObjectMapper();
-        fileImportMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
+//        fileImportMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
 
         ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
         InputStream inputStream;
@@ -452,11 +452,12 @@ public class IOManager {
 
     public String getChecksumFromKeysInTranslationFile(List<TranslationEntry> list) {
         ArrayList<String> keys = new ArrayList<String>();
-        ArrayList<TranslationEntry> listCopy = new ArrayList<TranslationEntry>(list);
-        Collections.sort(listCopy);
+//        ArrayList<TranslationEntry> listCopy = new ArrayList<TranslationEntry>(list);
+//        Collections.sort(list);
+//        !!!WAZNE: SORTOWANIE ZOSTALO WYKOMENTOWANE, BO POWODUJE LOSOWA ZMIANE CHECKSUMY!!!
 
         String extractedKey = null;
-        for (TranslationEntry t : listCopy) {
+        for (TranslationEntry t : list) {
             extractedKey = t.getEntryKey();
             keys.add(extractedKey);
         }
