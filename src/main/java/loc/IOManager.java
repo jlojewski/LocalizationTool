@@ -181,10 +181,16 @@ public class IOManager {
 //            checksum = checksumNode.asText();
 
             result = fileImportMapper.readValue(consolidatedJson, typeRefFinal);
-            generatedChecksum = getChecksumFromKeysInTranslationFile(result);
-            setTranslationKeyChecksum(generatedChecksum);
+            for (var t : result) {
+                System.out.println(t.getEntryKey());
+            }
+//            generatedChecksum = getChecksumFromKeysInTranslationFile(result);
+//            setTranslationKeyChecksum(generatedChecksum);
+            setTranslationKeyChecksum(getChecksumFromKeysInTranslationFile(result));
+            System.out.println(getTranslationKeyChecksum());
             System.out.println(generatedChecksum);
-            compareLoadedChecksumWithExternalFile(generatedChecksum, externalChecksumsFileName);
+            compareLoadedChecksumWithExternalFile(getTranslationKeyChecksum(), externalChecksumsFileName);
+            saveTestListOfKeys2(result);
 
 
         } catch (IOException e) {
@@ -284,6 +290,11 @@ public class IOManager {
             TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
             File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
             File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
+            for (var t : consolidatedArray) {
+                System.out.println(t.getEntryKey());
+
+            }
+            saveTestListOfKeys1(consolidatedArray);
             mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
             storeChecksumInFile(storedChecksumFile);
 
@@ -460,6 +471,7 @@ public class IOManager {
         for (TranslationEntry t : list) {
             extractedKey = t.getEntryKey();
             keys.add(extractedKey);
+//            System.out.println(extractedKey);
         }
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -469,6 +481,7 @@ public class IOManager {
             e.printStackTrace();
         }
         byte[] bytes = output.toByteArray();
+
 
 
         String keysChecksum = DigestUtils.md5Hex(bytes);
@@ -516,6 +529,53 @@ public class IOManager {
 
     /// worek wszystkich checksum + sprawdzanie najnowszej + ewentualnie skąd podchodzą
     /// w razie czego zapytaj ponownie
+
+
+
+    public void saveTestListOfKeys1(List<TranslationEntry> keyArray) {
+        String programPath = (System.getProperty("user.dir"));
+        File savedTestFile1 = new File(programPath, "test_file1.txt");
+        try (FileWriter fw = new FileWriter(savedTestFile1, false);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter keyWriter = new PrintWriter(bw)) {
+//            TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
+//            File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
+            for (var t : keyArray) {
+
+
+                    String lineToWrite = t.getEntryKey();
+                    keyWriter.println(lineToWrite);
+
+                }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void saveTestListOfKeys2(List<TranslationEntry> keyArray) {
+        String programPath = (System.getProperty("user.dir"));
+        File savedTestFile2 = new File(programPath, "test_file2.txt");
+        try (FileWriter fw = new FileWriter(savedTestFile2, false);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter keyWriter = new PrintWriter(bw)) {
+//            TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
+//            File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
+            for (var t : keyArray) {
+
+
+                String lineToWrite = t.getEntryKey();
+                keyWriter.println(lineToWrite);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 
 
