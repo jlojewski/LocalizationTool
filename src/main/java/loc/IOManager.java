@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.io.ByteArrayDataOutput;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.FilenameUtils;
@@ -24,11 +25,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.zip.CRC32;
-import java.util.zip.Checksum;
+import com.google.common.io.ByteStreams;
+import org.apache.commons.io.IOUtils;
 
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
+
 
 public class IOManager {
 
@@ -150,7 +150,7 @@ public class IOManager {
 
 
     public ArrayList<TranslationEntry> loadConsolidatedTranslationFile(File consolidatedJson) {
-        String generatedChecksum = null;
+//        String generatedChecksum = null;
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         ObjectMapper fileImportMapper = new ObjectMapper();
         TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>() {};
@@ -172,15 +172,16 @@ public class IOManager {
         try {
             result = fileImportMapper.readValue(consolidatedJson, typeRefFinal);
             for (TranslationEntry t : result) {
-                System.out.println(t.getEntryKey());
+//                System.out.println(t.getEntryKey());
             }
 //            generatedChecksum = getChecksumFromKeysInTranslationFile(result);
 //            setTranslationKeyChecksum(generatedChecksum);
             setTranslationKeyChecksum(getChecksumFromKeysInTranslationFile(result));
             System.out.println(getTranslationKeyChecksum());
-            System.out.println(generatedChecksum);
+//            System.out.println(generatedChecksum);
             compareLoadedChecksumWithExternalFile(getTranslationKeyChecksum(), externalChecksumsFileName);
             saveTestListOfKeys2(result);
+            saveConsolidatedTranslationFile2(result);
 
 
         } catch (IOException e) {
@@ -281,7 +282,27 @@ public class IOManager {
             File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
             File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
             for (var t : consolidatedArray) {
-                System.out.println(t.getEntryKey());
+//                System.out.println(t.getEntryKey());
+
+            }
+            saveTestListOfKeys1(consolidatedArray);
+            mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
+            storeChecksumInFile(storedChecksumFile);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void saveConsolidatedTranslationFile2(List<TranslationEntry> consolidatedArray) {
+        String programPath = (System.getProperty("user.dir"));
+        try {
+//            TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
+            File savedConsolidatedFile = new File(programPath, "test_fi.json");
+            File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
+            for (var t : consolidatedArray) {
+//                System.out.println(t.getEntryKey());
 
             }
             saveTestListOfKeys1(consolidatedArray);
@@ -475,10 +496,13 @@ public class IOManager {
 //            System.out.println(extractedKey);
         }
 
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         try (ObjectOutputStream obj = new ObjectOutputStream(output)) {
-            obj.writeObject(keys);
+//            obj.writeObject(keys);
+            obj.writeUnshared(keys);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
