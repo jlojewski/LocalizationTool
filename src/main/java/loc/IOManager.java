@@ -129,11 +129,11 @@ public class IOManager {
                     String charsetName = bom == null ? defaultEncoding : bom.getCharsetName();
                     InputStreamReader reader = new InputStreamReader(new BufferedInputStream(bOMInputStream), charsetName);
 
-                Path importedFilePath = Paths.get(f.getAbsolutePath());
-                Path importedFileName = importedFilePath.getFileName();
-                String convertedPath = importedFilePath.toString();
-                String targetJson = readFileAsString(convertedPath);
-                listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertGameJsonToList(f, targetJson, fileImportMapper, reader));
+                    Path importedFilePath = Paths.get(f.getAbsolutePath());
+                    Path importedFileName = importedFilePath.getFileName();
+                    String convertedPath = importedFilePath.toString();
+                    String targetJson = readFileAsString(convertedPath);
+                    listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertGameJsonToList(f, targetJson, fileImportMapper, reader));
                 } finally {
                     inputStream.close();
                 }
@@ -150,16 +150,10 @@ public class IOManager {
 
 
     public ArrayList<TranslationEntry> loadConsolidatedTranslationFile(File consolidatedJson) {
-//        ArrayNode outerNode;
-//        JsonNode checksumNode;
-//        JsonNode rootNode;
         String generatedChecksum = null;
-//        JsonNode checksumNode;
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         ObjectMapper fileImportMapper = new ObjectMapper();
-//        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>(){};
-        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>() {
-        };
+        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>() {};
 
         String programPath = (System.getProperty("user.dir"));
         String checksumTrackerName = "checksum_tracker.txt";
@@ -176,12 +170,8 @@ public class IOManager {
         Path externalChecksumsFileName = externalChecksumsFilePath.getFileName();
 
         try {
-//            rootNode = fileImportMapper.readTree(consolidatedJson);
-//            checksumNode = rootNode.findValue("keyChecksum");
-//            checksum = checksumNode.asText();
-
             result = fileImportMapper.readValue(consolidatedJson, typeRefFinal);
-            for (var t : result) {
+            for (TranslationEntry t : result) {
                 System.out.println(t.getEntryKey());
             }
 //            generatedChecksum = getChecksumFromKeysInTranslationFile(result);
@@ -456,32 +446,43 @@ public class IOManager {
     }
 
 
-    public String readFileAsString(String file) throws Exception {
-        return new String(Files.readAllBytes(Paths.get(file)));
+    public String readFileAsString(String file) {
+
+        byte[] bytes = null;
+
+        try {
+
+            bytes = Files.readAllBytes(Paths.get(file));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new String(bytes);
     }
 
 
     public String getChecksumFromKeysInTranslationFile(List<TranslationEntry> list) {
         ArrayList<String> keys = new ArrayList<String>();
-//        ArrayList<TranslationEntry> listCopy = new ArrayList<TranslationEntry>(list);
+        ArrayList<TranslationEntry> listCopy = new ArrayList<TranslationEntry>(list);
 //        Collections.sort(list);
 //        !!!WAZNE: SORTOWANIE ZOSTALO WYKOMENTOWANE, BO POWODUJE LOSOWA ZMIANE CHECKSUMY!!!
 
-        String extractedKey = null;
-        for (TranslationEntry t : list) {
-            extractedKey = t.getEntryKey();
+
+        for (TranslationEntry t : listCopy) {
+            String extractedKey = t.getEntryKey();
             keys.add(extractedKey);
 //            System.out.println(extractedKey);
         }
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        try (ObjectOutputStream obj = new ObjectOutputStream(output)){
+
+        try (ObjectOutputStream obj = new ObjectOutputStream(output)) {
             obj.writeObject(keys);
         } catch (IOException e) {
             e.printStackTrace();
         }
         byte[] bytes = output.toByteArray();
-
 
 
         String keysChecksum = DigestUtils.md5Hex(bytes);
@@ -497,13 +498,13 @@ public class IOManager {
 
 
         if (!externalChecksumList.isEmpty()) {
-                if (externalChecksumList.contains(checksumToCompare)) {
-                    System.out.println("ZNALEZIONO TEN SAM CHECKSUM " + checksumToCompare);
+            if (externalChecksumList.contains(checksumToCompare)) {
+                System.out.println("ZNALEZIONO TEN SAM CHECKSUM " + checksumToCompare);
 
-                } else {
-                    System.out.println("NIE ZNALEZIONO CHECKSUMY");
-                    JOptionPane.showMessageDialog(null, "No matching checksums detected! Please make sure that translation keys are not modified between the operations.", "Warning", JOptionPane.WARNING_MESSAGE);
-                }
+            } else {
+                System.out.println("NIE ZNALEZIONO CHECKSUMY");
+                JOptionPane.showMessageDialog(null, "No matching checksums detected! Please make sure that translation keys are not modified between the operations.", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
         } else {
             System.out.println("NIE ZNALEZIONO CHECKSUMY");
             JOptionPane.showMessageDialog(null, "No matching checksums detected! Please make sure that translation keys are not modified between the operations.", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -531,7 +532,6 @@ public class IOManager {
     /// w razie czego zapytaj ponownie
 
 
-
     public void saveTestListOfKeys1(List<TranslationEntry> keyArray) {
         String programPath = (System.getProperty("user.dir"));
         File savedTestFile1 = new File(programPath, "test_file1.txt");
@@ -543,10 +543,10 @@ public class IOManager {
             for (var t : keyArray) {
 
 
-                    String lineToWrite = t.getEntryKey();
-                    keyWriter.println(lineToWrite);
+                String lineToWrite = t.getEntryKey();
+                keyWriter.println(lineToWrite);
 
-                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -575,9 +575,6 @@ public class IOManager {
         }
 
     }
-
-
-
 
 
 }
