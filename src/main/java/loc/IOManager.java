@@ -134,6 +134,7 @@ public class IOManager {
                     String convertedPath = importedFilePath.toString();
                     String targetJson = readFileAsString(convertedPath);
                     listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertGameJsonToList(f, targetJson, fileImportMapper, reader));
+                    
                 } finally {
                     inputStream.close();
                 }
