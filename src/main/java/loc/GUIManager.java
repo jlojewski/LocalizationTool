@@ -263,7 +263,14 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
             if (chosenFiles == null) {
                 return;
             }
+//            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+
+            var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFiles();
+            tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
+            IOManager.getInstance().setExpandableListOfLoadedFiles(tempListOfLists);
+
+
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 

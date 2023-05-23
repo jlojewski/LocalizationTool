@@ -28,7 +28,5 @@ A
 .consolidated_translation_file — kopia 3.json,1\7\17cd1b7d9ca4d204c0a1e2c539d4d2d72c1e1a51
 =
 Calendar.json,3\b\3b879e7cc118b6ecede4f64c4460f55c31e77b19
-\
-,src/main/java/loc/LanguageCheckboxTable.java,6\8\68edc9991aa599e839d210edcf153e5d9988073d
 ]
 -Calendar — do testowania duplikatów 2.json,6\a\6ad11c842100b9dcebd055d8bdb06135896a3bf1

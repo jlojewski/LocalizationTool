@@ -166,6 +166,15 @@ public class TranslationEntryManager {
 //        return mergedMap;
 //    }
 
+//    public ArrayList<TranslationEntry> mergeLoadedEntryFilesInArrays(ArrayList<List<TranslationEntry>> listOfEntryFiles) {
+//        ArrayList<TranslationEntry> mergedList = new ArrayList<>();
+//        for (var list:listOfEntryFiles) {
+//            mergedList.addAll(list);
+//
+//        }
+//        return mergedList;
+//    }
+
     public ArrayList<TranslationEntry> mergeLoadedEntryFilesInArrays(ArrayList<List<TranslationEntry>> listOfEntryFiles) {
         ArrayList<TranslationEntry> mergedList = new ArrayList<>();
         for (var list:listOfEntryFiles) {
@@ -238,6 +247,15 @@ public class TranslationEntryManager {
 //        }
 //    }
 
+    public ArrayList<String> extractKeys (List<TranslationEntry> listOfEntries) {
+        String tempKey = null;
+        ArrayList<String> listOfKeys = new ArrayList<>();
+        for (TranslationEntry e : listOfEntries) {
+            tempKey = e.getEntryKey();
+            listOfKeys.add(tempKey);
+        }
+        return listOfKeys;
+    }
 
 
 }
