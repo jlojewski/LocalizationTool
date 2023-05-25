@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import org.apache.commons.io.FilenameUtils;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
@@ -28,6 +29,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     JButton saveButton1;
     JButton importSettingsButton;
     JButton languageSettingsButton;
+    JButton confirmButton1;
     JScrollPane logScrollPane;
     BorderLayout layout;
     LanguageMenu languageMenu;
@@ -71,6 +73,9 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         saveButton1 = new JButton("Save");
         saveButton1.addActionListener(this);
 
+        confirmButton1 = new JButton("Confirm selection");
+        confirmButton1.addActionListener(this);
+
         openButton2 = new JButton("Open .json");
         openButton2.addActionListener(this);
 
@@ -93,6 +98,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 
         buttonPanel1 = new JPanel();
         buttonPanel1.add(openButton1);
+        buttonPanel1.add(confirmButton1);
         buttonPanel1.add(importSettingsButton);
         importSettingsButton.setEnabled(false);
         buttonPanel1.add(languageSettingsButton);
@@ -274,8 +280,15 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 
+        } else if (e.getSource() == confirmButton1) {
+            var listToBeUsed = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles());
+            Collections.sort(listToBeUsed);
+            TranslationEntryManager.getInstance().extractKeys(listToBeUsed);
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
+//            TranslationEntryManager.getInstance().extractKeys(TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles()));
 
         } else if (e.getSource() == saveButton1) {
+//            IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
             IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
 //            log.setCaretPosition(log.getDocument().getLength());
 

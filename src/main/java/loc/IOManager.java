@@ -119,44 +119,44 @@ public class IOManager {
     }
 
 
-//    public ArrayList<TranslationEntry> loadUnconsolidatedTranslationFiles(File[] filesToUse) {
-//        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(filesToUse));
-//
-//        ObjectMapper fileImportMapper = new ObjectMapper();
-////        fileImportMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
-//
-//        ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
-//        InputStream inputStream;
-//        for (File f : filesToConvert) {
-//
-//
-//            try {
-//                String defaultEncoding = "UTF-8";
-//                inputStream = new FileInputStream(f);
-//                try {
-//                    BOMInputStream bOMInputStream = new BOMInputStream(inputStream);
-//                    ByteOrderMark bom = bOMInputStream.getBOM();
-//                    String charsetName = bom == null ? defaultEncoding : bom.getCharsetName();
-//                    InputStreamReader reader = new InputStreamReader(new BufferedInputStream(bOMInputStream), charsetName);
-//
-//                    Path importedFilePath = Paths.get(f.getAbsolutePath());
-//                    Path importedFileName = importedFilePath.getFileName();
-//                    String convertedPath = importedFilePath.toString();
-//                    String targetJson = readFileAsString(convertedPath);
-//                    listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertGameJsonToList(f, targetJson, fileImportMapper, reader));
-//                } finally {
-//                    inputStream.close();
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//        ArrayList<TranslationEntry> finalMergedList = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(listOfLoadedFiles);
+    public ArrayList<TranslationEntry> loadUnconsolidatedTranslationFiles(File[] filesToUse) {
+        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(filesToUse));
+
+        ObjectMapper fileImportMapper = new ObjectMapper();
+//        fileImportMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
+
+        ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
+        InputStream inputStream;
+        for (File f : filesToConvert) {
+
+
+            try {
+                String defaultEncoding = "UTF-8";
+                inputStream = new FileInputStream(f);
+                try {
+                    BOMInputStream bOMInputStream = new BOMInputStream(inputStream);
+                    ByteOrderMark bom = bOMInputStream.getBOM();
+                    String charsetName = bom == null ? defaultEncoding : bom.getCharsetName();
+                    InputStreamReader reader = new InputStreamReader(new BufferedInputStream(bOMInputStream), charsetName);
+
+                    Path importedFilePath = Paths.get(f.getAbsolutePath());
+                    Path importedFileName = importedFilePath.getFileName();
+                    String convertedPath = importedFilePath.toString();
+                    String targetJson = readFileAsString(convertedPath);
+                    listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertGameJsonToList(f, targetJson, fileImportMapper, reader));
+                } finally {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        ArrayList<TranslationEntry> finalMergedList = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(listOfLoadedFiles);
 //        setTranslationKeyChecksum(getChecksumFromKeysInTranslationFile(finalMergedList));
-//
-//        return finalMergedList;
-//    }
+
+        return finalMergedList;
+    }
 
 
     public ArrayList<TranslationEntry> loadConsolidatedTranslationFile(File consolidatedJson) {
@@ -611,42 +611,7 @@ public class IOManager {
     }
 
 
-    public ArrayList<TranslationEntry> loadUnconsolidatedTranslationFiles(File[] filesToUse) {
-        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(filesToUse));
 
-        ObjectMapper fileImportMapper = new ObjectMapper();
-
-        ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
-        InputStream inputStream;
-        for (File f : filesToConvert) {
-
-
-            try {
-                String defaultEncoding = "UTF-8";
-                inputStream = new FileInputStream(f);
-                try {
-                    BOMInputStream bOMInputStream = new BOMInputStream(inputStream);
-                    ByteOrderMark bom = bOMInputStream.getBOM();
-                    String charsetName = bom == null ? defaultEncoding : bom.getCharsetName();
-                    InputStreamReader reader = new InputStreamReader(new BufferedInputStream(bOMInputStream), charsetName);
-
-                    Path importedFilePath = Paths.get(f.getAbsolutePath());
-                    Path importedFileName = importedFilePath.getFileName();
-                    String convertedPath = importedFilePath.toString();
-                    String targetJson = readFileAsString(convertedPath);
-                    listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertGameJsonToList(f, targetJson, fileImportMapper, reader));
-                } finally {
-                    inputStream.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-        ArrayList<TranslationEntry> finalMergedList = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(listOfLoadedFiles);
-
-        return finalMergedList;
-    }
 
 
 
