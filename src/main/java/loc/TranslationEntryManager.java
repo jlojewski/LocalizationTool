@@ -64,9 +64,10 @@ public class TranslationEntryManager {
 //    }
 
 
-        public ArrayList<TranslationEntry> convertGameJsonToList(File file, String json, ObjectMapper mapper, InputStreamReader reader) {
+    public ArrayList<TranslationEntry> convertGameJsonToList(File file, String json, ObjectMapper mapper, InputStreamReader reader) {
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
-        TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>(){};
+        TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>() {
+        };
 
         Path importedFilePath = Paths.get(file.getAbsolutePath());
         Path importedFileName = importedFilePath.getFileName();
@@ -78,7 +79,7 @@ public class TranslationEntryManager {
         try {
             node = mapper.readValue(reader, JsonNode.class);
             Iterator<Map.Entry<String, JsonNode>> userEntries = node.fields();
-            while(userEntries.hasNext()) {
+            while (userEntries.hasNext()) {
                 Map.Entry<String, JsonNode> userEntry = userEntries.next();
                 tempTranslationEntry = new TranslationEntry(null, null, null, null, null);
                 tempTranslationEntry.entryID = UUID.randomUUID();
@@ -99,7 +100,7 @@ public class TranslationEntryManager {
             //as it seems to be buggy at the moment
         } catch (IOException e) {
             e.printStackTrace();
-            }
+        }
 
 
         return result;
@@ -177,7 +178,7 @@ public class TranslationEntryManager {
 
     public ArrayList<TranslationEntry> mergeLoadedEntryFilesInArrays(ArrayList<List<TranslationEntry>> listOfEntryFiles) {
         ArrayList<TranslationEntry> mergedList = new ArrayList<>();
-        for (var list:listOfEntryFiles) {
+        for (var list : listOfEntryFiles) {
             mergedList.addAll(list);
 
         }
@@ -190,7 +191,7 @@ public class TranslationEntryManager {
         return currentMap;
     }
 
-//this is the currently used/worked on/developed method to convert the initially loaded maps into array(s) with objects
+    //this is the currently used/worked on/developed method to convert the initially loaded maps into array(s) with objects
     public List<TranslationEntry> createTranslationEntriesFromMap(LinkedHashMap<String, String> inputMap, Path filename) {
         List<TranslationEntry> arrayListOfEntriesWithValuesTakenFromMap = inputMap.entrySet().stream().map(entry -> {
             TranslationEntry t = new TranslationEntry(null, null, null, null, null);
@@ -224,10 +225,10 @@ public class TranslationEntryManager {
     public void addLanguagesToLoadedEntries(List<TranslationEntry> originalList, TranslationSettings languageSettings) {
         TranslationEntry tempEntry = null;
         String tempValue = null;
-        for(int i = 0; i < originalList.size(); i++) {
+        for (int i = 0; i < originalList.size(); i++) {
             tempEntry = originalList.get(i);
             tempValue = tempEntry.getLanguages().get("DEFAULT");
-            for(String lang : TranslationSettingsManager.getInstance().getCurrentTranslationSettings().getUserDefinedLanguages()) {
+            for (String lang : TranslationSettingsManager.getInstance().getCurrentTranslationSettings().getUserDefinedLanguages()) {
                 originalList.get(i).languages.put(lang, tempValue);
             }
         }
@@ -247,7 +248,7 @@ public class TranslationEntryManager {
 //        }
 //    }
 
-    public ArrayList<String> extractKeys (List<TranslationEntry> listOfEntries) {
+    public ArrayList<String> extractKeys(List<TranslationEntry> listOfEntries) {
         String tempKey = null;
         ArrayList<String> listOfKeys = new ArrayList<>();
         for (TranslationEntry e : listOfEntries) {
@@ -258,4 +259,44 @@ public class TranslationEntryManager {
     }
 
 
+    public void compareKeys(ArrayList<String> listToCompareFrom, ArrayList<String> listToCompareTo) {
+        String tempKeyToCompareTo = null;
+        String tempStreamResult = null;
+        ArrayList<String> listOfMissingKeys = new ArrayList<String>();
+        for (int i = 0; i < listToCompareFrom.size() - 1; i++) {
+            tempKeyToCompareTo = listToCompareFrom.get(i);
+            String finalTempKeyToCompareTo = tempKeyToCompareTo;
+            tempStreamResult = listToCompareTo.stream()
+                    .filter(e -> e.equals(finalTempKeyToCompareTo))
+                    .findFirst()
+                    .orElse(null);
+            if (tempStreamResult == null) {
+                String keyToReport = tempKeyToCompareTo;
+                listOfMissingKeys.add(keyToReport);
+            }
+
+        }
+        for (int i = 0; i < listToCompareTo.size() - 1; i++) {
+            tempKeyToCompareTo = listToCompareTo.get(i);
+            String finalTempKeyToCompareTo = tempKeyToCompareTo;
+            tempStreamResult = listToCompareFrom.stream()
+                    .filter(e -> e.equals(finalTempKeyToCompareTo))
+                    .findFirst()
+                    .orElse(null);
+            if (tempStreamResult == null) {
+                String keyToReport = tempKeyToCompareTo;
+                listOfMissingKeys.add(keyToReport);
+            }
+        }
+        if (!listOfMissingKeys.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (String s : listOfMissingKeys) {
+                sb.append(s);
+                sb.append("\n");
+            }
+            JOptionPane.showMessageDialog(null, "WARNING! Found missing keys between the file batches:" + "\n" + sb, "Warning", JOptionPane.WARNING_MESSAGE);
+
+
+        }
+    }
 }

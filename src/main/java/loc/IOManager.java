@@ -39,6 +39,7 @@ public class IOManager {
     private ArrayList<TranslationEntry> loadedTranslationFileForExport;
     private String translationKeyChecksum;
     private ArrayList<List<TranslationEntry>> expandableListOfLoadedFiles;
+    private ArrayList<String> listOfExtractedKeys;
 
 
     public LinkedHashMap<String, String> getMapOfLoadedFiles() {
@@ -93,6 +94,15 @@ public class IOManager {
     public void setTranslationKeyChecksum(String translationKeyChecksum) {
         this.translationKeyChecksum = translationKeyChecksum;
     }
+
+    public ArrayList<String> getListOfExtractedKeys() {
+        return listOfExtractedKeys;
+    }
+
+    public void setListOfExtractedKeys(ArrayList<String> listOfExtractedKeys) {
+        this.listOfExtractedKeys = listOfExtractedKeys;
+    }
+
 
 
     private static IOManager IOManagerInstance;
@@ -166,30 +176,30 @@ public class IOManager {
         TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>() {};
 
         String programPath = (System.getProperty("user.dir"));
-        String checksumTrackerName = "checksum_tracker.txt";
+//        String checksumTrackerName = "checksum_tracker.txt";
 
-        try {
-            FileUtils.touch(new File(checksumTrackerName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            FileUtils.touch(new File(checksumTrackerName));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
-        String combinedPath = FilenameUtils.concat(programPath, checksumTrackerName);
-        Path externalChecksumsFilePath = Paths.get(combinedPath);
-        Path externalChecksumsFileName = externalChecksumsFilePath.getFileName();
+//        String combinedPath = FilenameUtils.concat(programPath, checksumTrackerName);
+//        Path externalChecksumsFilePath = Paths.get(combinedPath);
+//        Path externalChecksumsFileName = externalChecksumsFilePath.getFileName();
 
         try {
             result = fileImportMapper.readValue(consolidatedJson, typeRefFinal);
-            for (TranslationEntry t : result) {
+//            for (TranslationEntry t : result) {
 //                System.out.println(t.getEntryKey());
-            }
+//            }
 //            generatedChecksum = getChecksumFromKeysInTranslationFile(result);
 //            setTranslationKeyChecksum(generatedChecksum);
-            setTranslationKeyChecksum(getChecksumFromKeysInTranslationFile(result));
-            System.out.println(getTranslationKeyChecksum());
+//            setTranslationKeyChecksum(getChecksumFromKeysInTranslationFile(result));
+//            System.out.println(getTranslationKeyChecksum());
 //            System.out.println(generatedChecksum);
-            compareLoadedChecksumWithExternalFile(getTranslationKeyChecksum(), externalChecksumsFileName);
+//            compareLoadedChecksumWithExternalFile(getTranslationKeyChecksum(), externalChecksumsFileName);
 //            saveTestListOfKeys2(result);
 //            saveConsolidatedTranslationFile2(result);
 
@@ -609,8 +619,6 @@ public class IOManager {
         }
 
     }
-
-
 
 
 

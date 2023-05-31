@@ -3,6 +3,8 @@ package loc;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -11,13 +13,16 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+
 import org.apache.commons.io.FilenameUtils;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
 
-public class GUIManager implements ActionListener, PropertyChangeListener {
+public class GUIManager implements ActionListener, PropertyChangeListener, ChangeListener {
     JFrame mainFrame;
     JPanel buttonPanel1;
     JPanel buttonPanel2;
@@ -25,18 +30,22 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     JFileChooser fileChooser;
     JFileChooser settingsChooser;
     JFileChooser fileToGameChooser;
-    JButton openButton1;
-    JButton saveButton1;
+    JButton openButtonGameToTrans1;
+    JButton saveButtonGameToTrans1;
     JButton importSettingsButton;
     JButton languageSettingsButton;
-    JButton confirmButton1;
+    JButton confirmButtonGameToTrans1;
     JScrollPane logScrollPane;
-    BorderLayout layout;
+    BorderLayout layout1;
+    BorderLayout layout2;
     LanguageMenu languageMenu;
     TitledBorder border1;
     TitledBorder border2;
-    JButton openButton2;
-    JButton saveButton2;
+    JButton openButtonTransToGame1;
+    JButton openButtonTransToGame2;
+    JButton saveButtonTransToGame1;
+    JButton confirmButtonTransToGame1;
+    JTabbedPane tabPane;
 
     private static GUIManager GUIManagerInstance;
 
@@ -56,7 +65,9 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 
 
     public void prepareMainGUI() {
-        layout = new BorderLayout();
+        layout1 = new BorderLayout();
+        layout2 = new BorderLayout();
+        tabPane = new JTabbedPane();
 
         log = new JTextArea(8, 20);
         log.setMargin(new Insets(5, 5, 5, 5));
@@ -67,20 +78,26 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         settingsChooser = new JFileChooser();
         fileToGameChooser = new JFileChooser();
 
-        openButton1 = new JButton("Open .json");
-        openButton1.addActionListener(this);
+        openButtonGameToTrans1 = new JButton("Add game JSONs");
+        openButtonGameToTrans1.addActionListener(this);
 
-        saveButton1 = new JButton("Save");
-        saveButton1.addActionListener(this);
+        saveButtonGameToTrans1 = new JButton("Export to translation file");
+        saveButtonGameToTrans1.addActionListener(this);
 
-        confirmButton1 = new JButton("Confirm selection");
-        confirmButton1.addActionListener(this);
+        confirmButtonGameToTrans1 = new JButton("Confirm JSON selection");
+        confirmButtonGameToTrans1.addActionListener(this);
 
-        openButton2 = new JButton("Open .json");
-        openButton2.addActionListener(this);
+        openButtonTransToGame1 = new JButton("Add game JSONs");
+        openButtonTransToGame1.addActionListener(this);
 
-        saveButton2 = new JButton("Export to game");
-        saveButton2.addActionListener(this);
+        openButtonTransToGame2 = new JButton("Load translation file");
+        openButtonTransToGame2.addActionListener(this);
+
+        saveButtonTransToGame1 = new JButton("Export to game");
+        saveButtonTransToGame1.addActionListener(this);
+
+        confirmButtonTransToGame1 = new JButton("Confirm JSON selection");
+        confirmButtonTransToGame1.addActionListener(this);
 
         importSettingsButton = new JButton("Import language settings");
         importSettingsButton.addActionListener(this);
@@ -96,39 +113,64 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
         border2.setTitleJustification(TitledBorder.CENTER);
         border2.setTitlePosition(TitledBorder.TOP);
 
-        buttonPanel1 = new JPanel();
-        buttonPanel1.add(openButton1);
-        buttonPanel1.add(confirmButton1);
+        buttonPanel1 = new JPanel(new GridLayout(1, 0));
+        buttonPanel1.add(openButtonGameToTrans1);
+        buttonPanel1.add(confirmButtonGameToTrans1);
         buttonPanel1.add(importSettingsButton);
         importSettingsButton.setEnabled(false);
         buttonPanel1.add(languageSettingsButton);
 //        languageSettingsButton.setEnabled(false);
-        buttonPanel1.add(saveButton1);
+        buttonPanel1.add(saveButtonGameToTrans1);
         buttonPanel1.setBorder(border1);
 
-        layout.addLayoutComponent(buttonPanel1, BorderLayout.PAGE_START);
+//        layout1.addLayoutComponent(buttonPanel1, BorderLayout.NORTH);
+//        layout1.addLayoutComponent(logScrollPane, BorderLayout.PAGE_END);
         languageMenu = new LanguageMenu();
 
-        buttonPanel2 = new JPanel();
-        buttonPanel2.add(openButton2);
-        buttonPanel2.add(saveButton2);
+//        buttonPanel2 = new JPanel(new BorderLayout());
+        buttonPanel2 = new JPanel(new GridLayout(1, 0));
+        buttonPanel2.add(openButtonTransToGame1);
+        buttonPanel2.add(confirmButtonTransToGame1);
+        buttonPanel2.add(openButtonTransToGame2);
+        buttonPanel2.add(saveButtonTransToGame1);
 
         buttonPanel2.setBorder(border2);
-        layout.addLayoutComponent(buttonPanel2, BorderLayout.CENTER);
-        layout.addLayoutComponent(logScrollPane, BorderLayout.PAGE_END);
+//        layout1.addLayoutComponent(buttonPanel2, BorderLayout.NORTH);
+//        layout2.addLayoutComponent(logScrollPane, BorderLayout.PAGE_END);
+
+        tabPane.addTab("Game -> Translation", buttonPanel1);
+        tabPane.addTab("Translation -> Game", buttonPanel2);
+        tabPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                System.out.println("Tab " + tabPane.getSelectedIndex());
+                IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(new ArrayList<>());
+                IOManager.getInstance().setExpandableListOfLoadedFiles(new ArrayList<>());
+                IOManager.getInstance().setSetOfUniqueLanguages(new LinkedHashSet<>());
+                IOManager.getInstance().setLoadedTranslationFileForExport(new ArrayList<>());
+
+            }
+        });
 
 
 
     }
 
     public void showMainGUI() {
-        JFrame mainFrame = new JFrame("Localization Tool");
+        mainFrame = new JFrame("Localization Tool");
+//        mainFrame.setLayout(new BorderLayout());
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        mainFrame.add(buttonPanel1);
-        mainFrame.add(buttonPanel2);
-        mainFrame.add(logScrollPane);
-        mainFrame.setLayout(layout);
+
+
+        mainFrame.add(tabPane);
+//        mainFrame.add(logScrollPane);
+
+//        mainFrame.add(buttonPanel1);
+//        mainFrame.add(buttonPanel2);
+//        mainFrame.add(logScrollPane);
+//        mainFrame.setLayout(layout1);
+
 
         mainFrame.pack();
         mainFrame.setVisible(true);
@@ -264,7 +306,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == openButton1) {
+        if (e.getSource() == openButtonGameToTrans1) {
             var chosenFiles = setupGameToTranslationFileChooser();
             if (chosenFiles == null) {
                 return;
@@ -280,14 +322,14 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 
-        } else if (e.getSource() == confirmButton1) {
+        } else if (e.getSource() == confirmButtonGameToTrans1) {
             var listToBeUsed = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles());
             Collections.sort(listToBeUsed);
-            TranslationEntryManager.getInstance().extractKeys(listToBeUsed);
+            IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
 //            TranslationEntryManager.getInstance().extractKeys(TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles()));
 
-        } else if (e.getSource() == saveButton1) {
+        } else if (e.getSource() == saveButtonGameToTrans1) {
 //            IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
             IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
 //            log.setCaretPosition(log.getDocument().getLength());
@@ -304,14 +346,35 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 //            openLanguageDialogInput();
             openLanguageTable();
 
-        } else if (e.getSource() == openButton2) {
+        } else if (e.getSource() == openButtonTransToGame1) {
+            var chosenFiles = setupGameToTranslationFileChooser();
+            if (chosenFiles == null) {
+                return;
+            }
+//            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+
+            var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFiles();
+            tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
+            IOManager.getInstance().setExpandableListOfLoadedFiles(tempListOfLists);
+
+
+        } else if (e.getSource() == confirmButtonTransToGame1) {
+            var listToBeUsed = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles());
+            Collections.sort(listToBeUsed);
+            IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
+
+        } else if (e.getSource() == openButtonTransToGame2) {
             var chosenFile = setupTranslationToGameFileChooser();
             if (chosenFile == null) {
                 return;
             }
             IOManager.getInstance().setLoadedTranslationFileForExport(IOManager.getInstance().loadConsolidatedTranslationFile(chosenFile));
+            var keysFromTranslationFile = TranslationEntryManager.getInstance().extractKeys(IOManager.getInstance().getLoadedTranslationFileForExport());
+            TranslationEntryManager.getInstance().compareKeys(IOManager.getInstance().getListOfExtractedKeys(), keysFromTranslationFile);
 
-        } else if (e.getSource() == saveButton2) {
+        } else if (e.getSource() == saveButtonTransToGame1) {
             IOManager.getInstance().exportUnconsolidatedTranslationFiles(IOManager.getInstance().getLoadedTranslationFileForExport());
         }
     }
@@ -325,5 +388,10 @@ public class GUIManager implements ActionListener, PropertyChangeListener {
 
         //enableLanguageButton(IOManager.getInstance().checkIfTranslationFilesHaveBeenLoaded());
         enableLanguageButton(evt.getNewValue() != null);
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+
     }
 }

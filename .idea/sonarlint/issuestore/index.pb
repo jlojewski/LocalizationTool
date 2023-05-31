@@ -1,6 +1,4 @@
 
-G
-translation_sample.json,9\7\97daf629183059dff36eb9ab162bf9fd55aae8b5
 Q
 !localization/German/Calendar.json,f\0\f01cd1e9be64c8966b6d9c0f7a9ccd676a68844b
 R
@@ -32,3 +30,7 @@ A
 -Calendar — do testowania duplikatów 2.json,6\a\6ad11c842100b9dcebd055d8bdb06135896a3bf1
 <
 test_fi.json,5\f\5fe0c12ccd533c88e9c8429078bc4704bb477547
+D
+checksum_tracker.txt,1\9\19a08bc60f2beee6fc00d8634009d2d116be0933
+a
+1src/main/java/loc/TranslationSettingsManager.java,3\6\362013afa1087dd21ce86db6d6088281e9bb7c4a
