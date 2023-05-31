@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -259,44 +262,112 @@ public class TranslationEntryManager {
     }
 
 
-    public void compareKeys(ArrayList<String> listToCompareFrom, ArrayList<String> listToCompareTo) {
-        String tempKeyToCompareTo = null;
-        String tempStreamResult = null;
-        ArrayList<String> listOfMissingKeys = new ArrayList<String>();
+//    public void compareKeys(ArrayList<String> listToCompareFrom, ArrayList<String> listToCompareTo) {
+//        String tempKeyToCompareTo = null;
+//        String tempStreamResult = null;
+//        ArrayList<String> listOfMissingKeys = new ArrayList<String>();
+//        for (int i = 0; i < listToCompareFrom.size() - 1; i++) {
+//            tempKeyToCompareTo = listToCompareFrom.get(i);
+//            String finalTempKeyToCompareTo = tempKeyToCompareTo;
+//            tempStreamResult = listToCompareTo.stream()
+//                    .filter(e -> e.equals(finalTempKeyToCompareTo))
+//                    .findFirst()
+//                    .orElse(null);
+//            if (tempStreamResult == null) {
+//                String keyToReport = tempKeyToCompareTo;
+//                listOfMissingKeys.add(keyToReport);
+//            }
+//
+//        }
+//        for (int i = 0; i < listToCompareTo.size() - 1; i++) {
+//            tempKeyToCompareTo = listToCompareTo.get(i);
+//            String finalTempKeyToCompareTo = tempKeyToCompareTo;
+//            tempStreamResult = listToCompareFrom.stream()
+//                    .filter(e -> e.equals(finalTempKeyToCompareTo))
+//                    .findFirst()
+//                    .orElse(null);
+//            if (tempStreamResult == null) {
+//                String keyToReport = tempKeyToCompareTo;
+//                listOfMissingKeys.add(keyToReport);
+//            }
+//        }
+//        if (!listOfMissingKeys.isEmpty()) {
+//            StringBuilder sb = new StringBuilder();
+//            for (String s : listOfMissingKeys) {
+//                sb.append(s);
+//                sb.append("\n");
+//            }
+//            JOptionPane.showMessageDialog(null, "WARNING! Found missing keys between the file batches:" + "\n" + sb, "Warning", JOptionPane.WARNING_MESSAGE);
+//
+//
+//        }
+//    }
+
+    public void compareKeys(List<TranslationEntry> listToCompareFrom, List<TranslationEntry> listToCompareTo) {
+        TranslationEntry tempEntryToCompareTo = null;
+        TranslationEntry tempStreamResult = null;
+        ArrayList<TranslationEntry> listOfEntriesWithMissingKeys = new ArrayList<TranslationEntry>();
+//        ArrayList<TranslationEntry> listOfEntriesWithMissingKeysInGameFiles = new ArrayList<TranslationEntry>();
+//        ArrayList<TranslationEntry> listOfEntriesWithMissingKeysInTranslationFile = new ArrayList<TranslationEntry>();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < listToCompareFrom.size() - 1; i++) {
-            tempKeyToCompareTo = listToCompareFrom.get(i);
-            String finalTempKeyToCompareTo = tempKeyToCompareTo;
+            tempEntryToCompareTo = listToCompareFrom.get(i);
+            var finalTempEntryToCompareTo = tempEntryToCompareTo;
             tempStreamResult = listToCompareTo.stream()
-                    .filter(e -> e.equals(finalTempKeyToCompareTo))
+                    .filter(e -> e.getEntryKey().equals(finalTempEntryToCompareTo.getEntryKey()))
                     .findFirst()
                     .orElse(null);
             if (tempStreamResult == null) {
-                String keyToReport = tempKeyToCompareTo;
-                listOfMissingKeys.add(keyToReport);
+//                String keyToReport = tempKeyToCompareTo;
+                listOfEntriesWithMissingKeys.add(tempEntryToCompareTo);
+                sb.append(tempEntryToCompareTo.getEntryKey());
+                sb.append(" (in game files: " + tempEntryToCompareTo.getFilename() + ")");
+                sb.append("\n");
+
             }
 
         }
         for (int i = 0; i < listToCompareTo.size() - 1; i++) {
-            tempKeyToCompareTo = listToCompareTo.get(i);
-            String finalTempKeyToCompareTo = tempKeyToCompareTo;
+            tempEntryToCompareTo = listToCompareTo.get(i);
+            var finalTempEntryToCompareTo = tempEntryToCompareTo;
             tempStreamResult = listToCompareFrom.stream()
-                    .filter(e -> e.equals(finalTempKeyToCompareTo))
+                    .filter(e -> e.getEntryKey().equals(finalTempEntryToCompareTo.getEntryKey()))
                     .findFirst()
                     .orElse(null);
             if (tempStreamResult == null) {
-                String keyToReport = tempKeyToCompareTo;
-                listOfMissingKeys.add(keyToReport);
-            }
-        }
-        if (!listOfMissingKeys.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            for (String s : listOfMissingKeys) {
-                sb.append(s);
+//                String keyToReport = tempKeyToCompareTo;
+                listOfEntriesWithMissingKeys.add(tempEntryToCompareTo);
+                sb.append(tempEntryToCompareTo.getEntryKey());
+                sb.append(" (in translation file: " + tempEntryToCompareTo.getFilename() + ")");
                 sb.append("\n");
             }
-            JOptionPane.showMessageDialog(null, "WARNING! Found missing keys between the file batches:" + "\n" + sb, "Warning", JOptionPane.WARNING_MESSAGE);
+        }
 
+//        List<TranslationEntry> listOfEntriesWithMissingKeys = Stream.of(listOfEntriesWithMissingKeysInGameFiles, listOfEntriesWithMissingKeysInTranslationFile)
+//                .flatMap(e -> e.stream())
+//                .collect(Collectors.toList());
+
+
+        if (!listOfEntriesWithMissingKeys.isEmpty()) {
+//         StringBuilder sb = new StringBuilder();
+//            for (TranslationEntry t : listOfEntriesWithMissingKeys) {
+//                sb.append(t.getEntryKey());
+//                sb.append(" (in: " + t.getFilename() + ")");
+//                sb.append("\n");
+//            }
+
+//            JOptionPane.showMessageDialog(null, "WARNING! Found missing keys between the file batches:" + "\n" + sb, "Warning", JOptionPane.WARNING_MESSAGE);
+
+            JTextArea textArea = new JTextArea("WARNING! Found missing keys between loaded file batches:" + "\n" + sb);
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            textArea.setLineWrap(false);
+            textArea.setWrapStyleWord(true);
+            scrollPane.setPreferredSize(new Dimension( 750, 750 ) );
+            JOptionPane.showMessageDialog(null, scrollPane, "Warning",
+                    JOptionPane.WARNING_MESSAGE);
 
         }
     }
+
+
 }

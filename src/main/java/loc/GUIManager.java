@@ -372,7 +372,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             }
             IOManager.getInstance().setLoadedTranslationFileForExport(IOManager.getInstance().loadConsolidatedTranslationFile(chosenFile));
             var keysFromTranslationFile = TranslationEntryManager.getInstance().extractKeys(IOManager.getInstance().getLoadedTranslationFileForExport());
-            TranslationEntryManager.getInstance().compareKeys(IOManager.getInstance().getListOfExtractedKeys(), keysFromTranslationFile);
+//            TranslationEntryManager.getInstance().compareKeys(IOManager.getInstance().getListOfExtractedKeys(), keysFromTranslationFile);
+            TranslationEntryManager.getInstance().compareKeys(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries(), IOManager.getInstance().getLoadedTranslationFileForExport());
 
         } else if (e.getSource() == saveButtonTransToGame1) {
             IOManager.getInstance().exportUnconsolidatedTranslationFiles(IOManager.getInstance().getLoadedTranslationFileForExport());
