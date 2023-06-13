@@ -391,6 +391,11 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         enableLanguageButton(evt.getNewValue() != null);
     }
 
+
+    // na razie brzydko zrobione actionperformed, wiec zanim nie zrobisz kosmetyki - zrob propertychange ifami tak jak w actionperformed, jak wyzej
+
+
+
     @Override
     public void stateChanged(ChangeEvent e) {
 
