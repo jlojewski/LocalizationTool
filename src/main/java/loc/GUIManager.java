@@ -26,6 +26,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
     JFrame mainFrame;
     JPanel buttonPanel1;
     JPanel buttonPanel2;
+    JPanel buttonPanel3;
     JTextArea log;
     JFileChooser fileChooser;
     JFileChooser settingsChooser;
@@ -41,10 +42,16 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
     LanguageMenu languageMenu;
     TitledBorder border1;
     TitledBorder border2;
+    TitledBorder border3;
     JButton openButtonTransToGame1;
     JButton openButtonTransToGame2;
     JButton saveButtonTransToGame1;
     JButton confirmButtonTransToGame1;
+    JButton openButtonForMerge1;
+    JButton openButtonForMerge2;
+    JButton confirmButtonForMerge1;
+    JButton confirmButtonForMerge2;
+    JButton mergeButton;
     JTabbedPane tabPane;
 
     private static GUIManager GUIManagerInstance;
@@ -105,6 +112,21 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         languageSettingsButton = new JButton("Create language settings");
         languageSettingsButton.addActionListener(this);
 
+        openButtonForMerge1 = new JButton("Load base translation files to receive merge");
+        openButtonForMerge1.addActionListener(this);
+
+        openButtonForMerge2 = new JButton("Load translation files to be merged");
+        openButtonForMerge2.addActionListener(this);
+
+        confirmButtonForMerge1 = new JButton("Confirm selection #1");
+        confirmButtonForMerge1.addActionListener(this);
+
+        confirmButtonForMerge2 = new JButton("Confirm selection #2");
+        confirmButtonForMerge2.addActionListener(this);
+
+        mergeButton = new JButton("Merge into base file");
+        mergeButton.addActionListener(this);
+
         border1 = new TitledBorder("Game files -> Translation files");
         border1.setTitleJustification(TitledBorder.CENTER);
         border1.setTitlePosition(TitledBorder.TOP);
@@ -112,6 +134,10 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         border2 = new TitledBorder("Translation files -> Game files");
         border2.setTitleJustification(TitledBorder.CENTER);
         border2.setTitlePosition(TitledBorder.TOP);
+
+        border3 = new TitledBorder("Merge language entries into a single translation file");
+        border3.setTitleJustification(TitledBorder.CENTER);
+        border3.setTitlePosition(TitledBorder.TOP);
 
         buttonPanel1 = new JPanel(new GridLayout(1, 0));
         buttonPanel1.add(openButtonGameToTrans1);
@@ -133,13 +159,23 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         buttonPanel2.add(confirmButtonTransToGame1);
         buttonPanel2.add(openButtonTransToGame2);
         buttonPanel2.add(saveButtonTransToGame1);
-
         buttonPanel2.setBorder(border2);
 //        layout1.addLayoutComponent(buttonPanel2, BorderLayout.NORTH);
 //        layout2.addLayoutComponent(logScrollPane, BorderLayout.PAGE_END);
 
+
+        buttonPanel3 = new JPanel(new GridLayout(1, 0));
+        buttonPanel3.add(openButtonForMerge1);
+        buttonPanel3.add(confirmButtonForMerge1);
+        buttonPanel3.add(openButtonForMerge2);
+        buttonPanel3.add(confirmButtonForMerge2);
+        buttonPanel3.add(mergeButton);
+        buttonPanel3.setBorder(border3);
+
+
         tabPane.addTab("Game -> Translation", buttonPanel1);
         tabPane.addTab("Translation -> Game", buttonPanel2);
+        tabPane.addTab("Merge translation files", buttonPanel3);
         tabPane.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -377,7 +413,55 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
         } else if (e.getSource() == saveButtonTransToGame1) {
             IOManager.getInstance().exportUnconsolidatedTranslationFiles(IOManager.getInstance().getLoadedTranslationFileForExport());
+
+
+        } else if (e.getSource() == openButtonForMerge1) {
+            var chosenFiles = setupGameToTranslationFileChooser();
+            if (chosenFiles == null) {
+                return;
+            }
+//            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge1(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+
+            var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFilesForMerge1();
+            tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge1());
+            IOManager.getInstance().setExpandableListOfLoadedFilesForMerge1(tempListOfLists);
+
+
+        } else if (e.getSource() == confirmButtonForMerge1) {
+            var listToBeUsed = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFilesForMerge1());
+            Collections.sort(listToBeUsed);
+            IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
+//            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge1(listToBeUsed);
+
+
+        } else if (e.getSource() == openButtonForMerge2) {
+            var chosenFiles = setupGameToTranslationFileChooser();
+            if (chosenFiles == null) {
+                return;
+            }
+//            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+
+            var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFilesForMerge2();
+            tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge2());
+            IOManager.getInstance().setExpandableListOfLoadedFilesForMerge2(tempListOfLists);
+
+        } else if (e.getSource() == confirmButtonForMerge2) {
+            var listToBeUsed = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFilesForMerge2());
+            Collections.sort(listToBeUsed);
+            IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
+//            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge2(listToBeUsed);
+
+
+
+
         }
+
+
+
     }
 
 

@@ -39,7 +39,45 @@ public class IOManager {
     private ArrayList<TranslationEntry> loadedTranslationFileForExport;
     private String translationKeyChecksum;
     private ArrayList<List<TranslationEntry>> expandableListOfLoadedFiles;
+    private ArrayList<List<TranslationEntry>> expandableListOfLoadedFilesForMerge1;
+    private ArrayList<List<TranslationEntry>> expandableListOfLoadedFilesForMerge2;
     private ArrayList<String> listOfExtractedKeys;
+    private List<TranslationEntry> listOfLoadedFilesAsTranslationEntriesForMerge1;
+    private List<TranslationEntry> listOfLoadedFilesAsTranslationEntriesForMerge2;
+
+    public List<TranslationEntry> getListOfLoadedFilesAsTranslationEntriesForMerge1() {
+        return listOfLoadedFilesAsTranslationEntriesForMerge1;
+    }
+
+    public void setListOfLoadedFilesAsTranslationEntriesForMerge1(List<TranslationEntry> listOfLoadedFilesAsTranslationEntriesForMerge1) {
+        this.listOfLoadedFilesAsTranslationEntriesForMerge1 = listOfLoadedFilesAsTranslationEntriesForMerge1;
+    }
+
+    public List<TranslationEntry> getListOfLoadedFilesAsTranslationEntriesForMerge2() {
+        return listOfLoadedFilesAsTranslationEntriesForMerge2;
+    }
+
+    public void setListOfLoadedFilesAsTranslationEntriesForMerge2(List<TranslationEntry> listOfLoadedFilesAsTranslationEntriesForMerge2) {
+        this.listOfLoadedFilesAsTranslationEntriesForMerge2 = listOfLoadedFilesAsTranslationEntriesForMerge2;
+    }
+
+    public ArrayList<List<TranslationEntry>> getExpandableListOfLoadedFilesForMerge1() {
+        return expandableListOfLoadedFilesForMerge1;
+    }
+
+    public void setExpandableListOfLoadedFilesForMerge1(ArrayList<List<TranslationEntry>> expandableListOfLoadedFilesForMerge1) {
+        this.expandableListOfLoadedFilesForMerge1 = expandableListOfLoadedFilesForMerge1;
+    }
+
+    public ArrayList<List<TranslationEntry>> getExpandableListOfLoadedFilesForMerge2() {
+        return expandableListOfLoadedFilesForMerge2;
+    }
+
+    public void setExpandableListOfLoadedFilesForMerge2(ArrayList<List<TranslationEntry>> expandableListOfLoadedFilesForMerge2) {
+        this.expandableListOfLoadedFilesForMerge2 = expandableListOfLoadedFilesForMerge2;
+    }
+
+
 
 
     public LinkedHashMap<String, String> getMapOfLoadedFiles() {
@@ -461,6 +499,8 @@ public class IOManager {
             e.printStackTrace();
         }
     }
+
+
 
 
     public void saveTranslationSettings(TranslationSettings settingsToUse) {

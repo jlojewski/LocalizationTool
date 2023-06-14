@@ -362,9 +362,55 @@ public class TranslationEntryManager {
             JScrollPane scrollPane = new JScrollPane(textArea);
             textArea.setLineWrap(false);
             textArea.setWrapStyleWord(true);
-            scrollPane.setPreferredSize(new Dimension( 750, 750 ) );
+            scrollPane.setPreferredSize(new Dimension(750, 750));
             JOptionPane.showMessageDialog(null, scrollPane, "Warning",
                     JOptionPane.WARNING_MESSAGE);
+
+        }
+    }
+
+
+//    public void mergeLanguageValues(List<TranslationEntry> mergeBase, List<TranslationEntry> mergeMergees) {
+//        TranslationEntry tempBaseEntry= null;
+//        TranslationEntry tempStreamResult = null;
+//        LinkedHashMap<String, String> tempContents = null;
+//
+//        for (int i = 0; i < mergeBase.size() - 1; i++) {
+//            tempBaseEntry = mergeBase.get(i);
+//            tempContents = tempBaseEntry.getLanguages();
+//            var finalTempEntryToCompareTo = tempBaseEntry;
+//
+//            for (TranslationEntry t : mergeMergees) {
+//                for (var m :
+//                     ) {
+//
+//                }
+//            }
+//
+//
+//        }
+//    }
+
+    public void mergeLanguageValues(List<TranslationEntry> mergeBase, List<TranslationEntry> mergeMergees) {
+        TranslationEntry tempBaseEntry = null;
+        TranslationEntry tempStreamResult = null;
+        LinkedHashMap<String, String> tempContents = null;
+
+        for (int i = 0; i < mergeBase.size() - 1; i++) {
+            tempBaseEntry = mergeBase.get(i);
+            tempContents = tempBaseEntry.getLanguages();
+            var finalTempEntryToCompareTo = tempBaseEntry;
+
+            for (TranslationEntry t : mergeMergees) {
+                if (t.getEntryKey().equals(tempBaseEntry.getEntryKey()) && t.getFilename().equals(tempBaseEntry.getEntryKey())) {
+                    for (Map.Entry<String, String> langEntry : t.getLanguages().entrySet()) {
+                        if (!tempContents.containsKey(langEntry.getKey())) {
+                            mergeBase.get(i).getLanguages().put(langEntry.getKey(), langEntry.getValue());
+                        }
+                    }
+                }
+            }
+
 
         }
     }
