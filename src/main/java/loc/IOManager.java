@@ -254,85 +254,6 @@ public class IOManager {
     }
 
 
-//latest commented version of the method
-//    public ArrayList<TranslationEntry> loadTranslationFiles() {
-//        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupFileChooser()));
-//
-//        ObjectMapper fileImportMapper = new ObjectMapper();
-//
-//        ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
-//        for (File f : filesToConvert) {
-//
-//
-//            listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToList(f, fileImportMapper));
-//
-//        }
-//        ArrayList<TranslationEntry> finalMergedList = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(listOfLoadedFiles);
-//
-//        return finalMergedList;
-//    }
-
-
-//    public LinkedHashMap<String, String> loadTranslationFiles() {
-//        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupFileChooser()));
-////        LinkedHashMap loadedFilesMap = new LinkedHashMap<String, String>();
-//        ObjectMapper fileImportMapper = new ObjectMapper();
-//        ArrayList<LinkedHashMap<String, String>> listOfLoadedFiles = new ArrayList<LinkedHashMap<String, String>>();
-//        for (File f : filesToConvert) {
-////            try {
-////                TranslationEntry tren = fileImportMapper.readValue(f, TranslationEntry.class);
-////                loadedFilesMap.put(tren.entryKey, tren.entryValue);
-////            } catch (IOException e) {
-////                GUIManager.getInstance().setupFileChooser();
-////            }
-////        }
-////        return loadedFilesMap;
-//            listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToMap(f, fileImportMapper));
-//        }
-//        LinkedHashMap<String, String> finalMergedMap = TranslationEntryManager.getInstance().mergeLoadedEntryFiles(listOfLoadedFiles);
-//
-//        return finalMergedMap;
-//    }
-
-//    public LinkedHashMap<String, String> loadTranslationFiles() {
-//        ArrayList<File> filesToConvert = new ArrayList(Arrays.asList(GUIManager.getInstance().setupFileChooser()));
-////        LinkedHashMap loadedFilesMap = new LinkedHashMap<String, String>();
-//        ObjectMapper fileImportMapper = new ObjectMapper();
-//        ArrayList<LinkedHashMap<String, String>> listOfLoadedFiles = new ArrayList<LinkedHashMap<String, String>>();
-//        for (File f : filesToConvert) {
-//
-//            listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertJsonToMap(f, fileImportMapper));
-//        }
-//        LinkedHashMap<String, String> finalMergedMap = TranslationEntryManager.getInstance().mergeLoadedEntryFiles(listOfLoadedFiles);
-//
-//        return finalMergedMap;
-//    }
-
-
-//    public void saveConsolidatedTranslationFile(LinkedHashMap consolidatedMap) {
-//        String programPath = (System.getProperty("user.dir"));
-//        try {
-//            File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
-//            mapConsolidatedTranslationFile(consolidatedMap, savedConsolidatedFile);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
-//    public void saveConsolidatedTranslationFile(List<TranslationEntry> consolidatedArray) {
-//        String programPath = (System.getProperty("user.dir"));
-//        try {
-//            File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
-//            mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
     public void saveConsolidatedTranslationFile(List<TranslationEntry> consolidatedArray) {
         String programPath = (System.getProperty("user.dir"));
         try {
@@ -353,25 +274,40 @@ public class IOManager {
 
     }
 
-    public void saveConsolidatedTranslationFile2(List<TranslationEntry> consolidatedArray) {
+    public void saveMergedTranslationFile(List<TranslationEntry> firstConfirmedArray, List<TranslationEntry> secondConfirmedArray) {
         String programPath = (System.getProperty("user.dir"));
+        TranslationEntryManager.getInstance().mergeLanguageValues(firstConfirmedArray, secondConfirmedArray);
         try {
-//            TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
-            File savedConsolidatedFile = new File(programPath, "test_fi.json");
-            File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
-            for (var t : consolidatedArray) {
-//                System.out.println(t.getEntryKey());
+//            TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(fir, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
+            File savedMergedFile = new File(programPath, "merged_translation_file.json");
 
-            }
-            saveTestListOfKeys1(consolidatedArray);
-            mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
-            storeChecksumInFile(storedChecksumFile);
+            mapConsolidatedTranslationFile(firstConfirmedArray, savedMergedFile);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
+//    public void saveConsolidatedTranslationFile2(List<TranslationEntry> consolidatedArray) {
+//        String programPath = (System.getProperty("user.dir"));
+//        try {
+////            TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
+//            File savedConsolidatedFile = new File(programPath, "test_fi.json");
+//            File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
+//            for (var t : consolidatedArray) {
+////                System.out.println(t.getEntryKey());
+//
+//            }
+//            saveTestListOfKeys1(consolidatedArray);
+//            mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
+//            storeChecksumInFile(storedChecksumFile);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     ///zmień na zapisywanie w pliku .txt
     public void storeChecksumInFile(File fileToUse) {

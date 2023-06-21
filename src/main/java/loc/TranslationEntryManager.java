@@ -396,7 +396,7 @@ public class TranslationEntryManager {
         TranslationEntry tempStreamResult = null;
         LinkedHashMap<String, String> tempContents = null;
 
-        for (int i = 0; i < mergeBase.size() - 1; i++) {
+        for (int i = 0; i <= mergeBase.size() - 1; i++) {
             tempBaseEntry = mergeBase.get(i);
             tempContents = tempBaseEntry.getLanguages();
             var finalTempEntryToCompareTo = tempBaseEntry;

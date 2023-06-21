@@ -416,16 +416,29 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
 
         } else if (e.getSource() == openButtonForMerge1) {
-            var chosenFiles = setupGameToTranslationFileChooser();
-            if (chosenFiles == null) {
+            var chosenFile = setupTranslationToGameFileChooser();
+            if (chosenFile == null) {
                 return;
             }
-//            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
-            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge1(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
-
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge1(IOManager.getInstance().loadConsolidatedTranslationFile(chosenFile));
             var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFilesForMerge1();
             tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge1());
             IOManager.getInstance().setExpandableListOfLoadedFilesForMerge1(tempListOfLists);
+
+
+
+
+//            var chosenFiles = setupGameToTranslationFileChooser();
+//            if (chosenFiles == null) {
+//                return;
+//            }
+////            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+////            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge1(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+//            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge1(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+//
+//            var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFilesForMerge1();
+//            tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge1());
+//            IOManager.getInstance().setExpandableListOfLoadedFilesForMerge1(tempListOfLists);
 
 
         } else if (e.getSource() == confirmButtonForMerge1) {
@@ -437,16 +450,28 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
 
         } else if (e.getSource() == openButtonForMerge2) {
-            var chosenFiles = setupGameToTranslationFileChooser();
-            if (chosenFiles == null) {
+            var chosenFile = setupTranslationToGameFileChooser();
+            if (chosenFile == null) {
                 return;
             }
-//            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
-            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
-
+            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge2(IOManager.getInstance().loadConsolidatedTranslationFile(chosenFile));
             var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFilesForMerge2();
             tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge2());
             IOManager.getInstance().setExpandableListOfLoadedFilesForMerge2(tempListOfLists);
+
+
+
+
+//            var chosenFiles = setupGameToTranslationFileChooser();
+//            if (chosenFiles == null) {
+//                return;
+//            }
+////            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+//            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(IOManager.getInstance().loadUnconsolidatedTranslationFiles(chosenFiles));
+//
+//            var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFilesForMerge2();
+//            tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge2());
+//            IOManager.getInstance().setExpandableListOfLoadedFilesForMerge2(tempListOfLists);
 
         } else if (e.getSource() == confirmButtonForMerge2) {
             var listToBeUsed = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFilesForMerge2());
@@ -454,13 +479,16 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
 //            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge2(listToBeUsed);
-
-
+        } else if (e.getSource() == mergeButton) {
+//            IOManager.getInstance().exportUnconsolidatedTranslationFiles(IOManager.getInstance().getLoadedTranslationFileForExport());
+            IOManager.getInstance().saveMergedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge1(), IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge2());
 
 
         }
 
 
+        // !!!! PRIORYTET przerób/dorób metody odpowiedzialne za wczytanie; metoda do wczytywania consolidated tr f. nie nadaje się do obsługi merga
+        // w takiej postaci, jak zrobiłeś to teraz
 
     }
 
