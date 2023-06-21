@@ -26,8 +26,6 @@ G
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 a
 1src/main/java/loc/TranslationSettingsManager.java,3\6\362013afa1087dd21ce86db6d6088281e9bb7c4a
-Z
-*src/main/java/loc/TranslationSettings.java,0\0\002893f2dd15f5fd2614a905297cf0cc26bc3b24
 S
 #src/main/java/loc/LanguageMenu.java,3\c\3c4e248469c890ad26dccc4d72213e6f11db34b0
 N

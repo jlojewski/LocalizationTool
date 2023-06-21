@@ -391,18 +391,44 @@ public class TranslationEntryManager {
 //        }
 //    }
 
+//    public void mergeLanguageValues(List<TranslationEntry> mergeBase, List<TranslationEntry> mergeMergees) {
+//        TranslationEntry tempBaseEntry = null;
+//        TranslationEntry tempStreamResult = null;
+//        LinkedHashMap<String, String> tempContents = null;
+//
+//        for (int i = 0; i < mergeBase.size(); i++) {
+//            tempBaseEntry = mergeBase.get(i);
+//            tempContents = tempBaseEntry.getLanguages();
+//            tempContents.remove(0);
+//            var finalTempEntryToCompareTo = tempBaseEntry;
+//
+//            for (TranslationEntry t : mergeMergees) {
+//                if (t.getEntryKey().equals(tempBaseEntry.getEntryKey()) && t.getFilename().equals(tempBaseEntry.getEntryKey())) {
+//                    for (Map.Entry<String, String> langEntry : t.getLanguages().entrySet()) {
+//                        if (!tempContents.containsKey(langEntry.getKey())) {
+//                            mergeBase.get(i).getLanguages().put(langEntry.getKey(), langEntry.getValue());
+//                        }
+//                    }
+//                }
+//            }
+//
+//
+//        }
+//    }
+
     public void mergeLanguageValues(List<TranslationEntry> mergeBase, List<TranslationEntry> mergeMergees) {
         TranslationEntry tempBaseEntry = null;
         TranslationEntry tempStreamResult = null;
         LinkedHashMap<String, String> tempContents = null;
 
-        for (int i = 0; i <= mergeBase.size() - 1; i++) {
+        for (int i = 0; i <= mergeBase.size() -1; i++) {
             tempBaseEntry = mergeBase.get(i);
             tempContents = tempBaseEntry.getLanguages();
+//            tempContents.remove(0);
             var finalTempEntryToCompareTo = tempBaseEntry;
 
             for (TranslationEntry t : mergeMergees) {
-                if (t.getEntryKey().equals(tempBaseEntry.getEntryKey()) && t.getFilename().equals(tempBaseEntry.getEntryKey())) {
+                if (t.getEntryKey().equals(tempBaseEntry.getEntryKey()) && t.getFilename().equals(tempBaseEntry.getFilename())) {
                     for (Map.Entry<String, String> langEntry : t.getLanguages().entrySet()) {
                         if (!tempContents.containsKey(langEntry.getKey())) {
                             mergeBase.get(i).getLanguages().put(langEntry.getKey(), langEntry.getValue());
@@ -414,6 +440,7 @@ public class TranslationEntryManager {
 
         }
     }
+
 
 
 }

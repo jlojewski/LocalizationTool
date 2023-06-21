@@ -53,6 +53,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
     JButton confirmButtonForMerge2;
     JButton mergeButton;
     JTabbedPane tabPane;
+    JPanel testPanel;
 
     private static GUIManager GUIManagerInstance;
 
@@ -75,11 +76,16 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         layout1 = new BorderLayout();
         layout2 = new BorderLayout();
         tabPane = new JTabbedPane();
+        testPanel = new JPanel();
+//        testPanel = new JPanel(new BorderLayout());
+        testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.PAGE_AXIS));
 
-        log = new JTextArea(8, 20);
+
+        log = new JTextArea(10, 50);
         log.setMargin(new Insets(5, 5, 5, 5));
         log.setEditable(false);
         logScrollPane = new JScrollPane(log);
+
 
         fileChooser = new JFileChooser();
         settingsChooser = new JFileChooser();
@@ -124,7 +130,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         confirmButtonForMerge2 = new JButton("Confirm selection #2");
         confirmButtonForMerge2.addActionListener(this);
 
-        mergeButton = new JButton("Merge into base file");
+        mergeButton = new JButton("Merge into base files");
         mergeButton.addActionListener(this);
 
         border1 = new TitledBorder("Game files -> Translation files");
@@ -135,7 +141,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         border2.setTitleJustification(TitledBorder.CENTER);
         border2.setTitlePosition(TitledBorder.TOP);
 
-        border3 = new TitledBorder("Merge language entries into a single translation file");
+        border3 = new TitledBorder("Merge language entries from multiple translation files into a single translation file");
         border3.setTitleJustification(TitledBorder.CENTER);
         border3.setTitlePosition(TitledBorder.TOP);
 
@@ -187,6 +193,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
             }
         });
+        testPanel.add(tabPane, BorderLayout.PAGE_START);
+        testPanel.add(logScrollPane, BorderLayout.PAGE_END);
 
 
 
@@ -199,7 +207,11 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
 
 
-        mainFrame.add(tabPane);
+        mainFrame.add(testPanel);
+
+//        mainFrame.add(tabPane);
+//        mainFrame.add(testPanel);
+//        mainFrame.add(logScrollPane);
 //        mainFrame.add(logScrollPane);
 
 //        mainFrame.add(buttonPanel1);
@@ -479,6 +491,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
 //            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge2(listToBeUsed);
+
+
         } else if (e.getSource() == mergeButton) {
 //            IOManager.getInstance().exportUnconsolidatedTranslationFiles(IOManager.getInstance().getLoadedTranslationFileForExport());
             IOManager.getInstance().saveMergedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge1(), IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge2());
