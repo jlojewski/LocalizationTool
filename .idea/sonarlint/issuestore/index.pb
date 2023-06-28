@@ -24,11 +24,15 @@ G
 translation_sample.json,9\7\97daf629183059dff36eb9ab162bf9fd55aae8b5
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-a
-1src/main/java/loc/TranslationSettingsManager.java,3\6\362013afa1087dd21ce86db6d6088281e9bb7c4a
-S
-#src/main/java/loc/LanguageMenu.java,3\c\3c4e248469c890ad26dccc4d72213e6f11db34b0
 N
 Calendar — duplikattest.json,b\c\bc908b122f002de935bd9fa23aea07f55dcab1d7
+D
+checksum_tracker.txt,1\9\19a08bc60f2beee6fc00d8634009d2d116be0933
+=
+Calendar.json,3\b\3b879e7cc118b6ecede4f64c4460f55c31e77b19
 \
-,src/main/java/loc/LanguageCheckboxTable.java,6\8\68edc9991aa599e839d210edcf153e5d9988073d
+,consolidated_translation_file — kopia.json,0\3\03b129a736f49c414fb6ab5331117700ef1bb958
+R
+"consolidated_translation_file.json,2\9\299c38e0ebbf714354b9a40206fa6fc15fd51b46
+Z
+*src/main/java/loc/TranslationSettings.java,0\0\002893f2dd15f5fd2614a905297cf0cc26bc3b24

@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 import org.apache.commons.io.FilenameUtils;
+
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
 
@@ -71,6 +72,14 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         return GUIManagerInstance;
     }
 
+    public JTextArea getLog() {
+        return log;
+    }
+
+    public void setLog(JTextArea log) {
+        this.log = log;
+    }
+
 
     public void prepareMainGUI() {
         layout1 = new BorderLayout();
@@ -97,7 +106,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         saveButtonGameToTrans1 = new JButton("Export to translation file");
         saveButtonGameToTrans1.addActionListener(this);
 
-        confirmButtonGameToTrans1 = new JButton("Confirm JSON selection");
+        confirmButtonGameToTrans1 = new JButton("Confirm JSON selection (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
         confirmButtonGameToTrans1.addActionListener(this);
 
         openButtonTransToGame1 = new JButton("Add game JSONs");
@@ -197,14 +206,12 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         testPanel.add(logScrollPane, BorderLayout.PAGE_END);
 
 
-
     }
 
     public void showMainGUI() {
         mainFrame = new JFrame("Localization Tool");
 //        mainFrame.setLayout(new BorderLayout());
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 
 
         mainFrame.add(testPanel);
@@ -268,12 +275,12 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             File chosenSettings = settingsChooser.getSelectedFile();
             String fileExt = FilenameUtils.getExtension(chosenSettings.toString());
 
-                if (!fileExt.equals("json")) {
-                    return setupSettingsChooser();
+            if (!fileExt.equals("json")) {
+                return setupSettingsChooser();
 
-                } else {
-                    return chosenSettings;
-                }
+            } else {
+                return chosenSettings;
+            }
 
         } else {
             return null;
@@ -365,8 +372,11 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFiles();
             tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
             IOManager.getInstance().setExpandableListOfLoadedFiles(tempListOfLists);
+            Log.print(Log.TOTAL_FILES_OPENED + IOManager.getInstance().getTotalCountOfOpenedFiles());
+            confirmButtonGameToTrans1.setText("Confirm JSON selection (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
 
-
+//                            log.append("Opening: " + file.getName() + "." + newline);
+//                log.setCaretPosition(log.getDocument().getLength());
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 
@@ -375,6 +385,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             Collections.sort(listToBeUsed);
             IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
+            Log.print(Log.CHOICE_LOCKED);
 //            TranslationEntryManager.getInstance().extractKeys(TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles()));
 
         } else if (e.getSource() == saveButtonGameToTrans1) {
@@ -438,8 +449,6 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             IOManager.getInstance().setExpandableListOfLoadedFilesForMerge1(tempListOfLists);
 
 
-
-
 //            var chosenFiles = setupGameToTranslationFileChooser();
 //            if (chosenFiles == null) {
 //                return;
@@ -470,8 +479,6 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFilesForMerge2();
             tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge2());
             IOManager.getInstance().setExpandableListOfLoadedFilesForMerge2(tempListOfLists);
-
-
 
 
 //            var chosenFiles = setupGameToTranslationFileChooser();
@@ -519,7 +526,6 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
 
     // na razie brzydko zrobione actionperformed, wiec zanim nie zrobisz kosmetyki - zrob propertychange ifami tak jak w actionperformed, jak wyzej
-
 
 
     @Override

@@ -44,6 +44,7 @@ public class IOManager {
     private ArrayList<String> listOfExtractedKeys;
     private List<TranslationEntry> listOfLoadedFilesAsTranslationEntriesForMerge1;
     private List<TranslationEntry> listOfLoadedFilesAsTranslationEntriesForMerge2;
+    private int totalCountOfOpenedFiles;
 
     public List<TranslationEntry> getListOfLoadedFilesAsTranslationEntriesForMerge1() {
         return listOfLoadedFilesAsTranslationEntriesForMerge1;
@@ -141,6 +142,15 @@ public class IOManager {
         this.listOfExtractedKeys = listOfExtractedKeys;
     }
 
+    public int getTotalCountOfOpenedFiles() {
+        return totalCountOfOpenedFiles;
+    }
+
+    public void setTotalCountOfOpenedFiles(int totalCountOfOpenedFiles) {
+        this.totalCountOfOpenedFiles = totalCountOfOpenedFiles;
+    }
+
+
 
 
     private static IOManager IOManagerInstance;
@@ -174,6 +184,7 @@ public class IOManager {
 //        fileImportMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
 
         ArrayList<List<TranslationEntry>> listOfLoadedFiles = new ArrayList<List<TranslationEntry>>();
+        int loadedCount = 0;
         InputStream inputStream;
         for (File f : filesToConvert) {
 
@@ -192,16 +203,22 @@ public class IOManager {
                     String convertedPath = importedFilePath.toString();
                     String targetJson = readFileAsString(convertedPath);
                     listOfLoadedFiles.add(TranslationEntryManager.getInstance().convertGameJsonToList(f, targetJson, fileImportMapper, reader));
+                    loadedCount++;
+                    totalCountOfOpenedFiles++;
                 } finally {
                     inputStream.close();
                 }
+                Log.print(Log.OPENING + f.getName());
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.print(Log.ERROR_OPENING +  f.getName());
             }
 
         }
         ArrayList<TranslationEntry> finalMergedList = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(listOfLoadedFiles);
 //        setTranslationKeyChecksum(getChecksumFromKeysInTranslationFile(finalMergedList));
+        Log.print(loadedCount + Log.OPENING_SUCCESS);
+
 
         return finalMergedList;
     }
@@ -244,6 +261,7 @@ public class IOManager {
 
         } catch (IOException e) {
             e.printStackTrace();
+            Log.print(Log.ERROR_OPENING + consolidatedJson.getName());
             //come back later and check if the above needs to be replaced with
             //another call GUIManager.getInstance().setupFileChooser();
             //as it seems to be buggy at the moment
@@ -264,12 +282,13 @@ public class IOManager {
 //                System.out.println(t.getEntryKey());
 
             }
-            saveTestListOfKeys1(consolidatedArray);
+//            saveTestListOfKeys1(consolidatedArray);
             mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
-            storeChecksumInFile(storedChecksumFile);
+//            storeChecksumInFile(storedChecksumFile);
 
         } catch (Exception e) {
             e.printStackTrace();
+            Log.print(Log.ERROR_SAVING_TO + programPath);
         }
 
     }
@@ -285,6 +304,8 @@ public class IOManager {
 
         } catch (Exception e) {
             e.printStackTrace();
+            Log.print(Log.ERROR_MERGING);
+
         }
 
     }
@@ -420,6 +441,7 @@ public class IOManager {
 
                 }
             }
+            Log.print(Log.SAVING);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -456,6 +478,7 @@ public class IOManager {
         try {
             ObjectMapper settingsImportMapper = new ObjectMapper();
             settings = settingsImportMapper.readValue(settingsToImport, TranslationSettings.class);
+            Log.print(Log.SETTINGS_IMPORTED + settingsToImport.getAbsolutePath());
         } catch (IOException e) {
             GUIManager.getInstance().setupSettingsChooser();
         }
@@ -594,6 +617,15 @@ public class IOManager {
             e.printStackTrace();
         }
 
+    }
+
+
+    public int countAllFilesLoaded(List<List<TranslationEntry>> listWithNestedFiles) {
+        int totalCount = 0;
+        for (var e : listWithNestedFiles) {
+            totalCount++;
+        }
+        return totalCount;
     }
 
 
