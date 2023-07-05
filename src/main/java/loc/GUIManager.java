@@ -106,45 +106,59 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         fileToGameChooser.setCurrentDirectory(new File(programPath));
 
         openButtonGameToTrans1 = new JButton("Add game JSONs");
+        openButtonGameToTrans1.setToolTipText("<html><p width=\"300\">" + "Adds any number of game JSON files to be included in the generated translation file. Can be performed multiple times." + "</p></html");
         openButtonGameToTrans1.addActionListener(this);
 
         saveButtonGameToTrans1 = new JButton("Export to translation file");
+        saveButtonGameToTrans1.setToolTipText("<html><p width=\"300\">" + "Generates a consolidated translation file based on the provided files and settings." + "</p></html>");
         saveButtonGameToTrans1.addActionListener(this);
 
         confirmButtonGameToTrans1 = new JButton("Confirm JSON selection (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
+        confirmButtonGameToTrans1.setToolTipText("<html><p width=\"300\">" + "Finalizes the list of JSONs to be worked on. Click on this after all desired game JSONs have been added by the 'Add Game JSONs' option." + "</p></html>");
         confirmButtonGameToTrans1.addActionListener(this);
 
-        openButtonTransToGame1 = new JButton("Add translation JSONs");
+        openButtonTransToGame1 = new JButton("Add game JSONs");
+        openButtonTransToGame1.setToolTipText("<html><p width=\"300\">" + "Adds any number of game JSON files to be compared with the consolidated translation file for possible mid-translation key mismatches. <br><br>IMPORTANT: Make sure to load ALL the game JSONs that were used for generating that specific translation file." + "</p></htmL>");
         openButtonTransToGame1.addActionListener(this);
 
         openButtonTransToGame2 = new JButton("Load translation file");
+        openButtonTransToGame2.setToolTipText("<html><p width=\"300\">" + "Opens a previously created translation file to be exported back into the game. Will provide warnings if any key mismatches between the loaded file and original game files are detected." + "</p</html>");
         openButtonTransToGame2.addActionListener(this);
 
         saveButtonTransToGame1 = new JButton("Export to game");
+        saveButtonTransToGame1.setToolTipText("<html><p width=\"300\">" + "Exports the contents of the translation file back as their original JSONs in a game-applicable structure. The resulting files can be found in the localization folder within the program's folder, ready to be copied back into the game." + "</p><html>");
         saveButtonTransToGame1.addActionListener(this);
 
         confirmButtonTransToGame1 = new JButton("Confirm JSON selection");
+        confirmButtonTransToGame1.setToolTipText("<html><p width=\"300\">" + "Finalizes the list of JSONs to be worked on. Click on this after all desired game JSONs have been added by the 'Add Game JSONs' option." + "</p></html>");
         confirmButtonTransToGame1.addActionListener(this);
 
         importSettingsButton = new JButton("Import language settings");
+        importSettingsButton.setToolTipText("<html><p width=\"300\">" + "Apply a previously generated settings file from disk. If no settings exist and/or this is your first time using the program, use the 'Create language settings' option first." + "</p></html>");
         importSettingsButton.addActionListener(this);
 
         languageSettingsButton = new JButton("Create language settings");
+        languageSettingsButton.setToolTipText("<html><p width=\"300\">" + "Generates a user-defined language settings file within the program's folder. This step is optional. <br><br>IMPORTANT: This option creates a settings file but otherwise does nothing else; to use these settings in the process of generating a translation file, click on 'Import language settings' and choose the settings file." + "</p></html>");
         languageSettingsButton.addActionListener(this);
 
         openButtonForMerge1 = new JButton("Load base translation files to receive merge");
+        openButtonForMerge1.setToolTipText("<html><p width=\"300\">" + "Selects a consolidated translation file to be the base for merging another translation file's entries' language values. <br><br>Typically, this base file should be:<br>\u2014the file containing entries in the game's default language (if merging two single-language files)<br>OR<br>\u2014a merged_translation_file.json file that was previously created using this feature" + "</p></html>");
         openButtonForMerge1.addActionListener(this);
 
         openButtonForMerge2 = new JButton("Load translation files to be merged");
+        openButtonForMerge2.setToolTipText("<html><p width=\"300\">" + "Selects a consolidated translation file to have its entries' language values merged with a previously selected base file." + "</p></html>");
         openButtonForMerge2.addActionListener(this);
 
         confirmButtonForMerge1 = new JButton("Confirm selection #1");
+        confirmButtonForMerge1.setToolTipText("<html><p width=\"300\">" + "Locks the selected to file to serve as the base for merge." + "</p></html>");
         confirmButtonForMerge1.addActionListener(this);
 
         confirmButtonForMerge2 = new JButton("Confirm selection #2");
+        confirmButtonForMerge2.setToolTipText("<html><p width=\"300\">" + "Locks the selected to file to be merged with the base." + "</p></html>");
         confirmButtonForMerge2.addActionListener(this);
 
         mergeButton = new JButton("Merge into base files");
+        mergeButton.setToolTipText("<html><p width=\"300\">" + "Creates a new file with merged entry language values of both source files." + "</p></html>");
         mergeButton.addActionListener(this);
 
         border1 = new TitledBorder("Game files -> Translation files");
