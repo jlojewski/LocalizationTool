@@ -257,6 +257,7 @@ public class IOManager {
 //            compareLoadedChecksumWithExternalFile(getTranslationKeyChecksum(), externalChecksumsFileName);
 //            saveTestListOfKeys2(result);
 //            saveConsolidatedTranslationFile2(result);
+            Log.print(Log.OPENING + consolidatedJson.getName());
 
 
         } catch (IOException e) {
@@ -274,10 +275,13 @@ public class IOManager {
 
     public void saveConsolidatedTranslationFile(List<TranslationEntry> consolidatedArray) {
         String programPath = (System.getProperty("user.dir"));
+        Log.print(Log.SAVING);
         try {
+
             TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
             File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
-            File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
+            var absolutePath = savedConsolidatedFile.getAbsolutePath();
+//            File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
             for (var t : consolidatedArray) {
 //                System.out.println(t.getEntryKey());
 
@@ -286,9 +290,11 @@ public class IOManager {
             mapConsolidatedTranslationFile(consolidatedArray, savedConsolidatedFile);
 //            storeChecksumInFile(storedChecksumFile);
 
+            Log.print(Log.SAVING_TO_SUCCESS + absolutePath);
+
         } catch (Exception e) {
             e.printStackTrace();
-            Log.print(Log.ERROR_SAVING_TO + programPath);
+            Log.print(Log.ERROR_SAVING_TO + programPath + "\\" + "consolidated_translation.file.json");
         }
 
     }
@@ -296,6 +302,9 @@ public class IOManager {
     public void saveMergedTranslationFile(List<TranslationEntry> firstConfirmedArray, List<TranslationEntry> secondConfirmedArray) {
         String programPath = (System.getProperty("user.dir"));
         TranslationEntryManager.getInstance().mergeLanguageValues(firstConfirmedArray, secondConfirmedArray);
+
+        Log.print(Log.MERGING);
+
         try {
 //            TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(fir, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
             File savedMergedFile = new File(programPath, "merged_translation_file.json");
@@ -357,32 +366,6 @@ public class IOManager {
     }
 
 
-//    public void mapConsolidatedTranslationFile(LinkedHashMap consolidatedMapToMap, File targetFile) {
-//        ObjectMapper fileSaveMapper = new ObjectMapper();
-//        try {
-//            fileSaveMapper.writeValue(targetFile, consolidatedMapToMap.entrySet());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    //newest version if you need to uncomment and go back
-//    public void mapConsolidatedTranslationFile(List<TranslationEntry> consolidatedArrayToMap, File targetFile) {
-//        ObjectMapper jsonObjectMapper = new ObjectMapper();
-//        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
-//        TranslationFileContent content = new TranslationFileContent(checksum, consolidatedArrayToMap);
-////        List<Object> listWithChecksum = new ArrayList<Object>();
-////        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
-////        listWithChecksum.add(checksum);
-////        listWithChecksum.addAll(consolidatedArrayToMap);
-//        try {
-////            jsonObjectMapper.writeValue(targetFile, listWithChecksum);
-//            jsonObjectMapper.writeValue(targetFile, content);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void mapConsolidatedTranslationFile(List<TranslationEntry> consolidatedArrayToMap, File targetFile) {
         ObjectMapper jsonObjectMapper = new ObjectMapper();
 //        TranslationChecksum checksum = new TranslationChecksum(getTranslationKeyChecksum());
@@ -404,6 +387,8 @@ public class IOManager {
     public void exportUnconsolidatedTranslationFiles(ArrayList<TranslationEntry> listOfEntries) {
         LinkedHashMap<String, String> convertedExportMap;
         ObjectMapper exportMapper = new ObjectMapper();
+
+        Log.print(Log.EXPORTING);
 
         try {
             Files.createDirectories(Paths.get("localization"));
@@ -441,10 +426,11 @@ public class IOManager {
 
                 }
             }
-            Log.print(Log.SAVING);
+            Log.print(Log.EXPORTING_SUCCESS_TO + basePath);
 
         } catch (Exception e) {
             e.printStackTrace();
+            Log.print(Log.ERROR_EXPORTING_TO + basePath);
         }
     }
 
@@ -466,7 +452,9 @@ public class IOManager {
         String programPath = (System.getProperty("user.dir"));
         try {
             File savedTranslationSettingsFile = new File(programPath, "translation_settings.json");
+            var completePath = savedTranslationSettingsFile.getAbsolutePath();
             translationSettingsMapper.writeValue(savedTranslationSettingsFile, settingsToUse);
+            Log.print(Log.SETTINGS_CREATED + "(" + completePath + ")");
 
         } catch (Exception e) {
             e.printStackTrace();

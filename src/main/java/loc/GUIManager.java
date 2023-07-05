@@ -97,8 +97,13 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
 
         fileChooser = new JFileChooser();
+        String programPath = System.getProperty("user.dir");
+        fileChooser.setCurrentDirectory(new File(programPath));
+
         settingsChooser = new JFileChooser();
+
         fileToGameChooser = new JFileChooser();
+        fileToGameChooser.setCurrentDirectory(new File(programPath));
 
         openButtonGameToTrans1 = new JButton("Add game JSONs");
         openButtonGameToTrans1.addActionListener(this);
@@ -109,7 +114,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         confirmButtonGameToTrans1 = new JButton("Confirm JSON selection (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
         confirmButtonGameToTrans1.addActionListener(this);
 
-        openButtonTransToGame1 = new JButton("Add game JSONs");
+        openButtonTransToGame1 = new JButton("Add translation JSONs");
         openButtonTransToGame1.addActionListener(this);
 
         openButtonTransToGame2 = new JButton("Load translation file");
@@ -200,6 +205,10 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
                 IOManager.getInstance().setSetOfUniqueLanguages(new LinkedHashSet<>());
                 IOManager.getInstance().setLoadedTranslationFileForExport(new ArrayList<>());
 
+
+                resetAllButtonCounters();
+                log.setText("");
+
             }
         });
         testPanel.add(tabPane, BorderLayout.PAGE_START);
@@ -234,9 +243,9 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
     public File[] setupGameToTranslationFileChooser() {
 
-        String programPath = System.getProperty("user.dir");
+//        String programPath = System.getProperty("user.dir");
         fileChooser.setMultiSelectionEnabled(true);
-        fileChooser.setCurrentDirectory(new File(programPath));
+//        fileChooser.setCurrentDirectory(new File(programPath));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON files", "json");
         fileChooser.setFileFilter(filter);
         fileChooser.setDialogTitle("Choose all .json files containing translation files");
@@ -289,9 +298,9 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
     public File setupTranslationToGameFileChooser() {
 
-        String programPath = System.getProperty("user.dir");
+//        String programPath = System.getProperty("user.dir");
         fileToGameChooser.setMultiSelectionEnabled(false);
-        fileToGameChooser.setCurrentDirectory(new File(programPath));
+//        fileToGameChooser.setCurrentDirectory(new File(programPath));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON files", "json");
         fileToGameChooser.setFileFilter(filter);
         fileToGameChooser.setDialogTitle("Choose a previously generated .json translation file");
@@ -380,6 +389,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 //                log.append("Opening: " + file.getName() + "." + newline);
 //                log.setCaretPosition(log.getDocument().getLength());
 
+
+
         } else if (e.getSource() == confirmButtonGameToTrans1) {
             var listToBeUsed = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles());
             Collections.sort(listToBeUsed);
@@ -388,10 +399,14 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             Log.print(Log.CHOICE_LOCKED);
 //            TranslationEntryManager.getInstance().extractKeys(TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles()));
 
+
+
         } else if (e.getSource() == saveButtonGameToTrans1) {
 //            IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
             IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
 //            log.setCaretPosition(log.getDocument().getLength());
+
+
 
         } else if (e.getSource() == importSettingsButton) {
             var chosenFile = setupSettingsChooser();
@@ -401,9 +416,13 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             TranslationSettingsManager.getInstance().setCurrentTranslationSettings(IOManager.getInstance().loadTranslationSettings(chosenFile));
 
 
+
+
         } else if (e.getSource() == languageSettingsButton) {
 //            openLanguageDialogInput();
             openLanguageTable();
+
+
 
         } else if (e.getSource() == openButtonTransToGame1) {
             var chosenFiles = setupGameToTranslationFileChooser();
@@ -416,6 +435,10 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFiles();
             tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
             IOManager.getInstance().setExpandableListOfLoadedFiles(tempListOfLists);
+            Log.print(Log.TOTAL_FILES_OPENED + IOManager.getInstance().getTotalCountOfOpenedFiles());
+            confirmButtonTransToGame1.setText("Confirm JSON selection (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
+
+
 
 
         } else if (e.getSource() == confirmButtonTransToGame1) {
@@ -423,6 +446,9 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             Collections.sort(listToBeUsed);
             IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
+            Log.print(Log.CHOICE_LOCKED);
+
+
 
         } else if (e.getSource() == openButtonTransToGame2) {
             var chosenFile = setupTranslationToGameFileChooser();
@@ -434,8 +460,12 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 //            TranslationEntryManager.getInstance().compareKeys(IOManager.getInstance().getListOfExtractedKeys(), keysFromTranslationFile);
             TranslationEntryManager.getInstance().compareKeys(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries(), IOManager.getInstance().getLoadedTranslationFileForExport());
 
+
+
         } else if (e.getSource() == saveButtonTransToGame1) {
             IOManager.getInstance().exportUnconsolidatedTranslationFiles(IOManager.getInstance().getLoadedTranslationFileForExport());
+
+
 
 
         } else if (e.getSource() == openButtonForMerge1) {
@@ -447,6 +477,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFilesForMerge1();
             tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge1());
             IOManager.getInstance().setExpandableListOfLoadedFilesForMerge1(tempListOfLists);
+
+
 
 
 //            var chosenFiles = setupGameToTranslationFileChooser();
@@ -468,6 +500,9 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
 //            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge1(listToBeUsed);
+            Log.print(Log.CHOICE_LOCKED + "(first)");
+
+
 
 
         } else if (e.getSource() == openButtonForMerge2) {
@@ -479,6 +514,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             var tempListOfLists = IOManager.getInstance().getExpandableListOfLoadedFilesForMerge2();
             tempListOfLists.add(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge2());
             IOManager.getInstance().setExpandableListOfLoadedFilesForMerge2(tempListOfLists);
+
+
 
 
 //            var chosenFiles = setupGameToTranslationFileChooser();
@@ -498,6 +535,9 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
 //            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge2(listToBeUsed);
+            Log.print(Log.CHOICE_LOCKED + "(second)");
+
+
 
 
         } else if (e.getSource() == mergeButton) {
@@ -515,6 +555,16 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
 
     //ustal czemu i kiedy w konsoli bialym tekstem pojawia "Exception while removing references" na zamknieciu programu
+
+
+    public void resetAllButtonCounters() {
+        IOManager.getInstance().setTotalCountOfOpenedFiles(0);
+        confirmButtonGameToTrans1.setText("Confirm JSON selection (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
+        confirmButtonTransToGame1.setText("Confirm JSON selection (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
+        confirmButtonForMerge1.setText("Confirm selection #1 (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
+        confirmButtonForMerge2.setText("Confirm selection #2 (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
+
+    }
 
 
     @Override

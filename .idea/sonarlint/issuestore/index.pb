@@ -26,13 +26,19 @@ G
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 N
 Calendar — duplikattest.json,b\c\bc908b122f002de935bd9fa23aea07f55dcab1d7
-D
-checksum_tracker.txt,1\9\19a08bc60f2beee6fc00d8634009d2d116be0933
-=
-Calendar.json,3\b\3b879e7cc118b6ecede4f64c4460f55c31e77b19
-\
-,consolidated_translation_file — kopia.json,0\3\03b129a736f49c414fb6ab5331117700ef1bb958
 R
 "consolidated_translation_file.json,2\9\299c38e0ebbf714354b9a40206fa6fc15fd51b46
-Z
-*src/main/java/loc/TranslationSettings.java,0\0\002893f2dd15f5fd2614a905297cf0cc26bc3b24
+9
+	new 3.txt,d\9\d91def4ed0d0fd8c93b662246e715583b2f2f22a
+_
+/consolidated_translation_file — kopia de.json,2\f\2fb415f6f5d2580b7f1cd2994a14ba588ce4c224
+L
+merged_translation_file.json,8\a\8ac86b097d41f27e9c66b03326e3f7975776b440
+`
+0consolidated_translation_file — kopia pl2.json,c\e\ceaafb2e8457f23587dc3a1849a427f923419577
+`
+0consolidated_translation_file — kopia eng.json,d\d\dd419105b2ade46667375d3a0e7ee6b58a9b5d7f
+_
+/consolidated_translation_file — kopia ru.json,f\9\f92ff2c1bfd571c0d27f66b8bcca67f2c6a69f28
+_
+/consolidated_translation_file — kopia fr.json,d\5\d5f5a820ef43e6556fd598598188d8a79d9549c6

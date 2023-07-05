@@ -304,6 +304,7 @@ public class TranslationEntryManager {
 //    }
 
     public void compareKeys(List<TranslationEntry> listToCompareFrom, List<TranslationEntry> listToCompareTo) {
+        Log.print(Log.COMPARING_KEYS);
         TranslationEntry tempEntryToCompareTo = null;
         TranslationEntry tempStreamResult = null;
         ArrayList<TranslationEntry> listOfEntriesWithMissingKeys = new ArrayList<TranslationEntry>();
@@ -357,7 +358,7 @@ public class TranslationEntryManager {
 //            }
 
 //            JOptionPane.showMessageDialog(null, "WARNING! Found missing keys between the file batches:" + "\n" + sb, "Warning", JOptionPane.WARNING_MESSAGE);
-
+            Log.print(listOfEntriesWithMissingKeys.size() + Log.WARNING_KEYS);
             JTextArea textArea = new JTextArea("WARNING! Found missing keys between loaded file batches:" + "\n" + sb);
             JScrollPane scrollPane = new JScrollPane(textArea);
             textArea.setLineWrap(false);
@@ -366,6 +367,8 @@ public class TranslationEntryManager {
             JOptionPane.showMessageDialog(null, scrollPane, "Warning",
                     JOptionPane.WARNING_MESSAGE);
 
+        } else {
+            Log.print(Log.COMPARING_KEYS_SUCCESS);
         }
     }
 
