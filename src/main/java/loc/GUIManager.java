@@ -176,11 +176,13 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         buttonPanel1 = new JPanel(new GridLayout(1, 0));
         buttonPanel1.add(openButtonGameToTrans1);
         buttonPanel1.add(confirmButtonGameToTrans1);
+        confirmButtonGameToTrans1.setEnabled(false);
         buttonPanel1.add(importSettingsButton);
         importSettingsButton.setEnabled(false);
         buttonPanel1.add(languageSettingsButton);
 //        languageSettingsButton.setEnabled(false);
         buttonPanel1.add(saveButtonGameToTrans1);
+        saveButtonGameToTrans1.setEnabled(false);
         buttonPanel1.setBorder(border1);
 
 //        layout1.addLayoutComponent(buttonPanel1, BorderLayout.NORTH);
@@ -349,13 +351,15 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
     }
 
-    public void enableLanguageButton(boolean trueOrFalse) {
+    public void enableButton(boolean trueOrFalse, JButton button) {
         if (trueOrFalse == true) {
-            importSettingsButton.setEnabled(true);
+            button.setEnabled(true);
         } else {
-            importSettingsButton.setEnabled(false);
+            button.setEnabled(false);
         }
     }
+
+
 
     public void openLanguageTable() {
         languageMenu.setVisible(true);
@@ -585,7 +589,10 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
     public void propertyChange(PropertyChangeEvent evt) {
 
         //enableLanguageButton(IOManager.getInstance().checkIfTranslationFilesHaveBeenLoaded());
-        enableLanguageButton(evt.getNewValue() != null);
+        enableButton(evt.getNewValue() != null, importSettingsButton);
+        enableButton(evt.getNewValue() != null, confirmButtonGameToTrans1);
+        enableButton(evt.getNewValue() != null, languageSettingsButton);
+        enableButton(evt.getNewValue() != null, saveButtonGameToTrans1);
     }
 
 
