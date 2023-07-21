@@ -216,13 +216,16 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             @Override
             public void stateChanged(ChangeEvent e) {
                 System.out.println("Tab " + tabPane.getSelectedIndex());
-                IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(new ArrayList<>());
-                IOManager.getInstance().setExpandableListOfLoadedFiles(new ArrayList<>());
-                IOManager.getInstance().setSetOfUniqueLanguages(new LinkedHashSet<>());
-                IOManager.getInstance().setLoadedTranslationFileForExport(new ArrayList<>());
+
+//                commented and replaced with a new all-encompassing method; left in case this new approach doesn't work out
+//                IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(new ArrayList<>());
+//                IOManager.getInstance().setExpandableListOfLoadedFiles(new ArrayList<>());
+//                IOManager.getInstance().setSetOfUniqueLanguages(new LinkedHashSet<>());
+//                IOManager.getInstance().setLoadedTranslationFileForExport(new ArrayList<>());
 
 
-                resetAllButtonCounters();
+                resetAllButtonsState();
+                IOManager.purgeAllLoadedFiles();
                 log.setText("");
 
             }
@@ -415,14 +418,23 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
             Log.print(Log.CHOICE_LOCKED);
+            openButtonGameToTrans1.setEnabled(false);
 //            TranslationEntryManager.getInstance().extractKeys(TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles()));
 
 
 
         } else if (e.getSource() == saveButtonGameToTrans1) {
+
+            var filename = IOManager.getInstance().inputSaveFilename();
+            if (filename == null) {
+                return;
+            }
+
 //            IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
-            IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries());
+            IOManager.getInstance().saveConsolidatedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntries(), filename);
 //            log.setCaretPosition(log.getDocument().getLength());
+            IOManager.purgeAllLoadedFiles();
+            resetAllButtonsState();
 
 
 
@@ -465,6 +477,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
             Log.print(Log.CHOICE_LOCKED);
+            openButtonTransToGame1.setEnabled(false);
 
 
 
@@ -482,6 +495,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
         } else if (e.getSource() == saveButtonTransToGame1) {
             IOManager.getInstance().exportUnconsolidatedTranslationFiles(IOManager.getInstance().getLoadedTranslationFileForExport());
+            IOManager.purgeAllLoadedFiles();
+            resetAllButtonsState();
 
 
 
@@ -519,6 +534,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 //            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge1(listToBeUsed);
             Log.print(Log.CHOICE_LOCKED + "(first)");
+            openButtonForMerge1.setEnabled(false);
 
 
 
@@ -554,6 +570,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 //            IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge2(listToBeUsed);
             Log.print(Log.CHOICE_LOCKED + "(second)");
+            openButtonForMerge2.setEnabled(false);
+
 
 
 
@@ -561,6 +579,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         } else if (e.getSource() == mergeButton) {
 //            IOManager.getInstance().exportUnconsolidatedTranslationFiles(IOManager.getInstance().getLoadedTranslationFileForExport());
             IOManager.getInstance().saveMergedTranslationFile(IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge1(), IOManager.getInstance().getListOfLoadedFilesAsTranslationEntriesForMerge2());
+            IOManager.purgeAllLoadedFiles();
+            resetAllButtonsState();
 
 
         }
@@ -575,14 +595,21 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
     //ustal czemu i kiedy w konsoli bialym tekstem pojawia "Exception while removing references" na zamknieciu programu
 
 
-    public void resetAllButtonCounters() {
+    public void resetAllButtonsState() {
         IOManager.getInstance().setTotalCountOfOpenedFiles(0);
         confirmButtonGameToTrans1.setText("Confirm JSON selection (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
         confirmButtonTransToGame1.setText("Confirm JSON selection (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
         confirmButtonForMerge1.setText("Confirm selection #1 (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
         confirmButtonForMerge2.setText("Confirm selection #2 (" + IOManager.getInstance().getTotalCountOfOpenedFiles() + " files)");
 
+        openButtonGameToTrans1.setEnabled(true);
+        openButtonTransToGame1.setEnabled(true);
+        openButtonForMerge1.setEnabled(true);
+        openButtonForMerge2.setEnabled(true);
+
     }
+
+
 
 
     @Override

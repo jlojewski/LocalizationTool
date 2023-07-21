@@ -79,8 +79,6 @@ public class IOManager {
     }
 
 
-
-
     public LinkedHashMap<String, String> getMapOfLoadedFiles() {
         return mapOfLoadedFiles;
     }
@@ -151,8 +149,6 @@ public class IOManager {
     }
 
 
-
-
     private static IOManager IOManagerInstance;
 
     private IOManager() {
@@ -211,7 +207,7 @@ public class IOManager {
                 Log.print(Log.OPENING + f.getName());
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.print(Log.ERROR_OPENING +  f.getName());
+                Log.print(Log.ERROR_OPENING + f.getName());
             }
 
         }
@@ -228,7 +224,8 @@ public class IOManager {
 //        String generatedChecksum = null;
         ArrayList<TranslationEntry> result = new ArrayList<TranslationEntry>();
         ObjectMapper fileImportMapper = new ObjectMapper();
-        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>() {};
+        TypeReference<ArrayList<TranslationEntry>> typeRefFinal = new TypeReference<ArrayList<TranslationEntry>>() {
+        };
 
         String programPath = (System.getProperty("user.dir"));
 //        String checksumTrackerName = "checksum_tracker.txt";
@@ -273,13 +270,15 @@ public class IOManager {
     }
 
 
-    public void saveConsolidatedTranslationFile(List<TranslationEntry> consolidatedArray) {
+    public void saveConsolidatedTranslationFile(List<TranslationEntry> consolidatedArray, String filename) {
         String programPath = (System.getProperty("user.dir"));
         Log.print(Log.SAVING);
+        var filenameToUse = filename + ".json";
         try {
 
             TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
-            File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
+//            File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
+            File savedConsolidatedFile = new File(programPath, filenameToUse);
             var absolutePath = savedConsolidatedFile.getAbsolutePath();
 //            File storedChecksumFile = new File(programPath, "checksum_tracker.txt");
             for (var t : consolidatedArray) {
@@ -294,7 +293,8 @@ public class IOManager {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Log.print(Log.ERROR_SAVING_TO + programPath + "\\" + "consolidated_translation.file.json");
+//            Log.print(Log.ERROR_SAVING_TO + programPath + "\\" + "consolidated_translation.file.json");
+            Log.print(Log.ERROR_SAVING_TO + programPath + "\\" + filenameToUse);
         }
 
     }
@@ -443,8 +443,6 @@ public class IOManager {
             e.printStackTrace();
         }
     }
-
-
 
 
     public void saveTranslationSettings(TranslationSettings settingsToUse) {
@@ -617,9 +615,33 @@ public class IOManager {
     }
 
 
+    public static void purgeAllLoadedFiles() {
+        IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(new ArrayList<>());
+        IOManager.getInstance().setExpandableListOfLoadedFiles(new ArrayList<>());
+        IOManager.getInstance().setSetOfUniqueLanguages(new LinkedHashSet<>());
+        IOManager.getInstance().setLoadedTranslationFileForExport(new ArrayList<>());
+        IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge1(new ArrayList<>());
+        IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge2(new ArrayList<>());
 
+
+    }
+
+
+    public String inputSaveFilename() {
+        String filename = (String) JOptionPane.showInputDialog(null, "Save under what name?", "Filename required", JOptionPane.PLAIN_MESSAGE, null, null, "consolidated_translation_file");
+        if (filename != null) {
+            if (!filename.isEmpty()) {
+                return filename;
+
+            } else {
+                return inputSaveFilename();
+            }
+        } else {
+            return null;
+        }
+
+    }
 
 }
-
 
 
