@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,6 +76,7 @@ public class TranslationEntryManager {
         Path importedFilePath = Paths.get(file.getAbsolutePath());
         Path importedFileName = importedFilePath.getFileName();
         String filename = importedFileName.toString();
+        String originalFilepath = FilenameUtils.getPath(importedFilePath.toString());
         TranslationEntry tempTranslationEntry;
 
         JsonNode node;
@@ -84,13 +86,14 @@ public class TranslationEntryManager {
             Iterator<Map.Entry<String, JsonNode>> userEntries = node.fields();
             while (userEntries.hasNext()) {
                 Map.Entry<String, JsonNode> userEntry = userEntries.next();
-                tempTranslationEntry = new TranslationEntry(null, null, null, null, null);
+                tempTranslationEntry = new TranslationEntry(null, null, null, null, null, null);
                 tempTranslationEntry.entryID = UUID.randomUUID();
                 tempTranslationEntry.entryKey = userEntry.getKey();
                 //.asText is currently experimental - need to check after rewrite if it works and all and whether
                 //it throws nullpointerexceptions
                 tempTranslationEntry.entryValue = userEntry.getValue().asText();
                 tempTranslationEntry.filename = filename;
+                tempTranslationEntry.originalFilepath = originalFilepath;
                 tempTranslationEntry.languages = new LinkedHashMap<>();
                 tempTranslationEntry.languages.put("DEFAULT", tempTranslationEntry.getEntryValue());
                 result.add(tempTranslationEntry);
@@ -195,13 +198,14 @@ public class TranslationEntryManager {
     }
 
     //this is the currently used/worked on/developed method to convert the initially loaded maps into array(s) with objects
-    public List<TranslationEntry> createTranslationEntriesFromMap(LinkedHashMap<String, String> inputMap, Path filename) {
+    public List<TranslationEntry> createTranslationEntriesFromMap(LinkedHashMap<String, String> inputMap, Path filename, Path originalFilepath) {
         List<TranslationEntry> arrayListOfEntriesWithValuesTakenFromMap = inputMap.entrySet().stream().map(entry -> {
-            TranslationEntry t = new TranslationEntry(null, null, null, null, null);
+            TranslationEntry t = new TranslationEntry(null, null, null, null, null, null);
             t.setEntryID(UUID.randomUUID());
             t.languages = new LinkedHashMap<>();
             t.languages.put("DEFAULT", entry.getValue());
             t.setFilename(filename.toString());
+            t.setOriginalFilepath(t.originalFilepath);
             t.setEntryKey(entry.getKey());
             t.setEntryValue(entry.getValue());
             return t;

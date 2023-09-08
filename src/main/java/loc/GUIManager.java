@@ -90,7 +90,8 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.PAGE_AXIS));
 
 
-        log = new JTextArea(10, 50);
+
+        log = new JTextArea(10, 70);
         log.setMargin(new Insets(5, 5, 5, 5));
         log.setEditable(false);
         logScrollPane = new JScrollPane(log);
@@ -184,6 +185,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         buttonPanel1.add(saveButtonGameToTrans1);
 //        saveButtonGameToTrans1.setEnabled(false);
         buttonPanel1.setBorder(border1);
+
 
 //        layout1.addLayoutComponent(buttonPanel1, BorderLayout.NORTH);
 //        layout1.addLayoutComponent(logScrollPane, BorderLayout.PAGE_END);
@@ -478,7 +480,6 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
             IOManager.getInstance().setListOfLoadedFilesAsTranslationEntries(listToBeUsed);
             Log.print(Log.CHOICE_LOCKED);
             openButtonTransToGame1.setEnabled(false);
-
 
 
         } else if (e.getSource() == openButtonTransToGame2) {

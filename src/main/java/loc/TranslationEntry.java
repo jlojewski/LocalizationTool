@@ -18,6 +18,7 @@ public class TranslationEntry implements Comparable<TranslationEntry> {
     @JsonIgnore
     public String entryValue;
     public String filename;
+    public String originalFilepath;
     public LinkedHashMap<String, String> languages;
     @JsonIgnore
     private Long keyChecksum;
@@ -57,6 +58,13 @@ public class TranslationEntry implements Comparable<TranslationEntry> {
         this.filename = filename;
     }
 
+    public String getOriginalFilepath() {
+        return originalFilepath;
+    }
+
+    public void setOriginalFilepath(String originalFilepath) {
+        this.originalFilepath = originalFilepath;
+    }
 
     public LinkedHashMap<String, String> getLanguages() {
         return languages;
@@ -76,12 +84,13 @@ public class TranslationEntry implements Comparable<TranslationEntry> {
     }
 
     @JsonCreator
-    public TranslationEntry(@JsonProperty("entryID") UUID entryID, @JsonProperty("entryKey") String entryKey, @JsonProperty("entryValue") String entryValue, @JsonProperty("filename") String filename, @JsonProperty("languages") LinkedHashMap<String, String> languages) {
+    public TranslationEntry(@JsonProperty("entryID") UUID entryID, @JsonProperty("entryKey") String entryKey, @JsonProperty("entryValue") String entryValue, @JsonProperty("filename") String filename, @JsonProperty("languages") LinkedHashMap<String, String> languages, @JsonProperty("originalFilepath") String originalFilepath) {
         this.entryID = entryID;
         this.entryKey = entryKey;
         this.entryValue = entryValue;
         this.filename = filename;
         this.languages = languages;
+        this.originalFilepath = originalFilepath;
     }
 
     @Override

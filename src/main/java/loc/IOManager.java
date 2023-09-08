@@ -398,7 +398,8 @@ public class IOManager {
 
         String programPath = (System.getProperty("user.dir"));
         String basePath = FilenameUtils.concat(programPath, "localization");
-        String varPath;
+        Path relPath = Paths.get(basePath);
+        String varPath = null;
         String filenameToUse;
         String langPath;
         String outputKey;
@@ -414,11 +415,13 @@ public class IOManager {
             for (Map.Entry<String, List<TranslationEntry>> z : translationEntriesPerFilename.entrySet()) {
                 filenameToUse = z.getKey();
                 for (String s : languageList) {
-                    varPath = FilenameUtils.concat(basePath, s);
-                    Files.createDirectories(Paths.get(varPath));
+//                    varPath = FilenameUtils.concat(basePath, s);
+//                    Files.createDirectories(Paths.get(varPath));
                     LinkedHashMap<String, String> tempMap = new LinkedHashMap<String, String>();
                     for (TranslationEntry t : z.getValue()) {
                         tempMap.put(t.getEntryKey(), t.getLanguages().get(s));
+                        varPath = FilenameUtils.concat(basePath, t.getOriginalFilepath());
+                        Files.createDirectories(Paths.get(varPath));
 
 
                     }
@@ -622,6 +625,9 @@ public class IOManager {
         IOManager.getInstance().setLoadedTranslationFileForExport(new ArrayList<>());
         IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge1(new ArrayList<>());
         IOManager.getInstance().setListOfLoadedFilesAsTranslationEntriesForMerge2(new ArrayList<>());
+        //
+        IOManager.getInstance().setExpandableListOfLoadedFilesForMerge1(new ArrayList<>());
+        IOManager.getInstance().setExpandableListOfLoadedFilesForMerge2(new ArrayList<>());
 
 
     }
