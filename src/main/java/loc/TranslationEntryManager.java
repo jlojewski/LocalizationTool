@@ -15,6 +15,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,16 +25,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class TranslationEntryManager {
+        public class TranslationEntryManager {
 
-    private static TranslationEntryManager TranslationEntryManagerInstance;
+            private static loc.TranslationEntryManager TranslationEntryManagerInstance;
 
-    private TranslationEntryManager() {
+            private TranslationEntryManager() {
 
-    }
+            }
 
-    public static TranslationEntryManager getInstance() {
-        if (TranslationEntryManagerInstance == null) {
+            public static TranslationEntryManager getInstance() {
+                if (TranslationEntryManagerInstance == null) {
             TranslationEntryManagerInstance = new TranslationEntryManager();
         }
 
@@ -73,10 +74,11 @@ public class TranslationEntryManager {
         TypeReference<ArrayList<TranslationEntry>> typeRef = new TypeReference<ArrayList<TranslationEntry>>() {
         };
 
+//        Path importedFilePath = Paths.get(file.getAbsolutePath());
         Path importedFilePath = Paths.get(file.getAbsolutePath());
         Path importedFileName = importedFilePath.getFileName();
         String filename = importedFileName.toString();
-        String originalFilepath = FilenameUtils.getPath(importedFilePath.toString());
+        String originalFilepath = FilenameUtils.getFullPath(importedFilePath.toString());
         TranslationEntry tempTranslationEntry;
 
         JsonNode node;
@@ -240,6 +242,19 @@ public class TranslationEntryManager {
             }
         }
     }
+
+            public void addFilepathToLoadedEntries(List<TranslationEntry> originalList, Path rootPathForRelativize) {
+                TranslationEntry tempEntry = null;
+                Path tempPath = null;
+                Path relativizedPath = null;
+                for (int i = 0; i < originalList.size(); i++) {
+                    tempEntry = originalList.get(i);
+                    tempPath = Paths.get(tempEntry.getOriginalFilepath());
+                    relativizedPath = rootPathForRelativize.relativize(tempPath);
+                    originalList.get(i).setOriginalFilepath(relativizedPath.toString());
+
+                }
+            }
 
 //    public void checkIfEntryKeysAreUnique(List<TranslationEntry> listToCheck) {
 //        for (int i = 0; i < listToCheck.size(); i++) {
@@ -448,6 +463,13 @@ public class TranslationEntryManager {
         }
     }
 
+    public ArrayList<TranslationEntry> trimFilepaths(Path userSpecifiedPath, ArrayList<TranslationEntry> listToWorkOn) {
+        for (TranslationEntry t : listToWorkOn) {
+            var ogPath = Paths.get(t.getOriginalFilepath());
+            var trimmedPath = (ogPath.relativize(userSpecifiedPath)).toString();
+            t.setOriginalFilepath(trimmedPath);
+        } return listToWorkOn;
+    }
 
 
 }

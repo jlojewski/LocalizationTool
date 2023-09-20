@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -32,6 +34,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
     JFileChooser fileChooser;
     JFileChooser settingsChooser;
     JFileChooser fileToGameChooser;
+    JFileChooser rootFolderChooser;
     JButton openButtonGameToTrans1;
     JButton saveButtonGameToTrans1;
     JButton importSettingsButton;
@@ -98,6 +101,7 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
 
         fileChooser = new JFileChooser();
+        rootFolderChooser = new JFileChooser();
         String programPath = System.getProperty("user.dir");
         fileChooser.setCurrentDirectory(new File(programPath));
 
@@ -344,6 +348,30 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
         }
     }
 
+
+    public File setupRootFolderChooser() {
+
+        String programPath = System.getProperty("user.dir");
+        rootFolderChooser.setMultiSelectionEnabled(false);
+        rootFolderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        rootFolderChooser.setCurrentDirectory(new File(programPath));
+//        FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON files", "json");
+//        rootFolderChooser.setFileFilter(filter);
+        rootFolderChooser.setAcceptAllFileFilterUsed(false);
+        rootFolderChooser.setDialogTitle("Choose a root folder for ");
+
+        int returnVal = rootFolderChooser.showOpenDialog(null);
+        if (returnVal == rootFolderChooser.APPROVE_OPTION) {
+            File chosenFolder = rootFolderChooser.getCurrentDirectory();
+
+                return chosenFolder;
+            } else {
+            return null;
+        }
+    }
+
+
+
     public String openLanguageDialogInput() {
         String userInput = (String) JOptionPane.showInputDialog(
                 null,
@@ -415,6 +443,14 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
 
         } else if (e.getSource() == confirmButtonGameToTrans1) {
+            var chosenFolder = setupRootFolderChooser();
+            if (chosenFolder == null) {
+                return;
+            }
+            Path rootPath = Paths.get(chosenFolder.getAbsolutePath());
+
+            IOManager.getInstance().setRootFolderPath(rootPath);
+
             var listToBeUsed = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles());
             Collections.sort(listToBeUsed);
             IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));
@@ -474,6 +510,16 @@ public class GUIManager implements ActionListener, PropertyChangeListener, Chang
 
 
         } else if (e.getSource() == confirmButtonTransToGame1) {
+//            var chosenFolder = setupRootFolderChooser();
+//            if (chosenFolder == null) {
+//                return;
+//            }
+////            String rootPath = chosenFolder.getPath();
+//
+//            Path rootPath = Paths.get(chosenFolder.getAbsolutePath());
+//
+//            IOManager.getInstance().setRootFolderPath(rootPath);
+
             var listToBeUsed = TranslationEntryManager.getInstance().mergeLoadedEntryFilesInArrays(IOManager.getInstance().getExpandableListOfLoadedFiles());
             Collections.sort(listToBeUsed);
             IOManager.getInstance().setListOfExtractedKeys(TranslationEntryManager.getInstance().extractKeys(listToBeUsed));

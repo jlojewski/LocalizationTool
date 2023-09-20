@@ -45,6 +45,7 @@ public class IOManager {
     private List<TranslationEntry> listOfLoadedFilesAsTranslationEntriesForMerge1;
     private List<TranslationEntry> listOfLoadedFilesAsTranslationEntriesForMerge2;
     private int totalCountOfOpenedFiles;
+    private Path rootFolderPath;
 
     public List<TranslationEntry> getListOfLoadedFilesAsTranslationEntriesForMerge1() {
         return listOfLoadedFilesAsTranslationEntriesForMerge1;
@@ -148,6 +149,13 @@ public class IOManager {
         this.totalCountOfOpenedFiles = totalCountOfOpenedFiles;
     }
 
+    public Path getRootFolderPath() {
+        return rootFolderPath;
+    }
+
+    public void setRootFolderPath(Path rootFolderPath) {
+        this.rootFolderPath = rootFolderPath;
+    }
 
     private static IOManager IOManagerInstance;
 
@@ -277,6 +285,7 @@ public class IOManager {
         try {
 
             TranslationEntryManager.getInstance().addLanguagesToLoadedEntries(consolidatedArray, TranslationSettingsManager.getInstance().getCurrentTranslationSettings());
+            TranslationEntryManager.getInstance().addFilepathToLoadedEntries(consolidatedArray, getRootFolderPath());
 //            File savedConsolidatedFile = new File(programPath, "consolidated_translation_file.json");
             File savedConsolidatedFile = new File(programPath, filenameToUse);
             var absolutePath = savedConsolidatedFile.getAbsolutePath();
@@ -391,14 +400,15 @@ public class IOManager {
         Log.print(Log.EXPORTING);
 
         try {
-            Files.createDirectories(Paths.get("localization"));
+            Files.createDirectories(Paths.get("created_localizations"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         String programPath = (System.getProperty("user.dir"));
-        String basePath = FilenameUtils.concat(programPath, "localization");
-        Path relPath = Paths.get(basePath);
+        String basePath = FilenameUtils.concat(programPath, "created_localizations");
+//        Path relPath = Paths.get(basePath);
+        Path relPath = null;
         String varPath = null;
         String filenameToUse;
         String langPath;
@@ -420,7 +430,11 @@ public class IOManager {
                     LinkedHashMap<String, String> tempMap = new LinkedHashMap<String, String>();
                     for (TranslationEntry t : z.getValue()) {
                         tempMap.put(t.getEntryKey(), t.getLanguages().get(s));
+//                        relPath = getRootFolderPath().relativize(Paths.get(t.getOriginalFilepath()));
+//                        varPath = FilenameUtils.concat(basePath, relPath.toString());
                         varPath = FilenameUtils.concat(basePath, t.getOriginalFilepath());
+//                        varPath = FilenameUtils.concat(basePath, t.getOriginalFilepath());
+//                        t.setOriginalFilepath(varPath.toString());
                         Files.createDirectories(Paths.get(varPath));
 
 
